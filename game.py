@@ -75,7 +75,7 @@ def load_game(): # access save file -JSON
         savefile_value = 3  
         return 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]
 
-def save_game(high_score_list = None):
+def save_game(money_value = None, chip_info = None):
     '''saving game data'''
     if money_value is None:
         money_value = MONEY
