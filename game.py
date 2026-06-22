@@ -95,3 +95,26 @@ def save_game(high_score_list = None):
         f.write(encoded_bytes)
 
 MONEY, CHIPS = load_game()
+
+class pygame:
+    def __init__(self):
+        pass
+    def on_init(self):
+        pass
+    def starting_game(self):
+        pass
+    def game_starting(self):
+        pass
+    def on_event(self, event):
+        if event.type == pygame.QUIT:
+            self._running = False
+    def on_cleanup(self):
+        pygame.quit()
+    def on_execute(self):
+        if self.on_init() == False:
+            self._running = False 
+        while(self._running):
+            self.FPS.tick(self.fps)
+            self.on_loop()
+            self.on_render()
+            pygame.display.flip()
