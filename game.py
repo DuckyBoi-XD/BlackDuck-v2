@@ -96,7 +96,7 @@ def save_game(high_score_list = None):
 
 MONEY, CHIPS = load_game()
 
-class pygame:
+class pygame_function:
     def __init__(self):
         pass
     def on_init(self):
@@ -118,3 +118,5 @@ class pygame:
             self.on_loop()
             self.on_render()
             pygame.display.flip()
+class game_functions:
+    pass
