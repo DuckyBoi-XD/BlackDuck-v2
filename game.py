@@ -102,6 +102,7 @@ class pygame_function:
         self.fps = 60
         self.FPS = pygame.time.Clock()
         self.display = None
+        self.bg_colour = (255, 255, 255)
 
         self._running = True
     def on_init(self):
@@ -118,7 +119,7 @@ class pygame_function:
         if event.type == pygame.QUIT:
             self._running = False
     def on_render(self):
-        self.display.fill((0, 0, 0))
+        self.display.fill(self.bg_colour)
     def on_loop(self):
         pass
     def on_cleanup(self):
