@@ -98,9 +98,18 @@ MONEY, CHIPS = load_game()
 
 class pygame_function:
     def __init__(self):
-        pass
+        self.displayWidth, self.displayHeight = 1000, 500
+        self.fps = 60
+        self.FPS = pygame.time.Clock()
+        self.display = None
+
+        self._running = True
     def on_init(self):
-        pass
+        pygame.init()
+        self.display = pygame.display.set_mode((self.displayWidth, self.displayHeight), pygame.HWSURFACE | pygame.DOUBLEBUF)
+        
+        pygame.display.set_caption("BlackDuck v2")
+        self._running = True
     def starting_game(self):
         pass
     def game_starting(self):
@@ -108,6 +117,10 @@ class pygame_function:
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
+    def on_render(self):
+        self.display.fill((0, 0, 0))
+    def on_loop(self):
+        pass
     def on_cleanup(self):
         pygame.quit()
     def on_execute(self):
@@ -115,8 +128,19 @@ class pygame_function:
             self._running = False 
         while(self._running):
             self.FPS.tick(self.fps)
+            for event in pygame.event.get():
+                self.on_event(event)
+                pygame.display.flip()
+                
             self.on_loop()
             self.on_render()
             pygame.display.flip()
 class game_functions:
     pass
+
+def main():
+    Game = pygame_function()
+    Game.on_execute()
+
+if __name__ == "__main__":
+    main()
