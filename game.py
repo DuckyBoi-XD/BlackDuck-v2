@@ -96,26 +96,30 @@ def save_game(money_value = None, chip_info = None):
 
 MONEY, CHIPS = load_game()
 
+class game_varialbe: # Game variables
+    def __init__(self):
+        self.displayWidth, self.displayHeight = 1200, 700
+        self.display = pygame.display.set_mode((self.displayWidth, self.displayHeight), pygame.HWSURFACE | pygame.DOUBLEBUF)
+        self.bg_colour = (255, 255, 255)
+
+GV = game_varialbe()
+
 class game_objects:
-    def chip_object():
-        pass
+    def chip_object(self):
+        pygame.draw.circle(GV.display, (0, 0, 0), (600, 350), 50)
 
 class game_functions:
     pass
 
-
 class pygame_function:
     def __init__(self):
-        self.displayWidth, self.displayHeight = 1200, 700
         self.fps = 60
         self.FPS = pygame.time.Clock()
         self.display = None
-        self.bg_colour = (255, 255, 255)
 
         self._running = True
     def on_init(self):
         pygame.init()
-        self.display = pygame.display.set_mode((self.displayWidth, self.displayHeight), pygame.HWSURFACE | pygame.DOUBLEBUF)
         
         pygame.display.set_caption("BlackDuck v2")
         self._running = True
@@ -127,7 +131,8 @@ class pygame_function:
         if event.type == pygame.QUIT:
             self._running = False
     def on_render(self):
-        self.display.fill(self.bg_colour)
+        GV.display.fill(GV.bg_colour)
+        game_objects.chip_object(self)
     def on_loop(self):
         pass
     def on_cleanup(self):
