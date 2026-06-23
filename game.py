@@ -101,7 +101,7 @@ class game_functions:
 
 class pygame_function:
     def __init__(self):
-        self.displayWidth, self.displayHeight = 1000, 500
+        self.displayWidth, self.displayHeight = 1200, 700
         self.fps = 60
         self.FPS = pygame.time.Clock()
         self.display = None
