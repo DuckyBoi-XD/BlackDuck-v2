@@ -96,6 +96,9 @@ def save_game(money_value = None, chip_info = None):
 
 MONEY, CHIPS = load_game()
 
+class game_functions:
+    pass
+
 class pygame_function:
     def __init__(self):
         self.displayWidth, self.displayHeight = 1000, 500
@@ -136,8 +139,6 @@ class pygame_function:
             self.on_loop()
             self.on_render()
             pygame.display.flip()
-class game_functions:
-    pass
 
 def main():
     Game = pygame_function()
