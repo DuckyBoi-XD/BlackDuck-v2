@@ -96,8 +96,13 @@ def save_game(money_value = None, chip_info = None):
 
 MONEY, CHIPS = load_game()
 
+class game_objects:
+    def chip_object():
+        pass
+
 class game_functions:
     pass
+
 
 class pygame_function:
     def __init__(self):
