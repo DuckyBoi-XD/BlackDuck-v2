@@ -100,7 +100,7 @@ class game_variable: # Game variables
     def __init__(self):
         self.displayWidth, self.displayHeight = 1200, 700
         self.display = pygame.display.set_mode((self.displayWidth, self.displayHeight), pygame.HWSURFACE | pygame.DOUBLEBUF)
-        self.bg_colour = (255, 255, 255)
+        self.bg_colour = (23, 74, 67)
         self._running = True
 
         self.chipRadius = 50
