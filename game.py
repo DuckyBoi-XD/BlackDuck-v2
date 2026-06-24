@@ -101,15 +101,38 @@ class game_variable: # Game variables
         self.displayWidth, self.displayHeight = 1200, 700
         self.display = pygame.display.set_mode((self.displayWidth, self.displayHeight), pygame.HWSURFACE | pygame.DOUBLEBUF)
         self.bg_colour = (255, 255, 255)
+        self._running = True
+
+        self.chipRadius = 50
+        self.chipPos = [600, 350]
 
 GV = game_variable()
 
 class game_objects:
     def chip_object(self):
-        pygame.draw.circle(GV.display, (0, 0, 0), (600, 350), 50)
+        pygame.draw.circle(GV.display, (0, 0, 0), GV.chipPos, GV.chipRadius)
 
 class game_functions:
-    pass
+    def move_chip(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                GV._running = False
+            pygame.display.flip()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                cursorPosx, cursorPosy = pygame.mouse.get_pos()
+
+                CursorPos_CirclePosx = cursorPosx - (GV.chipPos[0])
+                CursorPos_CirclePosy = cursorPosy - (GV.chipPos[1])
+
+                CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
+
+                if CursorPos_CirclePos <= GV.chipRadius**2:
+                    print("inside")
+                    print(pygame.mouse.get_pos())
+                else:
+                    print("outside")
+
+GF = game_functions()
 
 class pygame_function:
     def __init__(self):
@@ -117,19 +140,19 @@ class pygame_function:
         self.FPS = pygame.time.Clock()
         self.display = None
 
-        self._running = True
+        GV._running = True
     def on_init(self):
         pygame.init()
         
         pygame.display.set_caption("BlackDuck v2")
-        self._running = True
+        GV._running = True
     def starting_game(self):
         pass
     def game_starting(self):
         pass
     def on_event(self, event):
         if event.type == pygame.QUIT:
-            self._running = False
+            GV._running = False
     def on_render(self):
         GV.display.fill(GV.bg_colour)
         game_objects.chip_object(self)
@@ -139,13 +162,10 @@ class pygame_function:
         pygame.quit()
     def on_execute(self):
         if self.on_init() == False:
-            self._running = False 
-        while(self._running):
+            GV._running = False 
+        while(GV._running):
             self.FPS.tick(self.fps)
-            for event in pygame.event.get():
-                self.on_event(event)
-                pygame.display.flip()
-                
+            GF.move_chip()
             self.on_loop()
             self.on_render()
             pygame.display.flip()
