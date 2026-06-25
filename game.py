@@ -96,6 +96,7 @@ def save_game(money_value = None, chip_info = None):
         f.write(encoded_bytes)
 
 MONEY, CHIPS = load_game()
+debug_var = True
 
 def cosd(x):
     return math.cos(math.radians(x))
@@ -111,39 +112,41 @@ class game_variable: # Game variables
 
         self.chipRadius = 50
         self.chipPos = [600, 350]
-        self.chipCirclePoints = []
+        self.chipArcAngles = (270, 330, 30, 90, 150, 210)
+        self.chipCirclePoints1 = []
+        self.chipCirclePoints2 = []
+        self.chipCirclePoints3 = []
+        self.chipCirclePoints4 = []
+        self.chipCirclePoints5 = []
+        self.chipCirclePoints6 = []
+        self.chipCirclePointsList = (self.chipCirclePoints1, self.chipCirclePoints2, self.chipCirclePoints3, 
+                                     self.chipCirclePoints4, self.chipCirclePoints5, self.chipCirclePoints6)
         self.chipCirclePointsReverse = []
 
         self.count = True
-
-        for delta in range (270, 301, 2):
-            self.chipCirclePoints.append([
-                (cosd(delta) * (self.chipRadius)) + (self.chipPos[0]), 
-                (sind(delta) * (self.chipRadius)) + (self.chipPos[1])
-            ])
-        for delta in range (270, 301, 2):
-            self.chipCirclePointsReverse.append([
-                (cosd(delta) * (self.chipRadius - 10)) + (self.chipPos[0]), 
-                (sind(delta) * (self.chipRadius - 10)) + (self.chipPos[1])
-            ])
-        
-        self.chipCirclePointsReverse.reverse()
-        for i in self.chipCirclePointsReverse:
-            self.chipCirclePoints.append(i)
-        '''
-        self.chipCirclePoints.append(((cosd(270) * (self.chipRadius)) + (self.chipPos[0] ), (sind(270) * (self.chipRadius)) + (self.chipPos[1] )))
-        self.chipCirclePoints.append(((cosd(300) * (self.chipRadius)) + (self.chipPos[0] +1), (sind(300) * (self.chipRadius)) + (self.chipPos[1] +1)))
-        self.chipCirclePoints.append(((cosd(300) * (self.chipRadius - 10)) + (self.chipPos[0]), (sind(300) * (self.chipRadius - 10)) + (self.chipPos[1])))
-        self.chipCirclePoints.append(((cosd(270) * (self.chipRadius - 10)) + (self.chipPos[0]), (sind(270) * (self.chipRadius - 10)) + (self.chipPos[1])))
-        '''
+        for i, value in enumerate(self.chipArcAngles):
+            self.chipCirclePointsReverse = []
+            for delta in range (value-10, value+11, 2):
+                self.chipCirclePointsList[i].append([
+                    (cosd(delta) * (self.chipRadius)) + (self.chipPos[0]), 
+                    (sind(delta) * (self.chipRadius)) + (self.chipPos[1])
+                ])
+                self.chipCirclePointsReverse.append([
+                    (cosd(delta) * (self.chipRadius - 10)) + (self.chipPos[0]), 
+                    (sind(delta) * (self.chipRadius - 10)) + (self.chipPos[1])
+                ])
+            self.chipCirclePointsReverse.reverse()
+            for a in self.chipCirclePointsReverse:
+                self.chipCirclePointsList[i].append(a)
 
 GV = game_variable()
 
 class game_objects:
     def chip_object(self):
-
         pygame.draw.circle(GV.display, (159, 27, 39), GV.chipPos, (GV.chipRadius))
-        pygame.draw.polygon(GV.display, (255, 255, 255), GV.chipCirclePoints)
+        for i in GV.chipCirclePointsList:
+            pygame.draw.polygon(GV.display, (255, 255, 255), i)
+
 
 class game_functions:
     def move_chip(self):
