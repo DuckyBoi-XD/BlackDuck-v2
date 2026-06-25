@@ -4,6 +4,7 @@ import json
 import base64
 import os
 import codecs
+import math
 from pygame.locals import *
 from importlib import resources
 
@@ -105,13 +106,21 @@ class game_variable: # Game variables
 
         self.chipRadius = 50
         self.chipPos = [600, 350]
+        self.chipCirclePoints = []
 
 GV = game_variable()
 
 class game_objects:
     def chip_object(self):
-        pygame.draw.circle(GV.display, (255, 255, 255), GV.chipPos, GV.chipRadius)
+        
+        for delta in range (0, 61, 2):
+            GV.chipCirclePoints.append([math.cos(delta) * GV.chipRadius, math.sin(delta) * GV.chipRadius])
+        
+        for delta in range (0, 61, 2):
+            GV.chipCirclePoints.append([math.cos(delta) * (GV.chipRadius - 10), math.sin(delta) * (GV.chipRadius - 10)])
+        
         pygame.draw.circle(GV.display, (0, 0, 0), GV.chipPos, (GV.chipRadius-2))
+        pygame.draw.arc(GV.display, (255, 255, 255), chipArcPos, math.radians(0), math.radians(14), 10)
 
 class game_functions:
     def move_chip(self):
