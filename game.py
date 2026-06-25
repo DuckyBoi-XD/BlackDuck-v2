@@ -113,6 +113,10 @@ class game_variable: # Game variables
         self.chipRadius = 50
         self.chipPos = [600, 350]
         self.chipArcAngles = (270, 330, 30, 90, 150, 210)
+GV = game_variable()
+
+class game_objects:
+    def on_init(self):
         self.chipCirclePoints1 = []
         self.chipCirclePoints2 = []
         self.chipCirclePoints3 = []
@@ -124,27 +128,24 @@ class game_variable: # Game variables
         self.chipCirclePointsReverse = []
 
         self.count = True
-        for i, value in enumerate(self.chipArcAngles):
+        for i, value in enumerate(GV.chipArcAngles):
             self.chipCirclePointsReverse = []
             for delta in range (value-10, value+11, 2):
                 self.chipCirclePointsList[i].append([
-                    (cosd(delta) * (self.chipRadius)) + (self.chipPos[0]), 
-                    (sind(delta) * (self.chipRadius)) + (self.chipPos[1])
+                    (cosd(delta) * (GV.chipRadius)) + (GV.chipPos[0]), 
+                    (sind(delta) * (GV.chipRadius)) + (GV.chipPos[1])
                 ])
                 self.chipCirclePointsReverse.append([
-                    (cosd(delta) * (self.chipRadius - 10)) + (self.chipPos[0]), 
-                    (sind(delta) * (self.chipRadius - 10)) + (self.chipPos[1])
+                    (cosd(delta) * (GV.chipRadius - 10)) + (GV.chipPos[0]), 
+                    (sind(delta) * (GV.chipRadius - 10)) + (GV.chipPos[1])
                 ])
             self.chipCirclePointsReverse.reverse()
             for a in self.chipCirclePointsReverse:
                 self.chipCirclePointsList[i].append(a)
 
-GV = game_variable()
-
-class game_objects:
     def chip_object(self):
         pygame.draw.circle(GV.display, (159, 27, 39), GV.chipPos, (GV.chipRadius))
-        for i in GV.chipCirclePointsList:
+        for i in self.chipCirclePointsList:
             pygame.draw.polygon(GV.display, (255, 255, 255), i)
 
 
@@ -191,6 +192,7 @@ class pygame_function:
             GV._running = False
     def on_render(self):
         GV.display.fill(GV.bg_colour)
+        game_objects.on_init(self)
         game_objects.chip_object(self)
     def on_loop(self):
         pass
