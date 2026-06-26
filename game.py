@@ -112,7 +112,11 @@ class game_variable: # Game variables
 
         self.chipRadius = 50
         self.chipPos = [600, 350]
+        self.chipCurrentPos = [600, 350]
         self.chipArcAngles = (270, 330, 30, 90, 150, 210)
+
+        self.mouseStartPos = None
+        self.mousePosChange = False
 GV = game_variable()
 
 class game_objects:
@@ -164,10 +168,21 @@ class game_functions:
                 CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
 
                 if CursorPos_CirclePos <= GV.chipRadius**2:
+                    GV.mouseStartPos = pygame.mouse.get_pos()
+                    GV.mousePosChange = True
                     print("inside")
-                    print(pygame.mouse.get_pos())
                 else:
                     print("outside")
+                    pass
+            if event.type == pygame.MOUSEBUTTONUP:
+                GV.mousePosChange = False
+                GV.chipCurrentPos[0] = GV.chipPos[0]
+                GV.chipCurrentPos[1] = GV.chipPos[1]
+                print("UP")
+            if GV.mousePosChange == True:
+                GV.chipPos[0] = pygame.mouse.get_pos()[0] - GV.mouseStartPos[0] + GV.chipCurrentPos[0]
+                GV.chipPos[1] = pygame.mouse.get_pos()[1] - GV.mouseStartPos[1] + GV.chipCurrentPos[1]
+                print(GV.chipCurrentPos)
 
 GF = game_functions()
 
