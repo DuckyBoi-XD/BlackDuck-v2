@@ -70,11 +70,11 @@ def load_game(): # access save file -JSON
                     
     except FileNotFoundError:
         savefile_value = 2
-        return 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        return 0, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     except (ValueError, json.JSONDecodeError) as error:
         print(f"Corrupted save file - using defaults. Error: {error}")
         savefile_value = 3  
-        return 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        return 0, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 def save_game(money_value = None, chip_info = None):
     '''saving game data'''
@@ -127,20 +127,38 @@ class game_variable: # Game variables
         self.chipPos = [600, 350]
         self.chipCurrentPos = [600, 350]
         self.chipArcAngles = (270, 330, 30, 90, 150, 210)
-        self.chipValues = ("1", "5", "10", "25", "100", "500", "1,000", "5,000", "25,000", "100,000")
+        self.chipValues = ("1", "5", "10", "25", "100", "500", "1000", "5000", "25000", "100000")
+
+        self.chipPosition1 = {}
+        self.chipPosition5 = {}
+        self.chipPosition10 = {}
+        self.chipPosition25 = {}
+        self.chipPosition100 = {}
+        self.chipPosition500 = {}
+        self.chipPosition1000 = {}
+        self.chipPosition5000 = {}
+        self.chipPosition25000 = {}
+        self.chipPosition100000 = {}
+
+        self.chipPositions = [self.chipPosition1, self.chipPosition5, self.chipPosition10, self.chipPosition25, self.chipPosition100, self.chipPosition500,
+                              self.chipPosition1000, self.chipPosition5000, self.chipPosition25000, self.chipPosition100000]
         self.chipValueColours = (self.white_colour, self.red_colour, self.blue_colour, self.green_colour, self.black_colour, 
                                  self.bright_purple_colour, self.yellow_colour, self.orange_colour, self.dark_blue, self.light_blue)
 
         self.mouseStartPos = None
         self.mousePosChange = False
 
-        self.threeCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 40)
-        self.fourCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 35)
-        self.fiveCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 30)
-        self.sixCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 25)
-        self.sevenCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 20)
+        self.threeCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 35)
+        self.fourCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 30)
+        self.fiveCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 24)
+        self.sixCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 22)
 
-        self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont, self.sevenCharFont)
+        self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont)
+
+        self.chipStartPositions = {}
+        for index, i in enumerate(self.chipValues): # Starting value of chips
+            startingx = index * 100 + (index+1)*(200/11) + 50
+            self.chipStartPositions[i] = (startingx, 650)
 
 GV = game_variable()
 
@@ -156,45 +174,53 @@ class game_objects:
                                      self.chipCirclePoints4, self.chipCirclePoints5, self.chipCirclePoints6)
         self.chipCirclePointsReverse = []
 
-        self.count = True
-        for i, value in enumerate(GV.chipArcAngles):
-            self.chipCirclePointsReverse = []
-            for delta in range (value-10, value+11, 2):
-                self.chipCirclePointsList[i].append([
-                    (cosd(delta) * (GV.chipRadius)) + (GV.chipPos[0]), 
-                    (sind(delta) * (GV.chipRadius)) + (GV.chipPos[1])
-                ])
-                self.chipCirclePointsReverse.append([
-                    (cosd(delta) * (GV.chipRadius - 10)) + (GV.chipPos[0]), 
-                    (sind(delta) * (GV.chipRadius - 10)) + (GV.chipPos[1])
-                ])
-            self.chipCirclePointsReverse.reverse()
-            for a in self.chipCirclePointsReverse:
-                self.chipCirclePointsList[i].append(a)
-
     def chip_object(self):
-        for index, i in enumerate(CHIPS):
+        self.chipPosLocation = None
+        for self.index, i in enumerate(CHIPS):
             if i != 0:
-                for a in range(0, i):
+                offset = 0
+                for self.chipID in range(0, i):
+                    (GV.chipPositions[self.index])[str(GV.chipValues[self.index]) + str(self.chipID)] = ((GV.chipStartPositions[GV.chipValues[self.index]])[0], 
+                                            (GV.chipStartPositions[GV.chipValues[self.index]])[1] - offset)
+                    self.chipPosLocation = (GV.chipPositions[self.index])[str(GV.chipValues[self.index]) + str(self.chipID)]
+                    offset += 5
 
-        pygame.draw.circle(GV.display, (159, 27, 39), GV.chipPos, (GV.chipRadius))
-        for i in self.chipCirclePointsList:
-            pygame.draw.polygon(GV.display, GV.white_colour, i)     
+                    for b, value in enumerate(GV.chipArcAngles):
+                        self.chipCirclePointsReverse = []
+                        for delta in range (value-10, value+11, 2):
+                            self.chipCirclePointsList[b].append([
+                                (cosd(delta) * (GV.chipRadius)) + (self.chipPosLocation)[0], 
+                                (sind(delta) * (GV.chipRadius)) + (self.chipPosLocation)[1]
+                            ])
+                            self.chipCirclePointsReverse.append([
+                                (cosd(delta) * (GV.chipRadius - 7)) + (self.chipPosLocation)[0], 
+                                (sind(delta) * (GV.chipRadius - 7)) + (self.chipPosLocation)[1]
+                            ])
+                        self.chipCirclePointsReverse.reverse()
+                        for c in self.chipCirclePointsReverse:
+                            self.chipCirclePointsList[b].append(c)
+                    
+                    pygame.draw.circle(GV.display, GV.chipValueColours[self.index], self.chipPosLocation, GV.chipRadius) # base chip
+                    for i in self.chipCirclePointsList: # Chip Accent
+                        if GV.chipValueColours[self.index] == GV.white_colour:
+                            pygame.draw.polygon(GV.display, GV.blue_colour, i)
+                        else:
+                            pygame.draw.polygon(GV.display, GV.white_colour, i)
 
-        chip = GV.chipValues[i]
-        if len(chip) < 4: # Grabs the font depending on value
-            chipFontFont = GV.chipFontList[0]
-        elif len(chip) == 9:
-            chipFontFont = GV.chipFontList[4]
-        elif len(chip) > 3:
-            chipFontFont = GV.chipFontList[len(chip) - 4]
-             
-        chipText = GV.threeCharFont.render(GV.chipValues[6], True, GV.white_colour)
-        chipTextRect = chipText.get_rect(center=(GV.chipPos))
+                    chip = GV.chipValues[self.index]
+                    if len(chip) <= 3: # Grabs the font depending on value
+                        chipFontFont = GV.chipFontList[0]
+                    elif len(chip) >= 4:
+                        chipFontFont = GV.chipFontList[len(chip) - 3]
 
-        GV.display.blit(chipText, chipTextRect)
-        
-
+                    if GV.chipValueColours[self.index] == GV.white_colour:
+                        chipText = chipFontFont.render(GV.chipValues[self.index], True, GV.blue_colour)
+                    else:
+                        chipText = chipFontFont.render(GV.chipValues[self.index], True, GV.white_colour)
+                    chipTextRect = chipText.get_rect(center=(self.chipPosLocation))
+                    GV.display.blit(chipText, chipTextRect)
+                    
+CO = game_objects()
 
 class game_functions:
     def move_chip(self):
@@ -204,8 +230,8 @@ class game_functions:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 cursorPosx, cursorPosy = pygame.mouse.get_pos()
 
-                CursorPos_CirclePosx = cursorPosx - (GV.chipPos[0])
-                CursorPos_CirclePosy = cursorPosy - (GV.chipPos[1])
+                CursorPos_CirclePosx = cursorPosx - (CO.chipPosLocation[0])
+                CursorPos_CirclePosy = cursorPosy - (CO.chipPosLocation[1])
 
                 CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
 
