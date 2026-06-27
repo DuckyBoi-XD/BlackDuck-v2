@@ -65,16 +65,16 @@ def load_game(): # access save file -JSON
             data = json.loads(json_str)
             savefile_value = 1
             return (data.get("Money", 0),
-                    data.get("Chips", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]) # 1, 5, 10, 25, 50, 100, 250, 500, 1.000, 2.500, 5.000, 10.000, 25.000, 50.000, 100.000, 250.000, 500,000
-                    )
+                    data.get("Chips", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+                    )# 1, 5, 10, 25, 100, 500, 1.000, 5.000, 10.000, 25.000, 100.000
                     
     except FileNotFoundError:
         savefile_value = 2
-        return 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]
+        return 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     except (ValueError, json.JSONDecodeError) as error:
         print(f"Corrupted save file - using defaults. Error: {error}")
         savefile_value = 3  
-        return 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]
+        return 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 def save_game(money_value = None, chip_info = None):
     '''saving game data'''
@@ -105,18 +105,43 @@ def sind(x):
 
 class game_variable: # Game variables
     def __init__(self):
+        pygame.init()
         self.displayWidth, self.displayHeight = 1200, 700
         self.display = pygame.display.set_mode((self.displayWidth, self.displayHeight), pygame.HWSURFACE | pygame.DOUBLEBUF)
         self.bg_colour = (23, 74, 67)
+
+        self.white_colour = (255, 255, 255)
+        self.red_colour = (159, 27, 39)
+        self.blue_colour = (21, 38, 110)
+        self.green_colour = (27, 120, 75)
+        self.black_colour = (9, 14, 18)
+        self.bright_purple_colour = (127, 101, 227)
+        self.yellow_colour = (255, 238, 50)
+        self.orange_colour = (255, 176, 60)
+        self.dark_blue = (42, 52, 161)
+        self.light_blue = (110, 177, 255)
+
         self._running = True
 
         self.chipRadius = 50
         self.chipPos = [600, 350]
         self.chipCurrentPos = [600, 350]
         self.chipArcAngles = (270, 330, 30, 90, 150, 210)
+        self.chipValues = ("1", "5", "10", "25", "100", "500", "1,000", "5,000", "25,000", "100,000")
+        self.chipValueColours = (self.white_colour, self.red_colour, self.blue_colour, self.green_colour, self.black_colour, 
+                                 self.bright_purple_colour, self.yellow_colour, self.orange_colour, self.dark_blue, self.light_blue)
 
         self.mouseStartPos = None
         self.mousePosChange = False
+
+        self.threeCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 40)
+        self.fourCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 35)
+        self.fiveCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 30)
+        self.sixCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 25)
+        self.sevenCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 20)
+
+        self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont, self.sevenCharFont)
+
 GV = game_variable()
 
 class game_objects:
@@ -148,9 +173,27 @@ class game_objects:
                 self.chipCirclePointsList[i].append(a)
 
     def chip_object(self):
+        for index, i in enumerate(CHIPS):
+            if i != 0:
+                for a in range(0, i):
+
         pygame.draw.circle(GV.display, (159, 27, 39), GV.chipPos, (GV.chipRadius))
         for i in self.chipCirclePointsList:
-            pygame.draw.polygon(GV.display, (255, 255, 255), i)
+            pygame.draw.polygon(GV.display, GV.white_colour, i)     
+
+        chip = GV.chipValues[i]
+        if len(chip) < 4: # Grabs the font depending on value
+            chipFontFont = GV.chipFontList[0]
+        elif len(chip) == 9:
+            chipFontFont = GV.chipFontList[4]
+        elif len(chip) > 3:
+            chipFontFont = GV.chipFontList[len(chip) - 4]
+             
+        chipText = GV.threeCharFont.render(GV.chipValues[6], True, GV.white_colour)
+        chipTextRect = chipText.get_rect(center=(GV.chipPos))
+
+        GV.display.blit(chipText, chipTextRect)
+        
 
 
 class game_functions:
@@ -158,7 +201,6 @@ class game_functions:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 GV._running = False
-            pygame.display.flip()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 cursorPosx, cursorPosy = pygame.mouse.get_pos()
 
@@ -168,21 +210,18 @@ class game_functions:
                 CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
 
                 if CursorPos_CirclePos <= GV.chipRadius**2:
+                    pass # for some reason fixes double click glitch
                     GV.mouseStartPos = pygame.mouse.get_pos()
                     GV.mousePosChange = True
-                    print("inside")
                 else:
-                    print("outside")
                     pass
             if event.type == pygame.MOUSEBUTTONUP:
                 GV.mousePosChange = False
                 GV.chipCurrentPos[0] = GV.chipPos[0]
                 GV.chipCurrentPos[1] = GV.chipPos[1]
-                print("UP")
             if GV.mousePosChange == True:
                 GV.chipPos[0] = pygame.mouse.get_pos()[0] - GV.mouseStartPos[0] + GV.chipCurrentPos[0]
                 GV.chipPos[1] = pygame.mouse.get_pos()[1] - GV.mouseStartPos[1] + GV.chipCurrentPos[1]
-                print(GV.chipCurrentPos)
 
 GF = game_functions()
 
