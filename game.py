@@ -128,20 +128,10 @@ class game_variable: # Game variables
         self.chipCurrentPos = [600, 350]
         self.chipArcAngles = (270, 330, 30, 90, 150, 210)
         self.chipValues = ("1", "5", "10", "25", "100", "500", "1000", "5000", "25000", "100000")
+        self.chipValuePositions = ("chipPositions1", "chipPositions5", "chipPositions10", "chipPositions25", "chipPositions100", "chipPositions500",
+                                   "chipPositions1000", "chipPositions5000", "chipPositions25000", "chipPositions100000")
 
-        self.chipPosition1 = {}
-        self.chipPosition5 = {}
-        self.chipPosition10 = {}
-        self.chipPosition25 = {}
-        self.chipPosition100 = {}
-        self.chipPosition500 = {}
-        self.chipPosition1000 = {}
-        self.chipPosition5000 = {}
-        self.chipPosition25000 = {}
-        self.chipPosition100000 = {}
-
-        self.chipPositions = [self.chipPosition1, self.chipPosition5, self.chipPosition10, self.chipPosition25, self.chipPosition100, self.chipPosition500,
-                              self.chipPosition1000, self.chipPosition5000, self.chipPosition25000, self.chipPosition100000]
+        self.chipPositions = {}
         self.chipValueColours = (self.white_colour, self.red_colour, self.blue_colour, self.green_colour, self.black_colour, 
                                  self.bright_purple_colour, self.yellow_colour, self.orange_colour, self.dark_blue, self.light_blue)
 
@@ -176,13 +166,12 @@ class game_objects:
 
     def chip_object(self):
         self.chipPosLocation = None
-        for self.index, i in enumerate(CHIPS):
+        for index, i in enumerate(CHIPS):
             if i != 0:
-                offset = 0
+                offset = 5
                 for self.chipID in range(0, i):
-                    (GV.chipPositions[self.index])[str(GV.chipValues[self.index]) + str(self.chipID)] = ((GV.chipStartPositions[GV.chipValues[self.index]])[0], 
-                                            (GV.chipStartPositions[GV.chipValues[self.index]])[1] - offset)
-                    self.chipPosLocation = (GV.chipPositions[self.index])[str(GV.chipValues[self.index]) + str(self.chipID)]
+                    GV.chipPositions["chipPositions"] = [((GV.chipStartPositions)[GV.chipValues[index]])[0], ((GV.chipStartPositions[GV.chipValues[index]])[1] - offset)]
+                    self.chipPosLocation = GV.chipPositions["chipPositions"]
                     offset += 5
 
                     for b, value in enumerate(GV.chipArcAngles):
@@ -200,54 +189,56 @@ class game_objects:
                         for c in self.chipCirclePointsReverse:
                             self.chipCirclePointsList[b].append(c)
                     
-                    pygame.draw.circle(GV.display, GV.chipValueColours[self.index], self.chipPosLocation, GV.chipRadius) # base chip
+                    pygame.draw.circle(GV.display, GV.chipValueColours[index], self.chipPosLocation, GV.chipRadius) # base chip
                     for i in self.chipCirclePointsList: # Chip Accent
-                        if GV.chipValueColours[self.index] == GV.white_colour:
+                        if GV.chipValueColours[index] == GV.white_colour:
                             pygame.draw.polygon(GV.display, GV.blue_colour, i)
                         else:
                             pygame.draw.polygon(GV.display, GV.white_colour, i)
 
-                    chip = GV.chipValues[self.index]
+                    chip = GV.chipValues[index]
                     if len(chip) <= 3: # Grabs the font depending on value
                         chipFontFont = GV.chipFontList[0]
                     elif len(chip) >= 4:
                         chipFontFont = GV.chipFontList[len(chip) - 3]
 
-                    if GV.chipValueColours[self.index] == GV.white_colour:
-                        chipText = chipFontFont.render(GV.chipValues[self.index], True, GV.blue_colour)
+                    if GV.chipValueColours[index] == GV.white_colour:
+                        chipText = chipFontFont.render(GV.chipValues[index], True, GV.blue_colour)
                     else:
-                        chipText = chipFontFont.render(GV.chipValues[self.index], True, GV.white_colour)
+                        chipText = chipFontFont.render(GV.chipValues[index], True, GV.white_colour)
                     chipTextRect = chipText.get_rect(center=(self.chipPosLocation))
                     GV.display.blit(chipText, chipTextRect)
                     
-CO = game_objects()
+GO = game_objects()
 
 class game_functions:
     def move_chip(self):
+        self.currentChipPos = 0, 0
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 GV._running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 cursorPosx, cursorPosy = pygame.mouse.get_pos()
+                for keys in GV.chipPositions:
+                    value = GV.chipPositions[keys]
+                    CursorPos_CirclePosx = cursorPosx - (value[0])
+                    CursorPos_CirclePosy = cursorPosy - (value[1])
 
-                CursorPos_CirclePosx = cursorPosx - (CO.chipPosLocation[0])
-                CursorPos_CirclePosy = cursorPosy - (CO.chipPosLocation[1])
-
-                CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
-
-                if CursorPos_CirclePos <= GV.chipRadius**2:
-                    pass # for some reason fixes double click glitch
-                    GV.mouseStartPos = pygame.mouse.get_pos()
-                    GV.mousePosChange = True
-                else:
-                    pass
+                    CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
+                    self.currentChipPos = value
+                    if CursorPos_CirclePos <= GV.chipRadius**2:
+                        pass # for some reason fixes double click glitch
+                        GV.mouseStartPos = pygame.mouse.get_pos()
+                        GV.mousePosChange = True
+                    else:
+                        pass
             if event.type == pygame.MOUSEBUTTONUP:
                 GV.mousePosChange = False
-                GV.chipCurrentPos[0] = GV.chipPos[0]
-                GV.chipCurrentPos[1] = GV.chipPos[1]
+                GV.chipCurrentPos[0] = self.currentChipPos[0]
+                GV.chipCurrentPos[1] = self.currentChipPos[1]
             if GV.mousePosChange == True:
-                GV.chipPos[0] = pygame.mouse.get_pos()[0] - GV.mouseStartPos[0] + GV.chipCurrentPos[0]
-                GV.chipPos[1] = pygame.mouse.get_pos()[1] - GV.mouseStartPos[1] + GV.chipCurrentPos[1]
+                self.currentChipPos[0] = pygame.mouse.get_pos()[0] - GV.mouseStartPos[0] + GV.chipCurrentPos[0]
+                self.currentChipPos[1] = pygame.mouse.get_pos()[1] - GV.mouseStartPos[1] + GV.chipCurrentPos[1]
 
 GF = game_functions()
 
