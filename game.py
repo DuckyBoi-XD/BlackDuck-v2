@@ -246,6 +246,8 @@ class game_functions:
                             pass # for some reason fixes double click glitch
                             GV.mouseStartPos = pygame.mouse.get_pos()
                             GV.mousePosChange = True
+                            GV.chipCurrentPos[0] = self.chipPos[0]
+                            GV.chipCurrentPos[1] = self.chipPos[1]
                             print("inside")
                             break
                         else:
