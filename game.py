@@ -70,11 +70,11 @@ def load_game(): # access save file -JSON
                     
     except FileNotFoundError:
         savefile_value = 2
-        return 0, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        return 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     except (ValueError, json.JSONDecodeError) as error:
         print(f"Corrupted save file - using defaults. Error: {error}")
         savefile_value = 3  
-        return 0, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        return 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 def save_game(money_value = None, chip_info = None):
     '''saving game data'''
@@ -96,6 +96,7 @@ def save_game(money_value = None, chip_info = None):
         f.write(encoded_bytes)
 
 MONEY, CHIPS = load_game()
+CHIPS = [1, 1, 0, 0, 0, 0, 0, 0, 1, 1]
 debug_var = True
 
 def cosd(x):
@@ -188,6 +189,8 @@ class game_objects:
             for pos in list:
 
                 # Chip Accents Positions
+                for i in self.chipCirclePointsList:
+                    i.clear()
                 for b, value in enumerate(GV.chipArcAngles):
                     self.chipCirclePointsReverse = []
                     for delta in range (value-10, value+11, 2):
