@@ -130,8 +130,19 @@ class game_variable: # Game variables
         self.chipValues = ("1", "5", "10", "25", "100", "500", "1000", "5000", "25000", "100000")
         self.chipValuePositions = ("chipPositions1", "chipPositions5", "chipPositions10", "chipPositions25", "chipPositions100", "chipPositions500",
                                    "chipPositions1000", "chipPositions5000", "chipPositions25000", "chipPositions100000")
+        chipPositions1 = []
+        chipPositions5 = []
+        chipPositions10 = []
+        chipPositions25 = []
+        chipPositions100 = []
+        chipPositions500 = []
+        chipPositions1000 = []
+        chipPositions5000 = []
+        chipPositions25000 = []
+        chipPositions100000 = []
 
-        self.chipPositions = {}
+        self.chipPositions = (chipPositions1, chipPositions5, chipPositions10, chipPositions25, chipPositions100, chipPositions500,
+                            chipPositions1000, chipPositions5000, chipPositions25000, chipPositions100000)
         self.chipValueColours = (self.white_colour, self.red_colour, self.blue_colour, self.green_colour, self.black_colour, 
                                  self.bright_purple_colour, self.yellow_colour, self.orange_colour, self.dark_blue, self.light_blue)
 
@@ -166,12 +177,14 @@ class game_objects:
 
     def chip_object(self):
         self.chipPosLocation = None
+        for list in GV.chipPositions:
+            list.clear()
         for index, i in enumerate(CHIPS):
             if i != 0:
                 offset = 5
                 for self.chipID in range(0, i):
-                    GV.chipPositions["chipPositions"] = [((GV.chipStartPositions)[GV.chipValues[index]])[0], ((GV.chipStartPositions[GV.chipValues[index]])[1] - offset)]
-                    self.chipPosLocation = GV.chipPositions["chipPositions"]
+                    GV.chipPositions[index].append([((GV.chipStartPositions)[GV.chipValues[index]])[0], ((GV.chipStartPositions[GV.chipValues[index]])[1] - offset)])
+                    self.chipPosLocation = (GV.chipPositions[index])[-1]
                     offset += 5
 
                     for b, value in enumerate(GV.chipArcAngles):
@@ -213,26 +226,27 @@ GO = game_objects()
 
 class game_functions:
     def move_chip(self):
-        self.currentChipPos = 0, 0
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 GV._running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 cursorPosx, cursorPosy = pygame.mouse.get_pos()
-                for keys in GV.chipPositions:
-                    value = GV.chipPositions[keys]
-                    CursorPos_CirclePosx = cursorPosx - (value[0])
-                    CursorPos_CirclePosy = cursorPosy - (value[1])
+                for list in GV.chipPositions:
+                    for pos in list:
+                        CursorPos_CirclePosx = cursorPosx - (pos[0])
+                        CursorPos_CirclePosy = cursorPosy - (pos[1])
 
-                    CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
-                    self.currentChipPos = value
-                    if CursorPos_CirclePos <= GV.chipRadius**2:
-                        pass # for some reason fixes double click glitch
-                        GV.mouseStartPos = pygame.mouse.get_pos()
-                        GV.mousePosChange = True
-                    else:
-                        pass
-            if event.type == pygame.MOUSEBUTTONUP:
+                        CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
+                        self.currentChipPos = pos
+                        if CursorPos_CirclePos <= GV.chipRadius**2:
+                            pass # for some reason fixes double click glitch
+                            GV.mouseStartPos = pygame.mouse.get_pos()
+                            GV.mousePosChange = True
+                            print("inside")
+                        else:
+                            print("outside")
+                            pass
+            if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
                 GV.chipCurrentPos[0] = self.currentChipPos[0]
                 GV.chipCurrentPos[1] = self.currentChipPos[1]
