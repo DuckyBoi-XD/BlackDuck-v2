@@ -168,7 +168,7 @@ class game_variable: # Game variables
                 offset = 5
                 for self.chipID in range(0, i):
                     self.chipPositions[index].append([((self.chipStartPositions)[self.chipValues[index]])[0], ((self.chipStartPositions[self.chipValues[index]])[1] - offset)])
-                    offset += 5
+                    offset += 10
         
         for indexa, list in enumerate(self.chipPositions):
             for indexb, value in enumerate(list):
