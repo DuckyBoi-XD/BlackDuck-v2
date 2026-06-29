@@ -96,7 +96,7 @@ def save_game(money_value = None, chip_info = None):
         f.write(encoded_bytes)
 
 MONEY, CHIPS = load_game()
-CHIPS = [1, 1, 0, 0, 0, 0, 0, 0, 1, 1]
+CHIPS = [3, 1, 3, 1, 1, 1, 1, 1, 1, 1]
 debug_var = True
 
 def cosd(x):
@@ -117,7 +117,7 @@ class game_variable: # Game variables
         self.green_colour = (27, 120, 75)
         self.black_colour = (9, 14, 18)
         self.bright_purple_colour = (127, 101, 227)
-        self.yellow_colour = (255, 238, 50)
+        self.yellow_colour = (241, 208, 93)
         self.orange_colour = (255, 176, 60)
         self.dark_blue = (42, 52, 161)
         self.light_blue = (110, 177, 255)
@@ -146,14 +146,15 @@ class game_variable: # Game variables
                             chipPositions1000, chipPositions5000, chipPositions25000, chipPositions100000)
         self.chipValueColours = (self.white_colour, self.red_colour, self.blue_colour, self.green_colour, self.black_colour, 
                                  self.bright_purple_colour, self.yellow_colour, self.orange_colour, self.dark_blue, self.light_blue)
+        self.chipDisplayPriority = []
 
         self.mouseStartPos = None
         self.mousePosChange = False
 
-        self.threeCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 35)
-        self.fourCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 30)
-        self.fiveCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 24)
-        self.sixCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 22)
+        self.threeCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 50)
+        self.fourCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 40)
+        self.fiveCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 30)
+        self.sixCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 28)
 
         self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont)
 
@@ -168,6 +169,10 @@ class game_variable: # Game variables
                 for self.chipID in range(0, i):
                     self.chipPositions[index].append([((self.chipStartPositions)[self.chipValues[index]])[0], ((self.chipStartPositions[self.chipValues[index]])[1] - offset)])
                     offset += 5
+        
+        for indexa, list in enumerate(self.chipPositions):
+            for indexb, value in enumerate(list):
+                self.chipDisplayPriority.append((indexa, indexb))
 
 GV = game_variable()
 
@@ -185,50 +190,59 @@ class game_objects:
 
     def chip_object(self):
         self.chipPosLocation = None
-        for index, list in enumerate(GV.chipPositions):
-            for pos in list:
+        for index_var in GV.chipDisplayPriority:
+            pos = (GV.chipPositions[index_var[0]])[index_var[1]]
+            # Chip Accents Positions
+            for b, value in enumerate(GV.chipArcAngles):
+                self.chipCirclePointsReverse = []
+                for delta in range (value-10, value+11, 2):
+                    self.chipCirclePointsList[b].append([
+                        (cosd(delta) * (GV.chipRadius)) + (pos)[0], 
+                        (sind(delta) * (GV.chipRadius)) + (pos)[1]
+                    ])
+                    self.chipCirclePointsReverse.append([
+                        (cosd(delta) * (GV.chipRadius - 7)) + (pos)[0], 
+                        (sind(delta) * (GV.chipRadius - 7)) + (pos)[1]
+                    ])
+                self.chipCirclePointsReverse.reverse()
+                for c in self.chipCirclePointsReverse:
+                    self.chipCirclePointsList[b].append(c)
 
-                # Chip Accents Positions
-                for i in self.chipCirclePointsList:
-                    i.clear()
-                for b, value in enumerate(GV.chipArcAngles):
-                    self.chipCirclePointsReverse = []
-                    for delta in range (value-10, value+11, 2):
-                        self.chipCirclePointsList[b].append([
-                            (cosd(delta) * (GV.chipRadius)) + (pos)[0], 
-                            (sind(delta) * (GV.chipRadius)) + (pos)[1]
-                        ])
-                        self.chipCirclePointsReverse.append([
-                            (cosd(delta) * (GV.chipRadius - 7)) + (pos)[0], 
-                            (sind(delta) * (GV.chipRadius - 7)) + (pos)[1]
-                        ])
-                    self.chipCirclePointsReverse.reverse()
-                    for c in self.chipCirclePointsReverse:
-                        self.chipCirclePointsList[b].append(c)
+                print(self.chipCirclePoints2)
                 
                 # Base Cricle
-                pygame.draw.circle(GV.display, GV.chipValueColours[index], pos, GV.chipRadius) # base chip
+                pygame.draw.circle(GV.display, GV.chipValueColours[index_var[0]], pos, GV.chipRadius) # base chip
 
                 # Chip Accent Creation
                 for i in self.chipCirclePointsList:
-                    if GV.chipValueColours[index] == GV.white_colour:
+                    print(i)
+                    print()
+                    if GV.chipValueColours[index_var[0]] == GV.white_colour:
                         pygame.draw.polygon(GV.display, GV.blue_colour, i)
                     else:
                         pygame.draw.polygon(GV.display, GV.white_colour, i)
 
                 # Font Creation
-                chip = GV.chipValues[index]
+                chip = GV.chipValues[index_var[0]]
                 if len(chip) <= 3: # Grabs the font depending on value
                     chipFontFont = GV.chipFontList[0]
                 elif len(chip) >= 4:
                     chipFontFont = GV.chipFontList[len(chip) - 3]
 
-                if GV.chipValueColours[index] == GV.white_colour:
-                    chipText = chipFontFont.render(GV.chipValues[index], True, GV.blue_colour)
+                if GV.chipValueColours[index_var[0]] == GV.white_colour:
+                    chipText = chipFontFont.render(GV.chipValues[index_var[0]], True, GV.blue_colour)
                 else:
-                    chipText = chipFontFont.render(GV.chipValues[index], True, GV.white_colour)
+                    chipText = chipFontFont.render(GV.chipValues[index_var[0]], True, GV.white_colour)
                 chipTextRect = chipText.get_rect(center=(pos))
                 GV.display.blit(chipText, chipTextRect)
+
+                # Black/white arc
+                if GV.chipValueColours[index_var[0]] == GV.black_colour or GV.chipValueColours[index_var[0]] == GV.blue_colour:
+                    pygame.draw.arc(GV.display, GV.white_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=1)
+                    pygame.draw.arc(GV.display, GV.white_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(0), width=1)
+                else:
+                    pygame.draw.arc(GV.display, GV.black_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=1)
+                    pygame.draw.arc(GV.display, GV.black_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(360), width=1)
                     
 GO = game_objects()
 
