@@ -263,24 +263,22 @@ class game_functions:
                         GV.mousePosChange = True
                         GV.chipCurrentPos[0] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
                         GV.chipCurrentPos[1] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1]
-                        print("inside")
+
+                        GV.chipDisplayPriority.remove(self.index_var)
+                        GV.chipDisplayPriority.append(self.index_var)
                         break
                     else:
-                        print("outside")
                         pass
                 if GV.mousePosChange == True:
                     break
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
-                print("finish")
                 GV.chipCurrentPos[0] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
                 GV.chipCurrentPos[1] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1]
             if GV.mousePosChange == True:
-                print("move")
                 ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0] = pygame.mouse.get_pos()[0] - GV.mouseStartPos[0] + GV.chipCurrentPos[0]
                 ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1] = pygame.mouse.get_pos()[1] - GV.mouseStartPos[1] + GV.chipCurrentPos[1]
-                print(self.index_var[0])
-                print(self.index_var[1])
+
 
 GF = game_functions()
 
