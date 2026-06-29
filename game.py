@@ -191,6 +191,8 @@ class game_objects:
     def chip_object(self):
         self.chipPosLocation = None
         for index_var in GV.chipDisplayPriority:
+            for listpostions in self.chipCirclePointsList:
+                listpostions.clear()
             pos = (GV.chipPositions[index_var[0]])[index_var[1]]
             # Chip Accents Positions
             for b, value in enumerate(GV.chipArcAngles):
@@ -208,41 +210,38 @@ class game_objects:
                 for c in self.chipCirclePointsReverse:
                     self.chipCirclePointsList[b].append(c)
 
-                print(self.chipCirclePoints2)
-                
-                # Base Cricle
-                pygame.draw.circle(GV.display, GV.chipValueColours[index_var[0]], pos, GV.chipRadius) # base chip
+            # Base Cricle
+            pygame.draw.circle(GV.display, GV.chipValueColours[index_var[0]], pos, GV.chipRadius) # base chip
 
-                # Chip Accent Creation
-                for i in self.chipCirclePointsList:
-                    print(i)
-                    print()
-                    if GV.chipValueColours[index_var[0]] == GV.white_colour:
-                        pygame.draw.polygon(GV.display, GV.blue_colour, i)
-                    else:
-                        pygame.draw.polygon(GV.display, GV.white_colour, i)
-
-                # Font Creation
-                chip = GV.chipValues[index_var[0]]
-                if len(chip) <= 3: # Grabs the font depending on value
-                    chipFontFont = GV.chipFontList[0]
-                elif len(chip) >= 4:
-                    chipFontFont = GV.chipFontList[len(chip) - 3]
+            # Chip Accent Creation
+            for i in self.chipCirclePointsList:
 
                 if GV.chipValueColours[index_var[0]] == GV.white_colour:
-                    chipText = chipFontFont.render(GV.chipValues[index_var[0]], True, GV.blue_colour)
+                    pygame.draw.polygon(GV.display, GV.blue_colour, i)
                 else:
-                    chipText = chipFontFont.render(GV.chipValues[index_var[0]], True, GV.white_colour)
-                chipTextRect = chipText.get_rect(center=(pos))
-                GV.display.blit(chipText, chipTextRect)
+                    pygame.draw.polygon(GV.display, GV.white_colour, i)
 
-                # Black/white arc
-                if GV.chipValueColours[index_var[0]] == GV.black_colour or GV.chipValueColours[index_var[0]] == GV.blue_colour:
-                    pygame.draw.arc(GV.display, GV.white_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=1)
-                    pygame.draw.arc(GV.display, GV.white_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(0), width=1)
-                else:
-                    pygame.draw.arc(GV.display, GV.black_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=1)
-                    pygame.draw.arc(GV.display, GV.black_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(360), width=1)
+            # Font Creation
+            chip = GV.chipValues[index_var[0]]
+            if len(chip) <= 3: # Grabs the font depending on value
+                chipFontFont = GV.chipFontList[0]
+            elif len(chip) >= 4:
+                chipFontFont = GV.chipFontList[len(chip) - 3]
+
+            if GV.chipValueColours[index_var[0]] == GV.white_colour:
+                chipText = chipFontFont.render(GV.chipValues[index_var[0]], True, GV.blue_colour)
+            else:
+                chipText = chipFontFont.render(GV.chipValues[index_var[0]], True, GV.white_colour)
+            chipTextRect = chipText.get_rect(center=(pos))
+            GV.display.blit(chipText, chipTextRect)
+
+            # Black/white arc
+            if GV.chipValueColours[index_var[0]] == GV.black_colour or GV.chipValueColours[index_var[0]] == GV.blue_colour:
+                pygame.draw.arc(GV.display, GV.white_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=1)
+                pygame.draw.arc(GV.display, GV.white_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(0), width=1)
+            else:
+                pygame.draw.arc(GV.display, GV.black_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=1)
+                pygame.draw.arc(GV.display, GV.black_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(360), width=1)
                     
 GO = game_objects()
 
