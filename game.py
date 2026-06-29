@@ -252,38 +252,35 @@ class game_functions:
                 GV._running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 cursorPosx, cursorPosy = pygame.mouse.get_pos()
-                for self.index1, list in enumerate(GV.chipPositions):
-                    for self.index2, self.chipPos in enumerate(list):
-                        CursorPos_CirclePosx = cursorPosx - (self.chipPos[0])
-                        CursorPos_CirclePosy = cursorPosy - (self.chipPos[1])
+                for self.index_var in reversed(GV.chipDisplayPriority):
+                    CursorPos_CirclePosx = cursorPosx - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
+                    CursorPos_CirclePosy = cursorPosy - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1]
 
-                        CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
-                        if CursorPos_CirclePos <= GV.chipRadius**2:
-                            pass # for some reason fixes double click glitch
-                            GV.mouseStartPos = pygame.mouse.get_pos()
-                            GV.mousePosChange = True
-                            GV.chipCurrentPos[0] = self.chipPos[0]
-                            GV.chipCurrentPos[1] = self.chipPos[1]
-                            print("inside")
-                            break
-                        else:
-                            print("outside")
-                            pass
-                    if GV.mousePosChange == True:
+                    CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
+                    if CursorPos_CirclePos <= GV.chipRadius**2:
+                        pass # for some reason fixes double click glitch
+                        GV.mouseStartPos = pygame.mouse.get_pos()
+                        GV.mousePosChange = True
+                        GV.chipCurrentPos[0] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
+                        GV.chipCurrentPos[1] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1]
+                        print("inside")
                         break
+                    else:
+                        print("outside")
+                        pass
+                if GV.mousePosChange == True:
+                    break
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
                 print("finish")
-                GV.chipCurrentPos[0] = self.chipPos[0]
-                GV.chipCurrentPos[1] = self.chipPos[1]
+                GV.chipCurrentPos[0] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
+                GV.chipCurrentPos[1] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1]
             if GV.mousePosChange == True:
                 print("move")
-                self.chipPos[0] = pygame.mouse.get_pos()[0] - GV.mouseStartPos[0] + GV.chipCurrentPos[0]
-                self.chipPos[1] = pygame.mouse.get_pos()[1] - GV.mouseStartPos[1] + GV.chipCurrentPos[1]
-                print(self.index1)
-                print(self.index2)
-                (GV.chipPositions[self.index1])[self.index2] = self.chipPos
-                print (self.chipPos)
+                ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0] = pygame.mouse.get_pos()[0] - GV.mouseStartPos[0] + GV.chipCurrentPos[0]
+                ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1] = pygame.mouse.get_pos()[1] - GV.mouseStartPos[1] + GV.chipCurrentPos[1]
+                print(self.index_var[0])
+                print(self.index_var[1])
 
 GF = game_functions()
 
