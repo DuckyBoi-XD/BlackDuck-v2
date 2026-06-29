@@ -237,15 +237,23 @@ class game_objects:
 
             # Black/white arc
 
+            chipOutlineColour = None
+            chipOutlineWidth = None
             if GV.mousePosChange and index_var == GV.chipDisplayPriority[-1]:
-                pygame.draw.arc(GV.display, GV.yellow_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=2)
-                pygame.draw.arc(GV.display, GV.yellow_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(0), width=2)
+                if GV.chipValueColours[index_var[0]] == GV.yellow_colour:
+                    chipOutlineColour = GV.orange_colour
+                    chipOutlineWidth = 2
+                else:
+                    chipOutlineColour = GV.yellow_colour
+                    chipOutlineWidth = 2
             elif GV.chipValueColours[index_var[0]] == GV.black_colour or GV.chipValueColours[index_var[0]] == GV.blue_colour:
-                pygame.draw.arc(GV.display, GV.white_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=1)
-                pygame.draw.arc(GV.display, GV.white_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(0), width=1)
+                chipOutlineColour = GV.white_colour
+                chipOutlineWidth = 1
             else:
-                pygame.draw.arc(GV.display, GV.black_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=1)
-                pygame.draw.arc(GV.display, GV.black_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(360), width=1)
+                chipOutlineColour = GV.black_colour
+                chipOutlineWidth = 1
+            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=chipOutlineWidth)
+            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(0), width=chipOutlineWidth)
                     
 GO = game_objects()
 
