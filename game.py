@@ -215,7 +215,7 @@ class game_objects:
 
             # Chip Accent Creation
             for i in self.chipCirclePointsList:
-
+                
                 if GV.chipValueColours[index_var[0]] == GV.white_colour:
                     pygame.draw.polygon(GV.display, GV.blue_colour, i)
                 else:
@@ -236,7 +236,11 @@ class game_objects:
             GV.display.blit(chipText, chipTextRect)
 
             # Black/white arc
-            if GV.chipValueColours[index_var[0]] == GV.black_colour or GV.chipValueColours[index_var[0]] == GV.blue_colour:
+
+            if GV.mousePosChange and index_var == GV.chipDisplayPriority[-1]:
+                pygame.draw.arc(GV.display, GV.yellow_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=2)
+                pygame.draw.arc(GV.display, GV.yellow_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(0), width=2)
+            elif GV.chipValueColours[index_var[0]] == GV.black_colour or GV.chipValueColours[index_var[0]] == GV.blue_colour:
                 pygame.draw.arc(GV.display, GV.white_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=1)
                 pygame.draw.arc(GV.display, GV.white_colour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(0), width=1)
             else:
