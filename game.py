@@ -122,6 +122,7 @@ class game_variable: # Game variables
         self.orange_colour = (255, 176, 60)
         self.dark_blue = (42, 52, 161)
         self.light_blue = (110, 177, 255)
+        self.bright_green = (109, 255, 108)
 
         self._running = True
 
