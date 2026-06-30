@@ -109,7 +109,8 @@ class game_variable: # Game variables
         pygame.init()
         self.displayWidth, self.displayHeight = 1200, 700
         self.display = pygame.display.set_mode((self.displayWidth, self.displayHeight), pygame.HWSURFACE | pygame.DOUBLEBUF)
-        self.bg_colour = (23, 74, 67)
+        self.table_colour = (20, 86, 62)
+        self.table_colour_accent = (37, 64, 64)
 
         self.white_colour = (255, 255, 255)
         self.red_colour = (159, 27, 39)
@@ -252,9 +253,18 @@ class game_objects:
             else:
                 chipOutlineColour = GV.black_colour
                 chipOutlineWidth = 1
-            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=chipOutlineWidth)
-            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(0), width=chipOutlineWidth)
-                    
+            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=1)
+            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(0), width=1)
+            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-51, pos[1]-51, 102, 102), math.radians(0), math.radians(180), width=1)
+            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-51, pos[1]-51, 102, 102), math.radians(180), math.radians(0), width=1)
+            if chipOutlineWidth == 2:
+                pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-52, pos[1]-52, 104, 104), math.radians(0), math.radians(180), width=1)
+                pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-52, pos[1]-52, 104, 104), math.radians(180), math.radians(0), width=1)
+    def game_space(self):
+        pygame.draw.lines(GV.display, GV.white_colour, False, ((100, 0), (100, 250), (550, 250), (550, 0)), width=5)
+        pygame.draw.lines(GV.display, GV.white_colour, False, ((650, 0), (650, 250), (1100, 250), (1100, 0)), width=5)
+        pygame.draw.rect(GV.display, GV.table_colour_accent, (100, 0, 450, 250))
+        pygame.draw.rect(GV.display, GV.table_colour_accent, (650, 0, 450, 250))
 GO = game_objects()
 
 class game_functions:
@@ -314,7 +324,8 @@ class pygame_function:
         if event.type == pygame.QUIT:
             GV._running = False
     def on_render(self):
-        GV.display.fill(GV.bg_colour)
+        GV.display.fill(GV.table_colour)
+        game_objects.game_space(self)
         game_objects.on_init(self)
         game_objects.chip_object(self)
     def on_loop(self):
