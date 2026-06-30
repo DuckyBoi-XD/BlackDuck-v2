@@ -159,6 +159,9 @@ class game_variable: # Game variables
 
         self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont)
 
+        self.chipBettingGame = []
+        self.chipExchange = []
+
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
             startingx = index * 100 + (index+1)*(200/11) + 50
@@ -300,6 +303,26 @@ class game_functions:
             if GV.mousePosChange == True:
                 ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0] = pygame.mouse.get_pos()[0] - GV.mouseStartPos[0] + GV.chipCurrentPos[0]
                 ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1] = pygame.mouse.get_pos()[1] - GV.mouseStartPos[1] + GV.chipCurrentPos[1]
+    def betting_area(self):
+        for self.indexChipPosition in reversed(GV.chipDisplayPriority):
+            chipPositionx = ((GV.chipPositions[self.indexChipPosition[0]])[self.indexChipPosition[1]])[0]
+            chipPositiony = ((GV.chipPositions[self.indexChipPosition[0]])[self.indexChipPosition[1]])[1]
+
+            if 100 <= chipPositionx <= 550 and 0 <= chipPositiony <= 250:
+                if self.indexChipPosition not in GV.chipBettingGame:
+                    GV.chipBettingGame.append(self.indexChipPosition)
+            elif 650 <= chipPositionx <= 1100 and 0 <= chipPositiony <= 250:
+                if self.indexChipPosition not in GV.chipExchange:
+                    GV.chipExchange.append(self.indexChipPosition)
+                    print("inin")
+            else:
+                if self.indexChipPosition in GV.chipExchange:
+                    GV.chipExchange.remove(self.indexChipPosition)
+                if self.indexChipPosition in GV.chipBettingGame:
+                    GV.chipBettingGame.remove(self.indexChipPosition)
+            print(GV.chipExchange)
+            print(GV.chipBettingGame)
+
 
 
 GF = game_functions()
@@ -338,6 +361,7 @@ class pygame_function:
         while(GV._running):
             self.FPS.tick(self.fps)
             GF.move_chip()
+            GF.betting_area()
             self.on_loop()
             self.on_render()
             pygame.display.flip()
