@@ -158,6 +158,8 @@ class game_variable: # Game variables
         self.fiveCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 30)
         self.sixCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 28)
 
+        self.tableFont = pygame.font.Font("assets/fonts/tableFont.ttf", 40)
+
         self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont)
 
         self.chipBettingGame = []
@@ -274,6 +276,16 @@ class game_objects:
         pygame.draw.lines(GV.display, GV.white_colour, False, ((650, 0), (650, 250), (1100, 250), (1100, 0)), width=5)
         pygame.draw.rect(GV.display, GV.table_colour_accent, (100, 0, 450, 250))
         pygame.draw.rect(GV.display, GV.table_colour_accent, (650, 0, 450, 250))
+
+        tableBettingText = GV.tableFont.render("BETTING", True, GV.white_colour)
+        tableExchangeText = GV.tableFont.render("EXCHANGE", True, GV.white_colour)
+
+        tBTWidth, tBTLength = GV.tableFont.size("BETTING")
+        tETWidth, tETLength = GV.tableFont.size("EXCHANGE")
+        GV.display.blit(tableBettingText, ((450/2) - (tBTWidth/2) + 100, (250/2) - (tBTLength/2)))
+        GV.display.blit(tableExchangeText, ((450/2) - (tETWidth/2) + 650, (250/2) - (tETLength/2)))
+        print(GV.chipExchange)
+        print(GV.chipBettingGame)
 GO = game_objects()
 
 class game_functions:
@@ -309,6 +321,7 @@ class game_functions:
             if GV.mousePosChange == True:
                 ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0] = pygame.mouse.get_pos()[0] - GV.mouseStartPos[0] + GV.chipCurrentPos[0]
                 ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1] = pygame.mouse.get_pos()[1] - GV.mouseStartPos[1] + GV.chipCurrentPos[1]
+
     def betting_area(self):
         for self.indexChipPosition in reversed(GV.chipDisplayPriority):
             chipPositionx = ((GV.chipPositions[self.indexChipPosition[0]])[self.indexChipPosition[1]])[0]
@@ -326,10 +339,6 @@ class game_functions:
                     GV.chipExchange.remove(self.indexChipPosition)
                 if self.indexChipPosition in GV.chipBettingGame:
                     GV.chipBettingGame.remove(self.indexChipPosition)
-            print(GV.chipExchange)
-            print(GV.chipBettingGame)
-
-
 
 GF = game_functions()
 
