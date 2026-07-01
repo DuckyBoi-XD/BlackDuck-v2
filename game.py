@@ -166,6 +166,8 @@ class game_variable: # Game variables
         self.chipBettingGame = []
         self.chipExchange = []
 
+        self.chipExchangeList = []
+
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
             startingx = index * 100 + (index+1)*(200/11) + 50
@@ -342,6 +344,9 @@ class game_functions:
                     GV.chipExchange.remove(self.indexChipPosition)
                 if self.indexChipPosition in GV.chipBettingGame:
                     GV.chipBettingGame.remove(self.indexChipPosition)
+    
+    def chip_exchange(self):
+        pass
 
 GF = game_functions()
 
