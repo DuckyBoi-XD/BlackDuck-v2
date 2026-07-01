@@ -123,6 +123,7 @@ class game_variable: # Game variables
         self.dark_blue = (42, 52, 161)
         self.light_blue = (110, 177, 255)
         self.bright_green = (109, 255, 108)
+        self.yellow_green = (183, 255, 0)
 
         self._running = True
 
@@ -248,7 +249,10 @@ class game_objects:
             chipOutlineColour = None
             chipOutlineWidth = None
             if GV.mousePosChange and index_var == GV.chipDisplayPriority[-1]:
-                if GV.chipValueColours[index_var[0]] == GV.yellow_colour:
+                if index_var in GV.chipBettingGame or index_var in GV.chipExchange:
+                    chipOutlineColour = GV.yellow_green
+                    chipOutlineWidth = 2
+                elif GV.chipValueColours[index_var[0]] == GV.yellow_colour:
                     chipOutlineColour = GV.orange_colour
                     chipOutlineWidth = 2
                 else:
