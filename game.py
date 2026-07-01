@@ -288,8 +288,7 @@ class game_objects:
         tETWidth, tETLength = GV.tableFont.size("EXCHANGE")
         GV.display.blit(tableBettingText, ((450/2) - (tBTWidth/2) + 100, (250/2) - (tBTLength/2)))
         GV.display.blit(tableExchangeText, ((450/2) - (tETWidth/2) + 650, (250/2) - (tETLength/2)))
-        print(GV.chipExchange)
-        print(GV.chipBettingGame)
+
 GO = game_objects()
 
 class game_functions:
