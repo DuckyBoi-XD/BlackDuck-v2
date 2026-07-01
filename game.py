@@ -166,6 +166,7 @@ class game_variable: # Game variables
         self.chipBettingGame = []
         self.chipExchange = []
 
+        self.chipExchangeOn = False
         self.chipExchangeList = []
 
         self.chipStartPositions = {}
@@ -278,18 +279,25 @@ class game_objects:
                 pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-52, pos[1]-52, 104, 104), math.radians(180), math.radians(0), width=1)
                 
     def game_space(self):
-        pygame.draw.lines(GV.display, GV.white_colour, False, ((100, 0), (100, 250), (550, 250), (550, 0)), width=5)
-        pygame.draw.lines(GV.display, GV.white_colour, False, ((650, 0), (650, 250), (1100, 250), (1100, 0)), width=5)
-        pygame.draw.rect(GV.display, GV.table_colour_accent, (100, 0, 450, 250))
-        pygame.draw.rect(GV.display, GV.table_colour_accent, (650, 0, 450, 250))
-
-        tableBettingText = GV.tableFont.render("BETTING", True, GV.white_colour)
-        tableExchangeText = GV.tableFont.render("EXCHANGE", True, GV.white_colour)
-
         tBTWidth, tBTLength = GV.tableFont.size("BETTING")
         tETWidth, tETLength = GV.tableFont.size("EXCHANGE")
-        GV.display.blit(tableBettingText, ((450/2) - (tBTWidth/2) + 100, (250/2) - (tBTLength/2)))
+
+        if GV.chipExchangeOn:
+            pass
+        else:
+            # Betting area
+            pygame.draw.lines(GV.display, GV.white_colour, False, ((100, 0), (100, 250), (550, 250), (550, 0)), width=5)
+            pygame.draw.rect(GV.display, GV.table_colour_accent, (100, 0, 450, 250))
+            tableBettingText = GV.tableFont.render("BETTING", True, GV.white_colour)
+            GV.display.blit(tableBettingText, ((450/2) - (tBTWidth/2) + 100, (250/2) - (tBTLength/2)))
+
+
+        # Exchanging area
+        pygame.draw.lines(GV.display, GV.white_colour, False, ((650, 0), (650, 250), (1100, 250), (1100, 0)), width=5)
+        pygame.draw.rect(GV.display, GV.table_colour_accent, (650, 0, 450, 250))
+        tableExchangeText = GV.tableFont.render("EXCHANGE", True, GV.white_colour)
         GV.display.blit(tableExchangeText, ((450/2) - (tETWidth/2) + 650, (250/2) - (tETLength/2)))
+
 
 GO = game_objects()
 
@@ -332,18 +340,24 @@ class game_functions:
             chipPositionx = ((GV.chipPositions[self.indexChipPosition[0]])[self.indexChipPosition[1]])[0]
             chipPositiony = ((GV.chipPositions[self.indexChipPosition[0]])[self.indexChipPosition[1]])[1]
 
-            if 100 <= chipPositionx <= 550 and 0 <= chipPositiony <= 250:
+            if 100 <= chipPositionx <= 550 and 0 <= chipPositiony <= 250 and GV.chipExchangeOn is False:
                 if self.indexChipPosition not in GV.chipBettingGame:
                     GV.chipBettingGame.append(self.indexChipPosition)
+
             elif 650 <= chipPositionx <= 1100 and 0 <= chipPositiony <= 250:
                 if self.indexChipPosition not in GV.chipExchange:
                     GV.chipExchange.append(self.indexChipPosition)
-                    print("inin")
+                    GV.chipExchangeOn = True
+
             else:
                 if self.indexChipPosition in GV.chipExchange:
                     GV.chipExchange.remove(self.indexChipPosition)
+
                 if self.indexChipPosition in GV.chipBettingGame:
                     GV.chipBettingGame.remove(self.indexChipPosition)
+
+            if not GV.chipExchange:
+                GV.chipExchangeOn = False
     
     def chip_exchange(self):
         pass
