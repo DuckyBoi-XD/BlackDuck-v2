@@ -199,6 +199,7 @@ class game_objects:
             for listpostions in self.chipCirclePointsList:
                 listpostions.clear()
             pos = (GV.chipPositions[index_var[0]])[index_var[1]]
+
             # Chip Accents Positions
             for b, value in enumerate(GV.chipArcAngles):
                 self.chipCirclePointsReverse = []
@@ -240,8 +241,8 @@ class game_objects:
             chipTextRect = chipText.get_rect(center=(pos))
             GV.display.blit(chipText, chipTextRect)
 
-            # Black/white arc
-
+            # Chip Outline
+ 
             chipOutlineColour = None
             chipOutlineWidth = None
             if GV.mousePosChange and index_var == GV.chipDisplayPriority[-1]:
@@ -251,6 +252,9 @@ class game_objects:
                 else:
                     chipOutlineColour = GV.yellow_colour
                     chipOutlineWidth = 2
+            elif index_var in GV.chipBettingGame or index_var in GV.chipExchange:
+                chipOutlineColour = GV.bright_green
+                chipOutlineWidth = 2
             elif GV.chipValueColours[index_var[0]] == GV.black_colour or GV.chipValueColours[index_var[0]] == GV.blue_colour:
                 chipOutlineColour = GV.white_colour
                 chipOutlineWidth = 1
@@ -264,6 +268,7 @@ class game_objects:
             if chipOutlineWidth == 2:
                 pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-52, pos[1]-52, 104, 104), math.radians(0), math.radians(180), width=1)
                 pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-52, pos[1]-52, 104, 104), math.radians(180), math.radians(0), width=1)
+                
     def game_space(self):
         pygame.draw.lines(GV.display, GV.white_colour, False, ((100, 0), (100, 250), (550, 250), (550, 0)), width=5)
         pygame.draw.lines(GV.display, GV.white_colour, False, ((650, 0), (650, 250), (1100, 250), (1100, 0)), width=5)
