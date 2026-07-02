@@ -128,6 +128,7 @@ class game_variable: # Game variables
         self._running = True
 
         self.chipRadius = 50
+        self.smallChipRadius = 30
         self.chipPos = [600, 350]
         self.chipCurrentPos = [600, 350]
         self.chipArcAngles = (270, 330, 30, 90, 150, 210)
@@ -161,7 +162,13 @@ class game_variable: # Game variables
 
         self.tableFont = pygame.font.Font("assets/fonts/tableFont.ttf", 40)
 
+        self.threeCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 25)
+        self.fourCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 20)
+        self.fiveCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 18)
+        self.sixCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 15)
+
         self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont)
+        self.chipFontListSmall = (self.threeCharFontSmall, self.fourCharFontSmall, self.fiveCharFontSmall, self.sixCharFontSmall)
 
         self.chipBettingGame = []
         self.chipExchange = []
@@ -198,6 +205,16 @@ class game_objects:
         self.chipCirclePointsList = (self.chipCirclePoints1, self.chipCirclePoints2, self.chipCirclePoints3, 
                                      self.chipCirclePoints4, self.chipCirclePoints5, self.chipCirclePoints6)
         self.chipCirclePointsReverse = []
+
+        self.chipCirclePointsSmall1 = []
+        self.chipCirclePointsSmall2 = []
+        self.chipCirclePointsSmall3 = []
+        self.chipCirclePointsSmall4 = []
+        self.chipCirclePointsSmall5 = []
+        self.chipCirclePointsSmall6 = []
+        self.chipCirclePointsListSmall = (self.chipCirclePoints1, self.chipCirclePoints2, self.chipCirclePoints3, 
+                                     self.chipCirclePoints4, self.chipCirclePoints5, self.chipCirclePoints6)
+        self.chipCirclePointsReverseSmall = []
 
     def chip_object(self):
         self.chipPosLocation = None
@@ -291,9 +308,57 @@ class game_objects:
 
             widthSpacing = 150/11
             for exchangeIndex, chipSelection in enumerate(GV.chipValuePositions):
-                widthSpacing = (exchangeIndex * 25) + ((160/12) * (exchangeIndex + 2)) + 125
-                pygame.draw.circle(GV.display, GV.chipValueColours[exchangeIndex], (widthSpacing, 137.5), 12)
+                for listpostions in self.chipCirclePointsListSmall:
+                    listpostions.clear()
 
+                widthSpacing = (exchangeIndex * 25) + ((100/10) * (exchangeIndex + 2)) + 148
+                smallChipPos = (widthSpacing, 137.5)
+
+                pygame.draw.circle(GV.display, GV.chipValueColours[exchangeIndex], smallChipPos, GV.smallChipRadius)
+
+                chip = GV.chipValues[exchangeIndex]
+                if len(chip) <= 3:
+                    chipFontSmall = GV.chipFontListSmall[0]
+                elif len(chip) >= 4:
+                    chipFontSmall = GV.chipFontListSmall[len(chip) - 3]
+
+                if GV.chipValueColours[exchangeIndex] == GV.white_colour:
+                    chipText = chipFontSmall.render(GV.chipValues[exchangeIndex], True, GV.blue_colour)
+                else:
+                    chipText = chipFontSmall.render(GV.chipValues[exchangeIndex], True, GV.white_colour)
+                chipTextRect = chipText.get_rect(center=(smallChipPos))
+                GV.display.blit(chipText, chipTextRect)
+
+                for b, value in enumerate(GV.chipArcAngles):
+                    self.chipCirclePointsReverseSmall = []
+                    for delta in range (value-10, value+11, 2):
+                        self.chipCirclePointsListSmall[b].append([
+                            (cosd(delta) * (GV.smallChipRadius)) + (smallChipPos)[0], 
+                            (sind(delta) * (GV.smallChipRadius)) + (smallChipPos)[1]
+                        ])
+                        self.chipCirclePointsReverseSmall.append([
+                            (cosd(delta) * (GV.smallChipRadius - 4)) + (smallChipPos)[0], 
+                            (sind(delta) * (GV.smallChipRadius - 4)) + (smallChipPos)[1]
+                        ])
+                    self.chipCirclePointsReverseSmall.reverse()
+                    for c in self.chipCirclePointsReverseSmall:
+                        self.chipCirclePointsListSmall[b].append(c)
+
+                for i in self.chipCirclePointsList:
+                    if GV.chipValueColours[exchangeIndex] == GV.white_colour:
+                        pygame.draw.polygon(GV.display, GV.blue_colour, i)
+                    else:
+                        pygame.draw.polygon(GV.display, GV.white_colour, i)
+
+                if GV.chipValueColours[exchangeIndex] == GV.black_colour or GV.chipValueColours[exchangeIndex] == GV.blue_colour:
+                    chipOutlineColour = GV.white_colour
+                else:
+                    chipOutlineColour = GV.black_colour
+
+                pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-30, smallChipPos[1]-30, 60, 60), math.radians(0), math.radians(180), width=1)
+                pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-30, smallChipPos[1]-30, 60, 60), math.radians(180), math.radians(0), width=1)    
+                pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-31, smallChipPos[1]-31, 62, 62), math.radians(0), math.radians(180), width=1)
+                pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-31, smallChipPos[1]-31, 62, 62), math.radians(180), math.radians(0), width=1)  
 
         else:
             # Betting area
