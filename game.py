@@ -282,19 +282,28 @@ class game_objects:
         tBTWidth, tBTLength = GV.tableFont.size("BETTING")
         tETWidth, tETLength = GV.tableFont.size("EXCHANGE")
 
+        pygame.draw.rect(GV.display, GV.table_colour_accent, (100, 0, 450, 250))
+        pygame.draw.lines(GV.display, GV.white_colour, False, ((100, 0), (100, 250), (550, 250), (550, 0)), width=4)
+
         if GV.chipExchangeOn:
-            pass
+            pygame.draw.rect(GV.display, GV.table_colour, (125, 100, 400, 75))
+            pygame.draw.lines(GV.display, GV.white_colour, True, ((125, 100), (125, 175), (525, 175), (525, 100)), width=2)
+
+            widthSpacing = 150/11
+            for exchangeIndex, chipSelection in enumerate(GV.chipValuePositions):
+                widthSpacing = (exchangeIndex * 25) + ((160/12) * (exchangeIndex + 2)) + 125
+                pygame.draw.circle(GV.display, GV.chipValueColours[exchangeIndex], (widthSpacing, 137.5), 12)
+
+
         else:
             # Betting area
-            pygame.draw.lines(GV.display, GV.white_colour, False, ((100, 0), (100, 250), (550, 250), (550, 0)), width=5)
-            pygame.draw.rect(GV.display, GV.table_colour_accent, (100, 0, 450, 250))
             tableBettingText = GV.tableFont.render("BETTING", True, GV.white_colour)
             GV.display.blit(tableBettingText, ((450/2) - (tBTWidth/2) + 100, (250/2) - (tBTLength/2)))
 
 
         # Exchanging area
-        pygame.draw.lines(GV.display, GV.white_colour, False, ((650, 0), (650, 250), (1100, 250), (1100, 0)), width=5)
         pygame.draw.rect(GV.display, GV.table_colour_accent, (650, 0, 450, 250))
+        pygame.draw.lines(GV.display, GV.white_colour, False, ((650, 0), (650, 250), (1100, 250), (1100, 0)), width=4)
         tableExchangeText = GV.tableFont.render("EXCHANGE", True, GV.white_colour)
         GV.display.blit(tableExchangeText, ((450/2) - (tETWidth/2) + 650, (250/2) - (tETLength/2)))
 
