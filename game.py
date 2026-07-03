@@ -310,6 +310,13 @@ class game_objects:
 
             widthSpacing = 150/11
             GV.chipExchangeValue2 = 0
+            
+            for item in GV.chipDisplayPriority:
+                if item in GV.chipExchange:
+                    item[0]
+                    GV.chipExchangeValue2 += int(GV.chipValues[item[0]])
+            print(GV.chipExchangeValue2)
+
             for exchangeIndex, chipSelection in enumerate(GV.chipValuePositions):
                 for listpostions in self.chipCirclePointsListSmall:
                     listpostions.clear()
@@ -368,7 +375,7 @@ class game_objects:
                 pygame.draw.lines(GV.display, GV.white_colour, True, ((125, 20), (125, 80), (305, 80), (305, 20)), width=2)
                 pygame.draw.lines(GV.display, GV.white_colour, True, ((345, 20), (345, 80), (525, 80), (525, 20)), width=2)
 
-            
+
         else:
             # Betting area
             tableBettingText = GV.tableFont.render("BETTING", True, GV.white_colour)
