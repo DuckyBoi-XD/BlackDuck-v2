@@ -175,6 +175,8 @@ class game_variable: # Game variables
 
         self.chipExchangeOn = False
         self.chipExchangeList = []
+        self.chipExchangeValue1 = 0
+        self.chipExchangeValue2 = 0
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -307,6 +309,7 @@ class game_objects:
             pygame.draw.lines(GV.display, GV.white_colour, True, ((125, 100), (125, 175), (525, 175), (525, 100)), width=2)
 
             widthSpacing = 150/11
+            GV.chipExchangeValue2 = 0
             for exchangeIndex, chipSelection in enumerate(GV.chipValuePositions):
                 for listpostions in self.chipCirclePointsListSmall:
                     listpostions.clear()
@@ -358,8 +361,14 @@ class game_objects:
                 pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-30, smallChipPos[1]-30, 60, 60), math.radians(0), math.radians(180), width=1)
                 pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-30, smallChipPos[1]-30, 60, 60), math.radians(180), math.radians(0), width=1)    
                 pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-31, smallChipPos[1]-31, 62, 62), math.radians(0), math.radians(180), width=1)
-                pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-31, smallChipPos[1]-31, 62, 62), math.radians(180), math.radians(0), width=1)  
+                pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-31, smallChipPos[1]-31, 62, 62), math.radians(180), math.radians(0), width=1)
 
+                pygame.draw.rect(GV.display, GV.table_colour, (125, 20, 180, 60))
+                pygame.draw.rect(GV.display, GV.table_colour, (345, 20, 180, 60))
+                pygame.draw.lines(GV.display, GV.white_colour, True, ((125, 20), (125, 80), (305, 80), (305, 20)), width=2)
+                pygame.draw.lines(GV.display, GV.white_colour, True, ((345, 20), (345, 80), (525, 80), (525, 20)), width=2)
+
+            
         else:
             # Betting area
             tableBettingText = GV.tableFont.render("BETTING", True, GV.white_colour)
