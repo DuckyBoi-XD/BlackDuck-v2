@@ -310,10 +310,8 @@ class game_objects:
 
             widthSpacing = 150/11
             GV.chipExchangeValue2 = 0
-            
             for item in GV.chipDisplayPriority:
                 if item in GV.chipExchange:
-                    item[0]
                     GV.chipExchangeValue2 += int(GV.chipValues[item[0]])
             print(GV.chipExchangeValue2)
 
