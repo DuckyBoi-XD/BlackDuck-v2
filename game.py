@@ -96,7 +96,7 @@ def save_game(money_value = None, chip_info = None):
         f.write(encoded_bytes)
 
 MONEY, CHIPS = load_game()
-CHIPS = [3, 1, 3, 1, 1, 1, 1, 1, 1, 1]
+CHIPS = [3, 1, 3, 1, 1, 1, 1, 1, 1, 10]
 debug_var = True
 
 def cosd(x):
@@ -167,16 +167,22 @@ class game_variable: # Game variables
         self.fiveCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 18)
         self.sixCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 15)
 
+        self.exchangeFontFull = pygame.font.Font("assets/fonts/tableFont.ttf", 50)
+        self.exchangeFontSemi = pygame.font.Font("assets/fonts/tableFont.ttf", 30)
+
         self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont)
         self.chipFontListSmall = (self.threeCharFontSmall, self.fourCharFontSmall, self.fiveCharFontSmall, self.sixCharFontSmall)
 
         self.chipBettingGame = []
         self.chipExchange = []
 
+        self.chipValuesExchange = ("1", "5", "10", "25", "100", "500", "1,000", "5,000", "25,000", "100,000")
         self.chipExchangeOn = False
         self.chipExchangeList = []
         self.chipExchangeValue1 = 0
         self.chipExchangeValue2 = 0
+        self.chipExchangeStr1 = ""
+        self.chipExchangeStr2 = ""
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -313,7 +319,7 @@ class game_objects:
             for item in GV.chipDisplayPriority:
                 if item in GV.chipExchange:
                     GV.chipExchangeValue2 += int(GV.chipValues[item[0]])
-            print(GV.chipExchangeValue2)
+            GV.chipExchangeStr2 = (f"{GV.chipExchangeValue2:,}")
 
             for exchangeIndex, chipSelection in enumerate(GV.chipValuePositions):
                 for listpostions in self.chipCirclePointsListSmall:
@@ -372,6 +378,13 @@ class game_objects:
                 pygame.draw.rect(GV.display, GV.table_colour, (345, 20, 180, 60))
                 pygame.draw.lines(GV.display, GV.white_colour, True, ((125, 20), (125, 80), (305, 80), (305, 20)), width=2)
                 pygame.draw.lines(GV.display, GV.white_colour, True, ((345, 20), (345, 80), (525, 80), (525, 20)), width=2)
+
+                if len(str(GV.chipExchangeValue2)) > 6:
+                    exchangeValueText = GV.exchangeFontSemi.render(GV.chipExchangeStr2, True, GV.white_colour)
+                else:
+                    exchangeValueText = GV.exchangeFontFull.render(GV.chipExchangeStr2, True, GV.white_colour)
+                exchangeValueTextRect = exchangeValueText.get_rect(center=(435, 50))
+                GV.display.blit(exchangeValueText, exchangeValueTextRect)
 
 
         else:
