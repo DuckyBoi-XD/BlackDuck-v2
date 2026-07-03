@@ -133,8 +133,7 @@ class game_variable: # Game variables
         self.chipCurrentPos = [600, 350]
         self.chipArcAngles = (270, 330, 30, 90, 150, 210)
         self.chipValues = ("1", "5", "10", "25", "100", "500", "1000", "5000", "25000", "100000")
-        self.chipValuePositions = ("chipPositions1", "chipPositions5", "chipPositions10", "chipPositions25", "chipPositions100", "chipPositions500",
-                                   "chipPositions1000", "chipPositions5000", "chipPositions25000", "chipPositions100000")
+        self.chipValuePositions = ((0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0))
         chipPositions1 = []
         chipPositions5 = []
         chipPositions10 = []
@@ -183,6 +182,7 @@ class game_variable: # Game variables
         self.chipExchangeValue2 = 0
         self.chipExchangeStr1 = ""
         self.chipExchangeStr2 = ""
+        self.chipExchangeHighlight = None
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -321,28 +321,32 @@ class game_objects:
                     GV.chipExchangeValue2 += int(GV.chipValues[item[0]])
             GV.chipExchangeStr2 = (f"{GV.chipExchangeValue2:,}")
 
-            for exchangeIndex, chipSelection in enumerate(GV.chipValuePositions):
+            for chipIndexSelection in GV.chipValuePositions:
                 for listpostions in self.chipCirclePointsListSmall:
                     listpostions.clear()
 
-                widthSpacing = (exchangeIndex * 25) + ((100/10) * (exchangeIndex + 2)) + 148
+                # Circle Positions
+                widthSpacing = (chipIndexSelection[0] * 25) + ((100/10) * (chipIndexSelection[0] + 2)) + 148
                 smallChipPos = (widthSpacing, 137.5)
 
-                pygame.draw.circle(GV.display, GV.chipValueColours[exchangeIndex], smallChipPos, GV.smallChipRadius)
+                # Base circle
+                pygame.draw.circle(GV.display, GV.chipValueColours[chipIndexSelection[0]], smallChipPos, GV.smallChipRadius)
 
-                chip = GV.chipValues[exchangeIndex]
+                # Chip font
+                chip = GV.chipValues[chipIndexSelection[0]]
                 if len(chip) <= 3:
                     chipFontSmall = GV.chipFontListSmall[0]
                 elif len(chip) >= 4:
                     chipFontSmall = GV.chipFontListSmall[len(chip) - 3]
 
-                if GV.chipValueColours[exchangeIndex] == GV.white_colour:
-                    chipText = chipFontSmall.render(GV.chipValues[exchangeIndex], True, GV.blue_colour)
+                if GV.chipValueColours[chipIndexSelection[0]] == GV.white_colour:
+                    chipText = chipFontSmall.render(GV.chipValues[chipIndexSelection[0]], True, GV.blue_colour)
                 else:
-                    chipText = chipFontSmall.render(GV.chipValues[exchangeIndex], True, GV.white_colour)
+                    chipText = chipFontSmall.render(GV.chipValues[chipIndexSelection[0]], True, GV.white_colour)
                 chipTextRect = chipText.get_rect(center=(smallChipPos))
                 GV.display.blit(chipText, chipTextRect)
 
+                # Calculating small chip accent
                 for b, value in enumerate(GV.chipArcAngles):
                     self.chipCirclePointsReverseSmall = []
                     for delta in range (value-10, value+11, 2):
@@ -358,22 +362,28 @@ class game_objects:
                     for c in self.chipCirclePointsReverseSmall:
                         self.chipCirclePointsListSmall[b].append(c)
 
+                # prints accent
                 for i in self.chipCirclePointsList:
-                    if GV.chipValueColours[exchangeIndex] == GV.white_colour:
+                    if GV.chipValueColours[chipIndexSelection[0]] == GV.white_colour:
                         pygame.draw.polygon(GV.display, GV.blue_colour, i)
                     else:
                         pygame.draw.polygon(GV.display, GV.white_colour, i)
 
-                if GV.chipValueColours[exchangeIndex] == GV.black_colour or GV.chipValueColours[exchangeIndex] == GV.blue_colour:
+                # sets outline colour
+                if GV.chipValueColours[chipIndexSelection[0]] == GV.chipExchangeHighlight:
+                    chipOutlineColour = GV.bright_green
+                elif GV.chipValueColours[chipIndexSelection[0]] == GV.black_colour or GV.chipValueColours[chipIndexSelection[0]] == GV.blue_colour:
                     chipOutlineColour = GV.white_colour
                 else:
                     chipOutlineColour = GV.black_colour
 
+                # draws chip outline
                 pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-30, smallChipPos[1]-30, 60, 60), math.radians(0), math.radians(180), width=1)
                 pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-30, smallChipPos[1]-30, 60, 60), math.radians(180), math.radians(0), width=1)    
                 pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-31, smallChipPos[1]-31, 62, 62), math.radians(0), math.radians(180), width=1)
                 pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-31, smallChipPos[1]-31, 62, 62), math.radians(180), math.radians(0), width=1)
 
+                # prints table stuff
                 pygame.draw.rect(GV.display, GV.table_colour, (125, 20, 180, 60))
                 pygame.draw.rect(GV.display, GV.table_colour, (345, 20, 180, 60))
                 pygame.draw.lines(GV.display, GV.white_colour, True, ((125, 20), (125, 80), (305, 80), (305, 20)), width=2)
@@ -460,8 +470,22 @@ class game_functions:
             if not GV.chipExchange:
                 GV.chipExchangeOn = False
     
-    def chip_exchange(self):
-        pass
+    def chip_exchange_hover(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                GV._running = False
+            cursorPosx, cursorPosy = pygame.mouse.get_pos()
+            for self.index_var_exc in reversed(GV.chipValuePositions):
+                widthSpacingexc = 463 - (self.index_var_exc[0] * 25) + ((100/10) * (self.index_var_exc[0] + 2))
+                
+                CursorPos_CirclePosx = cursorPosx - widthSpacingexc
+                CursorPos_CirclePosy = cursorPosy - 137.5
+
+                CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
+                if CursorPos_CirclePos <= GV.smallChipRadius**2:
+                    GV.chipExchangeHighlight = self.index_var_exc
+                else:
+                    GV.chipExchangeHighlight = None
 
 GF = game_functions()
 
