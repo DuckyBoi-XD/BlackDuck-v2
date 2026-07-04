@@ -183,6 +183,7 @@ class game_variable: # Game variables
         self.chipExchangeStr1 = ""
         self.chipExchangeStr2 = ""
         self.chipExchangeHighlight = None
+        self.exchangeChipPos = []
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -321,6 +322,7 @@ class game_objects:
                     GV.chipExchangeValue2 += int(GV.chipValues[item[0]])
             GV.chipExchangeStr2 = (f"{GV.chipExchangeValue2:,}")
 
+            GV.exchangeChipPos = []
             for chipIndexSelection in GV.chipValuePositions:
                 for listpostions in self.chipCirclePointsListSmall:
                     listpostions.clear()
@@ -328,6 +330,8 @@ class game_objects:
                 # Circle Positions
                 widthSpacing = (chipIndexSelection[0] * 25) + ((100/10) * (chipIndexSelection[0] + 2)) + 148
                 smallChipPos = (widthSpacing, 137.5)
+
+                GV.exchangeChipPos.append(smallChipPos)
 
                 # Base circle
                 pygame.draw.circle(GV.display, GV.chipValueColours[chipIndexSelection[0]], smallChipPos, GV.smallChipRadius)
@@ -370,7 +374,10 @@ class game_objects:
                         pygame.draw.polygon(GV.display, GV.white_colour, i)
 
                 # sets outline colour
-                if GV.chipValueColours[chipIndexSelection[0]] == GV.chipExchangeHighlight:
+                print(GV.chipValuePositions[chipIndexSelection[0]])
+                print(GV.chipExchangeHighlight)
+                if GV.exchangeChipPos[chipIndexSelection[0]] == GV.chipExchangeHighlight:
+                    print("match")
                     chipOutlineColour = GV.bright_green
                 elif GV.chipValueColours[chipIndexSelection[0]] == GV.black_colour or GV.chipValueColours[chipIndexSelection[0]] == GV.blue_colour:
                     chipOutlineColour = GV.white_colour
@@ -445,6 +452,20 @@ class game_functions:
             if GV.mousePosChange == True:
                 ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0] = pygame.mouse.get_pos()[0] - GV.mouseStartPos[0] + GV.chipCurrentPos[0]
                 ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1] = pygame.mouse.get_pos()[1] - GV.mouseStartPos[1] + GV.chipCurrentPos[1]
+            for self.smallExchangeChipPos in reversed(GV.exchangeChipPos):
+
+                cursorPosx, cursorPosy = pygame.mouse.get_pos()
+
+                CursorPos_CirclePosx = cursorPosx - self.smallExchangeChipPos[0]
+                CursorPos_CirclePosy = cursorPosy - self.smallExchangeChipPos[1]
+
+                CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
+                if CursorPos_CirclePos <= GV.smallChipRadius**2:
+                    GV.chipExchangeHighlight = self.smallExchangeChipPos
+                    print("working")
+                    break
+                else:
+                    GV.chipExchangeHighlight = None
 
     def betting_area(self):
         for self.indexChipPosition in reversed(GV.chipDisplayPriority):
@@ -469,23 +490,7 @@ class game_functions:
 
             if not GV.chipExchange:
                 GV.chipExchangeOn = False
-    
-    def chip_exchange_hover(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                GV._running = False
-            cursorPosx, cursorPosy = pygame.mouse.get_pos()
-            for self.index_var_exc in reversed(GV.chipValuePositions):
-                widthSpacingexc = 463 - (self.index_var_exc[0] * 25) + ((100/10) * (self.index_var_exc[0] + 2))
-                
-                CursorPos_CirclePosx = cursorPosx - widthSpacingexc
-                CursorPos_CirclePosy = cursorPosy - 137.5
 
-                CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
-                if CursorPos_CirclePos <= GV.smallChipRadius**2:
-                    GV.chipExchangeHighlight = self.index_var_exc
-                else:
-                    GV.chipExchangeHighlight = None
 
 GF = game_functions()
 
