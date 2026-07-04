@@ -374,10 +374,7 @@ class game_objects:
                         pygame.draw.polygon(GV.display, GV.white_colour, i)
 
                 # sets outline colour
-                print(GV.chipValuePositions[chipIndexSelection[0]])
-                print(GV.chipExchangeHighlight)
                 if GV.exchangeChipPos[chipIndexSelection[0]] == GV.chipExchangeHighlight:
-                    print("match")
                     chipOutlineColour = GV.bright_green
                 elif GV.chipValueColours[chipIndexSelection[0]] == GV.black_colour or GV.chipValueColours[chipIndexSelection[0]] == GV.blue_colour:
                     chipOutlineColour = GV.white_colour
@@ -462,7 +459,6 @@ class game_functions:
                 CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
                 if CursorPos_CirclePos <= GV.smallChipRadius**2:
                     GV.chipExchangeHighlight = self.smallExchangeChipPos
-                    print("working")
                     break
                 else:
                     GV.chipExchangeHighlight = None
