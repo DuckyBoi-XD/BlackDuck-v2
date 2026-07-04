@@ -169,6 +169,8 @@ class game_variable: # Game variables
         self.exchangeFontFull = pygame.font.Font("assets/fonts/tableFont.ttf", 50)
         self.exchangeFontSemi = pygame.font.Font("assets/fonts/tableFont.ttf", 30)
 
+        self.exchangeChipAmmount = pygame.font.Font("assets/fonts/tableFont.ttf", 20)
+
         self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont)
         self.chipFontListSmall = (self.threeCharFontSmall, self.fourCharFontSmall, self.fiveCharFontSmall, self.sixCharFontSmall)
 
@@ -185,6 +187,8 @@ class game_variable: # Game variables
         self.chipExchangeHighlight = None
         self.exchangeChipPos = []
         self.exchangeChipSelection = None
+        self.chipSmallExchangeList = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        self.chipSmallExchangeListtemp = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -386,18 +390,25 @@ class game_objects:
                 pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-31, smallChipPos[1]-31, 62, 62), math.radians(0), math.radians(180), width=1)
                 pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-31, smallChipPos[1]-31, 62, 62), math.radians(180), math.radians(0), width=1)
 
-                # prints table stuff
-                pygame.draw.rect(GV.display, GV.table_colour, (125, 20, 180, 60))
-                pygame.draw.rect(GV.display, GV.table_colour, (345, 20, 180, 60))
-                pygame.draw.lines(GV.display, GV.white_colour, True, ((125, 20), (125, 80), (305, 80), (305, 20)), width=2)
-                pygame.draw.lines(GV.display, GV.white_colour, True, ((345, 20), (345, 80), (525, 80), (525, 20)), width=2)
+                # Chip ammount indicator
+                chipAmmountIndicator = GV.exchangeChipAmmount.render(str(GV.chipSmallExchangeListtemp[chipIndexSelection[0]]), True, GV.white_colour)
+                CAIrect = chipAmmountIndicator.get_rect(center=(smallChipPos[0], 170))
+                GV.display.blit(chipAmmountIndicator, CAIrect)
 
-                if len(str(GV.chipExchangeValue2)) > 6:
-                    exchangeValueText = GV.exchangeFontSemi.render(GV.chipExchangeStr2, True, GV.white_colour)
-                else:
-                    exchangeValueText = GV.exchangeFontFull.render(GV.chipExchangeStr2, True, GV.white_colour)
-                exchangeValueTextRect = exchangeValueText.get_rect(center=(435, 50))
-                GV.display.blit(exchangeValueText, exchangeValueTextRect)
+            # prints table stuff
+            pygame.draw.rect(GV.display, GV.table_colour, (125, 20, 180, 60))
+            pygame.draw.rect(GV.display, GV.table_colour, (345, 20, 180, 60))
+            pygame.draw.lines(GV.display, GV.white_colour, True, ((125, 20), (125, 80), (305, 80), (305, 20)), width=2)
+            pygame.draw.lines(GV.display, GV.white_colour, True, ((345, 20), (345, 80), (525, 80), (525, 20)), width=2)
+
+
+
+            if len(str(GV.chipExchangeValue2)) > 6:
+                exchangeValueText = GV.exchangeFontSemi.render(GV.chipExchangeStr2, True, GV.white_colour)
+            else:
+                exchangeValueText = GV.exchangeFontFull.render(GV.chipExchangeStr2, True, GV.white_colour)
+            exchangeValueTextRect = exchangeValueText.get_rect(center=(435, 50))
+            GV.display.blit(exchangeValueText, exchangeValueTextRect)
 
 
         else:
