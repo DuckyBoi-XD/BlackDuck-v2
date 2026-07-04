@@ -313,8 +313,6 @@ class game_objects:
         pygame.draw.lines(GV.display, GV.white_colour, False, ((100, 0), (100, 250), (550, 250), (550, 0)), width=4)
 
         if GV.chipExchangeOn:
-            pygame.draw.rect(GV.display, GV.table_colour, (125, 100, 400, 75))
-            pygame.draw.lines(GV.display, GV.white_colour, True, ((125, 100), (125, 175), (525, 175), (525, 100)), width=2)
 
             widthSpacing = 150/11
             GV.chipExchangeValue2 = 0
@@ -330,7 +328,7 @@ class game_objects:
 
                 # Circle Positions
                 widthSpacing = (chipIndexSelection[0] * 25) + ((100/10) * (chipIndexSelection[0] + 2)) + 148
-                smallChipPos = (widthSpacing, 137.5)
+                smallChipPos = (widthSpacing, 125)
 
                 GV.exchangeChipPos.append(smallChipPos)
 
