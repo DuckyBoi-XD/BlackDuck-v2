@@ -175,8 +175,8 @@ class game_variable: # Game variables
         self.chipBettingGame = []
         self.chipExchange = []
 
-        self.chipValuesExchange = ("1", "5", "10", "25", "100", "500", "1,000", "5,000", "25,000", "100,000")
         self.chipExchangeOn = False
+        self.chipExchangehighlightOn = False
         self.chipExchangeList = []
         self.chipExchangeValue1 = 0
         self.chipExchangeValue2 = 0
@@ -184,6 +184,7 @@ class game_variable: # Game variables
         self.chipExchangeStr2 = ""
         self.chipExchangeHighlight = None
         self.exchangeChipPos = []
+        self.exchangeChipSelection = None
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -422,6 +423,10 @@ class game_functions:
             if event.type == pygame.QUIT:
                 GV._running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+
+                if GV.chipExchangehighlightOn:
+                    GV.chipExchangeValue1 += int(list(reversed(GV.chipValues))[GV.exchangeChipSelection])
+                    print(GV.chipExchangeValue1)
                 cursorPosx, cursorPosy = pygame.mouse.get_pos()
                 for self.index_var in reversed(GV.chipDisplayPriority):
                     CursorPos_CirclePosx = cursorPosx - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
@@ -449,7 +454,7 @@ class game_functions:
             if GV.mousePosChange == True:
                 ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0] = pygame.mouse.get_pos()[0] - GV.mouseStartPos[0] + GV.chipCurrentPos[0]
                 ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1] = pygame.mouse.get_pos()[1] - GV.mouseStartPos[1] + GV.chipCurrentPos[1]
-            for self.smallExchangeChipPos in reversed(GV.exchangeChipPos):
+            for indexexchange, self.smallExchangeChipPos in enumerate(reversed(GV.exchangeChipPos)):
 
                 cursorPosx, cursorPosy = pygame.mouse.get_pos()
 
@@ -458,10 +463,13 @@ class game_functions:
 
                 CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
                 if CursorPos_CirclePos <= GV.smallChipRadius**2:
-                    GV.chipExchangeHighlight = self.smallExchangeChipPos
+                    GV.chipExchangeHighlight = self.smallExchangeChipPos 
+                    GV.chipExchangehighlightOn = True
+                    GV.exchangeChipSelection = indexexchange
                     break
                 else:
                     GV.chipExchangeHighlight = None
+                    GV.chipExchangehighlightOn = False        
 
     def betting_area(self):
         for self.indexChipPosition in reversed(GV.chipDisplayPriority):
