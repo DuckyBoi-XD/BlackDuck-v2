@@ -439,38 +439,52 @@ class game_functions:
             if event.type == pygame.QUIT:
                 GV._running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    if GV.chipExchangehighlightOn:
+                        GV.chipSmallExchangeListtemp.reverse()
+                        GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] += 1
+                        GV.chipSmallExchangeListtemp.reverse()
+                        GV.chipExchangeValue1 = 0
 
-                if GV.chipExchangehighlightOn:
-                    GV.chipSmallExchangeListtemp.reverse()
-                    GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] += 1
-                    GV.chipSmallExchangeListtemp.reverse()
-                    GV.chipExchangeValue1 = 0
-                    
-                    for indexexclist, value in enumerate(reversed(GV.chipSmallExchangeListtemp)):
-                        if value > 0:
-                            GV.chipExchangeValue1 += value * int(list(reversed(GV.chipValues))[indexexclist])
-                    GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
+                        for indexexclist, value in enumerate(reversed(GV.chipSmallExchangeListtemp)):
+                            if value > 0:
+                                GV.chipExchangeValue1 += value * int(list(reversed(GV.chipValues))[indexexclist])
+                        GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
 
-                cursorPosx, cursorPosy = pygame.mouse.get_pos()
-                for self.index_var in reversed(GV.chipDisplayPriority):
-                    CursorPos_CirclePosx = cursorPosx - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
-                    CursorPos_CirclePosy = cursorPosy - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1]
+                    cursorPosx, cursorPosy = pygame.mouse.get_pos()
+                    for self.index_var in reversed(GV.chipDisplayPriority):
+                        CursorPos_CirclePosx = cursorPosx - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
+                        CursorPos_CirclePosy = cursorPosy - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1]
 
-                    CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
-                    if CursorPos_CirclePos <= GV.chipRadius**2:
-                        pass # for some reason fixes double click glitch
-                        GV.mouseStartPos = pygame.mouse.get_pos()
-                        GV.mousePosChange = True
-                        GV.chipCurrentPos[0] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
-                        GV.chipCurrentPos[1] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1]
+                        CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
+                        if CursorPos_CirclePos <= GV.chipRadius**2:
+                            pass # for some reason fixes double click glitch
+                            GV.mouseStartPos = pygame.mouse.get_pos()
+                            GV.mousePosChange = True
+                            GV.chipCurrentPos[0] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
+                            GV.chipCurrentPos[1] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1]
 
-                        GV.chipDisplayPriority.remove(self.index_var)
-                        GV.chipDisplayPriority.append(self.index_var)
+                            GV.chipDisplayPriority.remove(self.index_var)
+                            GV.chipDisplayPriority.append(self.index_var)
+                            break
+                        else:
+                            pass
+                    if GV.mousePosChange == True:
                         break
-                    else:
-                        pass
-                if GV.mousePosChange == True:
-                    break
+                elif event.button == 3:
+                    if GV.chipExchangehighlightOn:
+                        GV.chipSmallExchangeListtemp.reverse()
+                        print(GV.chipSmallExchangeListtemp[GV.exchangeChipSelection])
+                        if GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] > 0:
+                            GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] -= 1
+                            GV.chipExchangeValue1 = 0
+
+                            for indexexclist, value in enumerate(GV.chipSmallExchangeListtemp):
+                                if value > 0:
+                                    GV.chipExchangeValue1 += value * int(list(reversed(GV.chipValues))[indexexclist])
+                            GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
+                        GV.chipSmallExchangeListtemp.reverse()
+
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
                 GV.chipCurrentPos[0] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
