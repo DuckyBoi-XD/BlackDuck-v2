@@ -124,6 +124,7 @@ class game_variable: # Game variables
         self.light_blue = (110, 177, 255)
         self.bright_green = (109, 255, 108)
         self.yellow_green = (183, 255, 0)
+        self.bright_red = (255, 49, 49)
 
         self._running = True
 
@@ -182,11 +183,11 @@ class game_variable: # Game variables
         self.chipExchangeList = []
         self.chipExchangeValue1 = 0
         self.chipExchangeValue2 = 0
-        self.chipExchangeStr1 = ""
-        self.chipExchangeStr2 = ""
+        self.chipExchangeStr1 = "0"
+        self.chipExchangeStr2 = "0"
         self.chipExchangeHighlight = None
         self.exchangeChipPos = []
-        self.exchangeChipSelection = None
+        self.exchangeChipSelection = 0
         self.chipSmallExchangeList = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         self.chipSmallExchangeListtemp = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
@@ -377,7 +378,9 @@ class game_objects:
                         pygame.draw.polygon(GV.display, GV.white_colour, i)
 
                 # sets outline colour
-                if GV.exchangeChipPos[chipIndexSelection[0]] == GV.chipExchangeHighlight:
+                if int(GV.chipValues[chipIndexSelection[0]]) >= GV.chipExchangeValue2 or int(GV.chipValues[chipIndexSelection[0]]) > GV.chipExchangeValue2-GV.chipExchangeValue1:
+                    chipOutlineColour = GV.bright_red
+                elif GV.exchangeChipPos[chipIndexSelection[0]] == GV.chipExchangeHighlight:
                     chipOutlineColour = GV.bright_green
                 elif GV.chipValueColours[chipIndexSelection[0]] == GV.black_colour or GV.chipValueColours[chipIndexSelection[0]] == GV.blue_colour:
                     chipOutlineColour = GV.white_colour
@@ -439,18 +442,33 @@ class game_functions:
             if event.type == pygame.QUIT:
                 GV._running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
+                if int(list(reversed(GV.chipValues))[GV.exchangeChipSelection]) < GV.chipExchangeValue2 and int(list(reversed(GV.chipValues))[GV.exchangeChipSelection]) <= GV.chipExchangeValue2-GV.chipExchangeValue1:
+                    if event.button == 1:
+                        if GV.chipExchangehighlightOn:
+                            GV.chipSmallExchangeListtemp.reverse()
+                            GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] += 1
+                            GV.chipSmallExchangeListtemp.reverse()
+                            GV.chipExchangeValue1 = 0
+
+                            for indexexclist, value in enumerate(reversed(GV.chipSmallExchangeListtemp)):
+                                if value > 0:
+                                    GV.chipExchangeValue1 += value * int(list(reversed(GV.chipValues))[indexexclist])
+                            GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
+
+                if event.button == 3:
                     if GV.chipExchangehighlightOn:
                         GV.chipSmallExchangeListtemp.reverse()
-                        GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] += 1
+                        print(GV.chipSmallExchangeListtemp[GV.exchangeChipSelection])
+                        if GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] > 0:
+                            GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] -= 1
+                            GV.chipExchangeValue1 = 0
+
+                            for indexexclist, value in enumerate(GV.chipSmallExchangeListtemp):
+                                if value > 0:
+                                    GV.chipExchangeValue1 += value * int(list(reversed(GV.chipValues))[indexexclist])
+                            GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
                         GV.chipSmallExchangeListtemp.reverse()
-                        GV.chipExchangeValue1 = 0
-
-                        for indexexclist, value in enumerate(reversed(GV.chipSmallExchangeListtemp)):
-                            if value > 0:
-                                GV.chipExchangeValue1 += value * int(list(reversed(GV.chipValues))[indexexclist])
-                        GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
-
+                if event.button == 1:
                     cursorPosx, cursorPosy = pygame.mouse.get_pos()
                     for self.index_var in reversed(GV.chipDisplayPriority):
                         CursorPos_CirclePosx = cursorPosx - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
@@ -471,19 +489,6 @@ class game_functions:
                             pass
                     if GV.mousePosChange == True:
                         break
-                elif event.button == 3:
-                    if GV.chipExchangehighlightOn:
-                        GV.chipSmallExchangeListtemp.reverse()
-                        print(GV.chipSmallExchangeListtemp[GV.exchangeChipSelection])
-                        if GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] > 0:
-                            GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] -= 1
-                            GV.chipExchangeValue1 = 0
-
-                            for indexexclist, value in enumerate(GV.chipSmallExchangeListtemp):
-                                if value > 0:
-                                    GV.chipExchangeValue1 += value * int(list(reversed(GV.chipValues))[indexexclist])
-                            GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
-                        GV.chipSmallExchangeListtemp.reverse()
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
