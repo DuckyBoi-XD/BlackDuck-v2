@@ -128,7 +128,7 @@ class game_variable: # Game variables
 
         self._running = True
 
-        self.chipRadius = 50
+        self.chipRadius = 40
         self.smallChipRadius = 30
         self.chipPos = [600, 350]
         self.chipCurrentPos = [600, 350]
@@ -155,10 +155,10 @@ class game_variable: # Game variables
         self.mouseStartPos = None
         self.mousePosChange = False
 
-        self.threeCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 50)
-        self.fourCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 40)
-        self.fiveCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 30)
-        self.sixCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 28)
+        self.threeCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 40)
+        self.fourCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 30)
+        self.fiveCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 25)
+        self.sixCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 23)
 
         self.tableFont = pygame.font.Font("assets/fonts/tableFont.ttf", 40)
 
@@ -302,13 +302,13 @@ class game_objects:
             else:
                 chipOutlineColour = GV.black_colour
                 chipOutlineWidth = 1
-            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(0), math.radians(180), width=1)
-            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-50, pos[1]-50, 100, 100), math.radians(180), math.radians(0), width=1)
-            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-51, pos[1]-51, 102, 102), math.radians(0), math.radians(180), width=1)
-            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-51, pos[1]-51, 102, 102), math.radians(180), math.radians(0), width=1)
+            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-40, pos[1]-40, 80, 80), math.radians(0), math.radians(180), width=1)
+            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-40, pos[1]-40, 80, 80), math.radians(180), math.radians(0), width=1)
+            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-41, pos[1]-41, 82, 82), math.radians(0), math.radians(180), width=1)
+            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-41, pos[1]-41, 82, 82), math.radians(180), math.radians(0), width=1)
             if chipOutlineWidth == 2:
-                pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-52, pos[1]-52, 104, 104), math.radians(0), math.radians(180), width=1)
-                pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-52, pos[1]-52, 104, 104), math.radians(180), math.radians(0), width=1)
+                pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-42, pos[1]-42, 84, 84), math.radians(0), math.radians(180), width=1)
+                pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-42, pos[1]-42, 84, 84), math.radians(180), math.radians(0), width=1)
                 
     def game_space(self):
         tBTWidth, tBTLength = GV.tableFont.size("BETTING")
@@ -316,6 +316,7 @@ class game_objects:
 
         pygame.draw.rect(GV.display, GV.table_colour_accent, (100, 0, 450, 250))
         pygame.draw.lines(GV.display, GV.white_colour, False, ((100, 0), (100, 250), (550, 250), (550, 0)), width=4)
+
 
         if GV.chipExchangeOn:
 
@@ -432,6 +433,10 @@ class game_objects:
         pygame.draw.lines(GV.display, GV.white_colour, False, ((650, 0), (650, 250), (1100, 250), (1100, 0)), width=4)
         tableExchangeText = GV.tableFont.render("EXCHANGE", True, GV.white_colour)
         GV.display.blit(tableExchangeText, ((450/2) - (tETWidth/2) + 650, (250/2) - (tETLength/2)))
+        
+        pygame.draw.arc(GV.display, GV.white_colour, (-605, -2100, 2400, 2400), math.radians(210), math.radians(330))
+        pygame.draw.arc(GV.display, GV.white_colour, (-605, -2200, 2400, 2400), math.radians(210), math.radians(330))
+        pygame.draw.line(GV.display, GV.white_colour, (600, 0), (600, 600), width=20)
 
 
 GO = game_objects()
