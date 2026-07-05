@@ -410,6 +410,13 @@ class game_objects:
             exchangeValueTextRect = exchangeValueText.get_rect(center=(435, 50))
             GV.display.blit(exchangeValueText, exchangeValueTextRect)
 
+            if len(str(GV.chipExchangeValue1)) > 6:
+                exchangeValueText = GV.exchangeFontSemi.render(GV.chipExchangeStr1, True, GV.white_colour)
+            else:
+                exchangeValueText = GV.exchangeFontFull.render(GV.chipExchangeStr1, True, GV.white_colour)
+            exchangeValueTextRect = exchangeValueText.get_rect(center=(215, 50))
+            GV.display.blit(exchangeValueText, exchangeValueTextRect)
+
 
         else:
             # Betting area
@@ -437,9 +444,13 @@ class game_functions:
                     GV.chipSmallExchangeListtemp.reverse()
                     GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] += 1
                     GV.chipSmallExchangeListtemp.reverse()
+                    GV.chipExchangeValue1 = 0
+                    
                     for indexexclist, value in enumerate(reversed(GV.chipSmallExchangeListtemp)):
                         if value > 0:
                             GV.chipExchangeValue1 += value * int(list(reversed(GV.chipValues))[indexexclist])
+                    GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
+
                 cursorPosx, cursorPosy = pygame.mouse.get_pos()
                 for self.index_var in reversed(GV.chipDisplayPriority):
                     CursorPos_CirclePosx = cursorPosx - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
@@ -482,7 +493,7 @@ class game_functions:
                     break
                 else:
                     GV.chipExchangeHighlight = None
-                    GV.chipExchangehighlightOn = False        
+                    GV.chipExchangehighlightOn = False
 
     def betting_area(self):
         for self.indexChipPosition in reversed(GV.chipDisplayPriority):
@@ -499,7 +510,7 @@ class game_functions:
                     GV.chipExchangeOn = True
 
             else:
-                if self.indexChipPosition in GV.chipExchange:
+                if self.indexChipPosition in GV.chipExchange: 
                     GV.chipExchange.remove(self.indexChipPosition)
 
                 if self.indexChipPosition in GV.chipBettingGame:
@@ -507,6 +518,9 @@ class game_functions:
 
             if not GV.chipExchange:
                 GV.chipExchangeOn = False
+                GV.chipExchangeValue1 = 0
+                GV.chipExchangeStr1 = None
+                GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
 
 
 GF = game_functions()
