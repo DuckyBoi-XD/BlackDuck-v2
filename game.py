@@ -434,8 +434,12 @@ class game_functions:
             if event.type == pygame.MOUSEBUTTONDOWN:
 
                 if GV.chipExchangehighlightOn:
-                    GV.chipExchangeValue1 += int(list(reversed(GV.chipValues))[GV.exchangeChipSelection])
-                    print(GV.chipExchangeValue1)
+                    GV.chipSmallExchangeListtemp.reverse()
+                    GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] += 1
+                    GV.chipSmallExchangeListtemp.reverse()
+                    for indexexclist, value in enumerate(reversed(GV.chipSmallExchangeListtemp)):
+                        if value > 0:
+                            GV.chipExchangeValue1 += value * int(list(reversed(GV.chipValues))[indexexclist])
                 cursorPosx, cursorPosy = pygame.mouse.get_pos()
                 for self.index_var in reversed(GV.chipDisplayPriority):
                     CursorPos_CirclePosx = cursorPosx - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
