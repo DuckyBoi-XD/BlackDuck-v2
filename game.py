@@ -176,7 +176,11 @@ class game_variable: # Game variables
         self.chipFontListSmall = (self.threeCharFontSmall, self.fourCharFontSmall, self.fiveCharFontSmall, self.sixCharFontSmall)
 
         self.chipBettingGame = []
+        self.chipBettingPosChords = []
+
         self.chipExchange = []
+        self.chipExchangePosChords = []
+
 
         self.chipExchangeOn = False
         self.chipExchangehighlightOn = False
@@ -190,6 +194,7 @@ class game_variable: # Game variables
         self.exchangeChipSelection = 0
         self.chipSmallExchangeList = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         self.chipSmallExchangeListtemp = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -210,6 +215,24 @@ class game_variable: # Game variables
 GV = game_variable()
 
 class game_objects:
+    def __init__(self):
+        GV.chipExchangePosChords.append((1102.1419140888395, 0))
+        GV.chipExchangePosChords.append((636.8793960430015, 0))
+
+        for delta in range(272, 296, 1):
+            GV.chipExchangePosChords.append(
+                ((cosd(delta) * 1200) + 595, 
+                -1003 - (sind(delta) * 1200))
+            )
+
+        GV.chipBettingPosChords.append((553.120603956999, 0))
+        GV.chipBettingPosChords.append((87.85808591116103, 0))
+
+        for delta in range(245, 269, 1):
+            GV.chipBettingPosChords.append(
+                ((cosd(delta) * 1200) + 595, 
+                -1003 - (sind(delta) * 1200))
+            )
     def on_init(self):
         self.chipCirclePoints1 = []
         self.chipCirclePoints2 = []
@@ -312,11 +335,7 @@ class game_objects:
                 
     def game_space(self):
         tBTWidth, tBTLength = GV.tableFont.size("BETTING")
-        tETWidth, tETLength = GV.tableFont.size("EXCHANGE")
-
-        pygame.draw.rect(GV.display, GV.table_colour_accent, (100, 0, 450, 250))
-        pygame.draw.lines(GV.display, GV.white_colour, False, ((100, 0), (100, 250), (550, 250), (550, 0)), width=4)
-
+        tETWidth, tETLength = GV.tableFont.size("EXCHANGE") 
 
         if GV.chipExchangeOn:
 
@@ -427,16 +446,28 @@ class game_objects:
             tableBettingText = GV.tableFont.render("BETTING", True, GV.white_colour)
             GV.display.blit(tableBettingText, ((450/2) - (tBTWidth/2) + 100, (250/2) - (tBTLength/2)))
 
+        pygame.draw.polygon(GV.display, GV.red_colour, GV.chipExchangePosChords)
+        pygame.draw.polygon(GV.display, GV.white_colour, GV.chipExchangePosChords, width=5)
 
-        # Exchanging area
-        pygame.draw.rect(GV.display, GV.table_colour_accent, (650, 0, 450, 250))
-        pygame.draw.lines(GV.display, GV.white_colour, False, ((650, 0), (650, 250), (1100, 250), (1100, 0)), width=4)
+        pygame.draw.polygon(GV.display, GV.red_colour, GV.chipBettingPosChords)
+        pygame.draw.polygon(GV.display, GV.white_colour, GV.chipBettingPosChords, width=5)
+
         tableExchangeText = GV.tableFont.render("EXCHANGE", True, GV.white_colour)
-        GV.display.blit(tableExchangeText, ((450/2) - (tETWidth/2) + 650, (250/2) - (tETLength/2)))
+        GV.display.blit(tableExchangeText, ((450/2) - (tETWidth/2) + 650, (190/2) - (tETLength/2)))
         
-        pygame.draw.arc(GV.display, GV.white_colour, (-605, -2100, 2400, 2400), math.radians(210), math.radians(330))
-        pygame.draw.arc(GV.display, GV.white_colour, (-605, -2200, 2400, 2400), math.radians(210), math.radians(330))
-        pygame.draw.line(GV.display, GV.white_colour, (600, 0), (600, 600), width=20)
+        # table colour inside arcs
+        pygame.draw.arc(GV.display, GV.table_colour, (-605, -2100, 2400, 2400), math.radians(210), math.radians(350), width=90)
+        pygame.draw.arc(GV.display, GV.table_colour, (-605, -2099, 2400, 2400), math.radians(210), math.radians(350), width=90)
+        pygame.draw.arc(GV.display, GV.table_colour, (-605, -2190, 2400, 2400), math.radians(210), math.radians(350), width=10)
+        pygame.draw.arc(GV.display, GV.table_colour, (-605, -2191, 2400, 2400), math.radians(210), math.radians(350), width=10)
+
+        # top arc
+        pygame.draw.arc(GV.display, GV.white_colour, (-605, -2200, 2400, 2400), math.radians(240), math.radians(310), width=2)
+        pygame.draw.arc(GV.display, GV.white_colour, (-605, -2201, 2400, 2400), math.radians(240), math.radians(310), width=2)
+
+        # bottom arc
+        pygame.draw.arc(GV.display, GV.white_colour, (-605, -2100, 2400, 2400), math.radians(240), math.radians(310), width=2)
+        pygame.draw.arc(GV.display, GV.white_colour, (-605, -2099, 2400, 2400), math.radians(240), math.radians(310), width=2)
 
 
 GO = game_objects()
@@ -570,8 +601,8 @@ class pygame_function:
             GV._running = False
     def on_render(self):
         GV.display.fill(GV.table_colour)
-        game_objects.game_space(self)
         game_objects.on_init(self)
+        game_objects.game_space(self)
         game_objects.chip_object(self)
     def on_loop(self):
         pass
