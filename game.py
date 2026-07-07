@@ -451,15 +451,9 @@ class game_objects:
             exchangeValueTextRect = exchangeValueText.get_rect(center=(440, 85))
             GV.display.blit(exchangeValueText, exchangeValueTextRect)
 
-
-        else:
-            # Betting area
-            tableBettingText = GV.tableFont.render("BETTING", True, GV.white_colour)
-            GV.display.blit(tableBettingText, ((450/2) - (tBTWidth/2) + 100, 5))
-
         tableExchangeText = GV.tableFont.render("EXCHANGE", True, GV.white_colour)
 
-        GV.display.blit(tableExchangeText, ((450/2) - (tETWidth/2) + 650, 5))
+        GV.display.blit(tableExchangeText, ((450/2) - (tETWidth/2) + 650, 20))
 
 
 GO = game_objects()
@@ -547,27 +541,27 @@ class game_functions:
             chipPositionx = ((GV.chipPositions[self.indexChipPosition[0]])[self.indexChipPosition[1]])[0]
             chipPositiony = ((GV.chipPositions[self.indexChipPosition[0]])[self.indexChipPosition[1]])[1]
 
-            if 100 <= chipPositionx <= 550 and 0 <= chipPositiony <= 250 and GV.chipExchangeOn is False:
-                if self.indexChipPosition not in GV.chipBettingGame:
-                    GV.chipBettingGame.append(self.indexChipPosition)
+            exchange_remove = True
+            for position in GV.chipExchangePosChords:
+                if 636.8793960430015 <= chipPositionx <= position[0] and -100 <= chipPositiony <= position[1]:
+                    exchange_remove = False
+                    if self.indexChipPosition not in GV.chipExchange:
+                        GV.chipExchange.append(self.indexChipPosition)
+                        GV.chipExchangeOn = True
+                    break
 
-            elif 650 <= chipPositionx <= 1100 and 0 <= chipPositiony <= 250:
-                if self.indexChipPosition not in GV.chipExchange:
-                    GV.chipExchange.append(self.indexChipPosition)
-                    GV.chipExchangeOn = True
-
-            else:
+            if exchange_remove:
                 if self.indexChipPosition in GV.chipExchange: 
                     GV.chipExchange.remove(self.indexChipPosition)
 
                 if self.indexChipPosition in GV.chipBettingGame:
                     GV.chipBettingGame.remove(self.indexChipPosition)
-
-            if not GV.chipExchange:
-                GV.chipExchangeOn = False
-                GV.chipExchangeValue1 = 0
-                GV.chipExchangeStr1 = None
-                GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
+            
+                if not GV.chipExchange:
+                    GV.chipExchangeOn = False
+                    GV.chipExchangeValue1 = 0
+                    GV.chipExchangeStr1 = None
+                    GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
 
 
 GF = game_functions()
