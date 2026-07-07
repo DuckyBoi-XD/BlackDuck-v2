@@ -324,13 +324,11 @@ class game_objects:
             else:
                 chipOutlineColour = GV.black_colour
                 chipOutlineWidth = 1
-            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-40, pos[1]-40, 80, 80), math.radians(0), math.radians(180), width=1)
-            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-40, pos[1]-40, 80, 80), math.radians(180), math.radians(0), width=1)
-            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-41, pos[1]-41, 82, 82), math.radians(0), math.radians(180), width=1)
-            pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-41, pos[1]-41, 82, 82), math.radians(180), math.radians(0), width=1)
+
             if chipOutlineWidth == 2:
-                pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-42, pos[1]-42, 84, 84), math.radians(0), math.radians(180), width=1)
-                pygame.draw.arc(GV.display, chipOutlineColour, (pos[0]-42, pos[1]-42, 84, 84), math.radians(180), math.radians(0), width=1)
+                pygame.draw.circle(GV.display, chipOutlineColour, (pos[0], pos[1]), 42, width=3)
+            else:
+                pygame.draw.circle(GV.display, chipOutlineColour, (pos[0], pos[1]), 42, width=2)
                 
     def game_space(self):
         tBTWidth, tBTLength = GV.tableFont.size("BETTING")
@@ -428,8 +426,7 @@ class game_objects:
                     chipOutlineColour = GV.black_colour
 
                 # draws chip outline
-                pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-20, smallChipPos[1]-20, 40, 40), math.radians(0), math.radians(180), width=1)
-                pygame.draw.arc(GV.display, chipOutlineColour, (smallChipPos[0]-20, smallChipPos[1]-20, 40, 40), math.radians(180), math.radians(0), width=1)    
+                pygame.draw.circle(GV.display, chipOutlineColour, (smallChipPos[0], smallChipPos[1]), 21, width=1)   
 
                 # Chip ammount indicator
                 chipAmmountIndicator = GV.exchangeChipAmmount.render(str(GV.chipSmallExchangeListtemp[chipIndexSelection[0]]), True, GV.white_colour)
@@ -450,6 +447,10 @@ class game_objects:
             exchangeValueText = GV.exchangeFontFull.render(GV.chipExchangeStr1, True, GV.white_colour)
             exchangeValueTextRect = exchangeValueText.get_rect(center=(440, 85))
             GV.display.blit(exchangeValueText, exchangeValueTextRect)
+
+            pygame.draw.circle(GV.display, GV.bright_green, (305, 105), 30)
+            #pygame.draw.arc()
+            pygame.draw.circle(GV.display, GV.bright_green, (305, 105), 30, width=2)
 
         tableExchangeText = GV.tableFont.render("EXCHANGE", True, GV.white_colour)
 
