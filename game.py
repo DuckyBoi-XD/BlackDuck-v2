@@ -162,10 +162,10 @@ class game_variable: # Game variables
 
         self.tableFont = pygame.font.Font("assets/fonts/tableFont.ttf", 40)
 
-        self.threeCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 25)
-        self.fourCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 20)
-        self.fiveCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 18)
-        self.sixCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 15)
+        self.threeCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 16)
+        self.fourCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 13)
+        self.fiveCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 10)
+        self.sixCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 8)
 
         self.exchangeFontFull = pygame.font.Font("assets/fonts/tableFont.ttf", 30)
 
@@ -480,7 +480,6 @@ class game_functions:
                 if event.button == 3:
                     if GV.chipExchangehighlightOn:
                         GV.chipSmallExchangeListtemp.reverse()
-                        print(GV.chipSmallExchangeListtemp[GV.exchangeChipSelection])
                         if GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] > 0:
                             GV.chipSmallExchangeListtemp[GV.exchangeChipSelection] -= 1
                             GV.chipExchangeValue1 = 0
