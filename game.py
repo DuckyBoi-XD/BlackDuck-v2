@@ -194,6 +194,9 @@ class game_variable: # Game variables
         self.chipSmallExchangeList = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         self.chipSmallExchangeListtemp = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
+        self.exchangeConfirmation = False
+
+
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -370,7 +373,7 @@ class game_objects:
                     listpostions.clear()
 
                 # Circle Positions
-                widthSpacing = (chipIndexSelection[0] * 30) + ((100/10) * (chipIndexSelection[0] + 2)) + 125
+                widthSpacing = (chipIndexSelection[0] * 35) + ((100/10) * (chipIndexSelection[0] + 2)) + 97
                 smallChipPos = (widthSpacing, 20)
 
                 GV.exchangeChipPos.append(smallChipPos)
@@ -448,9 +451,12 @@ class game_objects:
             exchangeValueTextRect = exchangeValueText.get_rect(center=(440, 85))
             GV.display.blit(exchangeValueText, exchangeValueTextRect)
 
-            pygame.draw.circle(GV.display, GV.bright_green, (305, 105), 30)
-            #pygame.draw.arc()
-            pygame.draw.circle(GV.display, GV.bright_green, (305, 105), 30, width=2)
+            if GV.chipExchangeValue1 == GV.chipExchangeValue2:
+                pygame.draw.circle(GV.display, GV.bright_green, (305, 105), 30)
+            else:
+                pygame.draw.circle(GV.display, GV.red_colour, (305, 105), 30)
+            pygame.draw.circle(GV.display, GV.white_colour, (305, 105), 30, width=2)
+
 
         tableExchangeText = GV.tableFont.render("EXCHANGE", True, GV.white_colour)
 
@@ -477,7 +483,6 @@ class game_functions:
                                 if value > 0:
                                     GV.chipExchangeValue1 += value * int(list(reversed(GV.chipValues))[indexexclist])
                             GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
-
                 if event.button == 3:
                     if GV.chipExchangehighlightOn:
                         GV.chipSmallExchangeListtemp.reverse()
@@ -511,6 +516,18 @@ class game_functions:
                             pass
                     if GV.mousePosChange == True:
                         break
+                    CursorPos_CirclePosx = cursorPosx - 305
+                    CursorPos_CirclePosy = cursorPosy - 105
+
+                    CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
+
+                    if CursorPos_CirclePos <= GV.chipRadius**2 and GV.chipExchangeValue1 == GV.chipExchangeValue2:
+                        GV.exchangeConfirmation = True
+                        GV.chipExchangeValue1 = 0
+                        GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
+                        GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
+                    else:
+                        GV.exchangeConfirmation = False
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
