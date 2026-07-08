@@ -206,9 +206,14 @@ class game_variable: # Game variables
         for index, i in enumerate(CHIPS): # Start of game setup
             if i != 0:
                 self.offset = 5
+                self.offsetreal = 0
+                self.sideOffset = 0
                 for self.chipID in range(0, i):
-                    self.chipPositions[index].append([((self.chipStartPositions)[self.chipValues[index]])[0], ((self.chipStartPositions[self.chipValues[index]])[1] - self.offset)])
+                    self.sideOffset = int(str(self.offset/350)[0]) * 5
+                    self.offset = self.offset - int(str(self.offset/350)[0]) * 350
+                    self.chipPositions[index].append([((self.chipStartPositions)[self.chipValues[index]])[0] - self.sideOffset, ((self.chipStartPositions[self.chipValues[index]])[1] - self.offset)])
                     self.offset += 10
+                    self.offsetreal += 10
         
         for indexa, lista in enumerate(self.chipPositions):
             for indexb, value in enumerate(lista):
@@ -534,10 +539,14 @@ class game_functions:
 
                         for value in GV.chipPositions:
                             value.clear()
-                        for indexing, i in enumerate(CHIPS):
+                        for index, i in enumerate(CHIPS):
                             GV.offset = 5
-                            for b in range (0, i):
-                                GV.chipPositions[indexing].append([((GV.chipStartPositions)[GV.chipValues[indexing]])[0], ((GV.chipStartPositions[GV.chipValues[indexing]])[1] - GV.offset)])
+                            GV.offsetreal = 0
+                            GV.sideOffset = 0
+                            for GV.chipID in range(0, i):
+                                GV.sideOffset = int(str(GV.offset/350)[0]) * 5
+                                GV.offsetreal = GV.offset - int(str(GV.offset/350)[0]) * 350
+                                GV.chipPositions[index].append([((GV.chipStartPositions)[GV.chipValues[index]])[0] - GV.sideOffset, ((GV.chipStartPositions[GV.chipValues[index]])[1] - GV.offsetreal)])
                                 GV.offset += 10
 
                         print(CHIPS)
