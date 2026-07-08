@@ -96,7 +96,7 @@ def save_game(money_value = None, chip_info = None):
         f.write(encoded_bytes)
 
 MONEY, CHIPS = load_game()
-CHIPS = [3, 1, 3, 1, 1, 1, 1, 1, 1, 10]
+CHIPS = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 debug_var = True
 
 def cosd(x):
@@ -205,13 +205,13 @@ class game_variable: # Game variables
 
         for index, i in enumerate(CHIPS): # Start of game setup
             if i != 0:
-                offset = 5
+                self.offset = 5
                 for self.chipID in range(0, i):
-                    self.chipPositions[index].append([((self.chipStartPositions)[self.chipValues[index]])[0], ((self.chipStartPositions[self.chipValues[index]])[1] - offset)])
-                    offset += 10
+                    self.chipPositions[index].append([((self.chipStartPositions)[self.chipValues[index]])[0], ((self.chipStartPositions[self.chipValues[index]])[1] - self.offset)])
+                    self.offset += 10
         
-        for indexa, list in enumerate(self.chipPositions):
-            for indexb, value in enumerate(list):
+        for indexa, lista in enumerate(self.chipPositions):
+            for indexb, value in enumerate(lista):
                 self.chipDisplayPriority.append((indexa, indexb))
 
 GV = game_variable()
@@ -520,12 +520,40 @@ class game_functions:
                     CursorPos_CirclePosy = cursorPosy - 105
 
                     CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
-
                     if CursorPos_CirclePos <= GV.chipRadius**2 and GV.chipExchangeValue1 == GV.chipExchangeValue2:
                         GV.exchangeConfirmation = True
+
+                        for chips in GV.chipExchange:
+                            CHIPS[chips[0]] -= 1
+                        GV.chipExchange.clear()
+
+                        oldchips = CHIPS.copy()
+                        differencechips = []
+                        for index, i in enumerate(GV.chipSmallExchangeListtemp):
+                            CHIPS[index] += i
+
+                        for value in GV.chipPositions:
+                            value.clear()
+                        for indexing, i in enumerate(CHIPS):
+                            GV.offset = 5
+                            for b in range (0, i):
+                                GV.chipPositions[indexing].append([((GV.chipStartPositions)[GV.chipValues[indexing]])[0], ((GV.chipStartPositions[GV.chipValues[indexing]])[1] - GV.offset)])
+                                GV.offset += 10
+
+                        print(CHIPS)
+                        print(oldchips)
+                        print(differencechips)
+                        GV.chipDisplayPriority.clear()
+
+                        for indexa, lista in enumerate(GV.chipPositions):
+                            for indexb, value in enumerate(lista):
+                                GV.chipDisplayPriority.append((indexa, indexb))
+
                         GV.chipExchangeValue1 = 0
+                        
                         GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
                         GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
+
                     else:
                         GV.exchangeConfirmation = False
 
@@ -565,21 +593,23 @@ class game_functions:
                     if self.indexChipPosition not in GV.chipExchange:
                         GV.chipExchange.append(self.indexChipPosition)
                         GV.chipExchangeOn = True
+                        print(GV.chipExchange)
                     break
 
             if exchange_remove:
                 if self.indexChipPosition in GV.chipExchange: 
                     GV.chipExchange.remove(self.indexChipPosition)
+                    print(GV.chipExchange)
 
+                # NOT NEEDED YET
                 if self.indexChipPosition in GV.chipBettingGame:
                     GV.chipBettingGame.remove(self.indexChipPosition)
             
                 if not GV.chipExchange:
                     GV.chipExchangeOn = False
                     GV.chipExchangeValue1 = 0
-                    GV.chipExchangeStr1 = None
                     GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
-
+                    GV.chipExchangeStr1 = None
 
 GF = game_functions()
 
