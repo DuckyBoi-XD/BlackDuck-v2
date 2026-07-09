@@ -468,8 +468,15 @@ class game_objects:
 
         GV.display.blit(tableExchangeText, ((450/2) - (tETWidth/2) + 650, 20))
 
-        pygame.draw.lines(GV.display, GV.highlight_yellow, True, ((370, 325), (520, 325), (520, 525), (370, 525)), width=2)
-        pygame.draw.lines(GV.display, GV.highlight_yellow, True, ((680, 325), (830, 325), (830, 525), (680, 525)), width=2)
+        rect_surface = pygame.Surface((152, 202), pygame.SRCALPHA)
+        pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 152, 202), width=2)
+        betArea = pygame.transform.rotate(rect_surface, -5)
+        GV.display.blit(betArea, (370, 325))
+
+        rect_surface = pygame.Surface((152, 202), pygame.SRCALPHA)
+        pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 152, 202), width=2)
+        betArea = pygame.transform.rotate(rect_surface, 5)
+        GV.display.blit(betArea, (650, 325))
 
 
 GO = game_objects()
