@@ -468,6 +468,8 @@ class game_objects:
 
         GV.display.blit(tableExchangeText, ((450/2) - (tETWidth/2) + 650, 20))
 
+
+        # Betting outline
         rect_surface = pygame.Surface((152, 202), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 152, 202), width=2)
         betArea = pygame.transform.rotate(rect_surface, -5)
@@ -488,7 +490,6 @@ class game_functions:
                 GV._running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if int(list(reversed(GV.chipValues))[GV.exchangeChipSelection]) < GV.chipExchangeValue2 or (int(list(reversed(GV.chipValues))[GV.exchangeChipSelection]) == GV.chipExchangeValue2 and len(GV.chipExchange)!= 1):
-                    print(13238298765789)
                     if int(list(reversed(GV.chipValues))[GV.exchangeChipSelection]) <= GV.chipExchangeValue2-GV.chipExchangeValue1:
                         if event.button == 1:
                             if GV.chipExchangehighlightOn:
@@ -514,7 +515,6 @@ class game_functions:
                             GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
                         GV.chipSmallExchangeListtemp.reverse()
                 if event.button == 1:
-                    print(pygame.mouse.get_pos())
                     cursorPosx, cursorPosy = pygame.mouse.get_pos()
                     for self.index_var in reversed(GV.chipDisplayPriority):
                         CursorPos_CirclePosx = cursorPosx - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
