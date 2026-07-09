@@ -473,12 +473,14 @@ class game_objects:
         rect_surface = pygame.Surface((152, 202), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 152, 202), width=2)
         betArea = pygame.transform.rotate(rect_surface, -5)
-        GV.display.blit(betArea, (370, 325))
+        rect = betArea.get_rect(center=(445, 425))
+        GV.display.blit(betArea, rect)
 
         rect_surface = pygame.Surface((152, 202), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 152, 202), width=2)
         betArea = pygame.transform.rotate(rect_surface, 5)
-        GV.display.blit(betArea, (650, 325))
+        rect = betArea.get_rect(center=(725, 425))
+        GV.display.blit(betArea, rect)
 
 
 GO = game_objects()
