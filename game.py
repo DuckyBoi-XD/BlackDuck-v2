@@ -468,10 +468,10 @@ class game_objects:
 
         GV.display.blit(tableExchangeText, ((450/2) - (tETWidth/2) + 650, 20))
 
-        pygame.draw.lines(GV.display, GV.highlight_yellow, True, ((50, 265), (200, 265), (200, 465), (50, 465)), width=2)
-        pygame.draw.lines(GV.display, GV.highlight_yellow, True, ((325, 317), (475, 317), (475, 517), (325, 517)), width=2)
-        pygame.draw.lines(GV.display, GV.highlight_yellow, True, ((600, 322), (750, 322), (750, 522), (600, 522)), width=2)
-        pygame.draw.lines(GV.display, GV.highlight_yellow, True, ((875, 285), (1025, 285), (1025, 485), (875, 485)), width=2)
+        pygame.draw.lines(GV.display, GV.highlight_yellow, True, ((60, 265), (210, 265), (210, 465), (60, 465)), width=2)
+        pygame.draw.lines(GV.display, GV.highlight_yellow, True, ((370, 325), (520, 325), (520, 525), (370, 525)), width=2)
+        pygame.draw.lines(GV.display, GV.highlight_yellow, True, ((680, 325), (830, 325), (830, 525), (680, 525)), width=2)
+        pygame.draw.lines(GV.display, GV.highlight_yellow, True, ((990, 260), (1140, 260), (1140, 460), (990, 460)), width=2)
 
 
 GO = game_objects()
