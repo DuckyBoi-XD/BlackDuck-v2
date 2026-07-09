@@ -473,7 +473,7 @@ class game_objects:
         rect_surface = pygame.Surface((152, 202), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 152, 202), width=2)
         betArea = pygame.transform.rotate(rect_surface, -5)
-        rect = betArea.get_rect(center=(445, 425))
+        rect = betArea.get_rect(center=(470, 425))
         GV.display.blit(betArea, rect)
 
         rect_surface = pygame.Surface((152, 202), pygame.SRCALPHA)
@@ -481,6 +481,9 @@ class game_objects:
         betArea = pygame.transform.rotate(rect_surface, 5)
         rect = betArea.get_rect(center=(725, 425))
         GV.display.blit(betArea, rect)
+
+        pygame.draw.circle(GV.display, (255, 0, 0), (470, 425), 5)
+        pygame.draw.circle(GV.display, (0, 255, 0), (725, 425), 5)
 
 
 GO = game_objects()
@@ -613,6 +616,7 @@ class game_functions:
 
             exchange_remove = True
             for position in GV.chipExchangePosChords:
+
                 if 636.8793960430015 <= chipPositionx <= position[0] and -100 <= chipPositiony <= position[1]:
                     exchange_remove = False
                     if self.indexChipPosition not in GV.chipExchange:
@@ -620,6 +624,24 @@ class game_functions:
                         GV.chipExchangeOn = True
                         print(GV.chipExchange)
                     break
+
+            # betting space tracking
+            rectCentrex1 = chipPositionx - 470
+            rectCentrey1 = chipPositiony - 425
+
+            rectCentrex2 = chipPositionx - 725
+            rectCentrey2 = chipPositiony - 425
+
+            rectRotatedx1 = rectCentrex1 * cosd(5) - rectCentrey1 * sind(5)
+            rectRotatedy1 = rectCentrex1 * sind(5) + rectCentrey1 * cosd(5)
+
+            rectRotatedx2 = rectCentrex2 * cosd(-5) - rectCentrey2 * sind(-5)
+            rectRotatedy2 = rectCentrex2 * sind(-5) + rectCentrey2 * cosd(-5)
+
+            if -75 <= rectRotatedx1 <= 75 and -100 <= rectRotatedy1 <= 100:
+                print("check check")
+            elif -75 <= rectRotatedx2 <= 75 and -100 <= rectRotatedy2 <= 100:
+                print("check check2")
 
             if exchange_remove:
                 if self.indexChipPosition in GV.chipExchange: 
