@@ -467,12 +467,43 @@ class game_objects:
 
 
         # Betting outline
+
+        # betting options outline
         rect_surface = pygame.Surface((76, 202), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 202), width=2)
         betChoiceArea = pygame.transform.rotate(rect_surface, -5)
         rect = betChoiceArea.get_rect(center=(355, 415))
         GV.display.blit(betChoiceArea, rect)
+        #--------#
+        
+        # Betting option outline left
+        rect_surface = pygame.Surface((76, 59), pygame.SRCALPHA)
+        pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 59), width=2)
+        betChoiceArea = pygame.transform.rotate(rect_surface, -5)
+        rect = betChoiceArea.get_rect(center=(349, 486))
+        GV.display.blit(betChoiceArea, rect)
 
+        rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
+        pygame.draw.rect(rect_surface, GV.white_colour, (0, 0, 76, 50.5), width=2)
+        betChoiceArea = pygame.transform.rotate(rect_surface, -5)
+        rect = betChoiceArea.get_rect(center=(354, 434))
+        GV.display.blit(betChoiceArea, rect)
+
+        rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
+        pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 50.5), width=2)
+        betChoiceArea = pygame.transform.rotate(rect_surface, -5)
+        rect = betChoiceArea.get_rect(center=(358, 387))
+        GV.display.blit(betChoiceArea, rect)
+
+        rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
+        pygame.draw.rect(rect_surface, GV.white_colour, (0, 0, 76, 50.5), width=2)
+        betChoiceArea = pygame.transform.rotate(rect_surface, -5)
+        rect = betChoiceArea.get_rect(center=(362, 339))
+        GV.display.blit(betChoiceArea, rect)
+        #----------#
+
+
+        # betting chip space outline
         rect_surface = pygame.Surface((152, 202), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 152, 202), width=2)
         betArea = pygame.transform.rotate(rect_surface, -5)
@@ -484,12 +515,41 @@ class game_objects:
         betArea = pygame.transform.rotate(rect_surface, 5)
         rect = betArea.get_rect(center=(725, 425))
         GV.display.blit(betArea, rect)
+        #--------#
 
+        # betting options outline
         rect_surface = pygame.Surface((76, 202), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 202), width=2)
         betChoiceArea = pygame.transform.rotate(rect_surface, 5)
         rect = betChoiceArea.get_rect(center=(840, 415))
         GV.display.blit(betChoiceArea, rect)
+        #--------#
+
+        # Betting option outline right
+        rect_surface = pygame.Surface((76, 59), pygame.SRCALPHA)
+        pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 59), width=2)
+        betChoiceArea = pygame.transform.rotate(rect_surface, 5)
+        rect = betChoiceArea.get_rect(center=(847, 486))
+        GV.display.blit(betChoiceArea, rect)
+
+        rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
+        pygame.draw.rect(rect_surface, GV.white_colour, (0, 0, 76, 50.5), width=2)
+        betChoiceArea = pygame.transform.rotate(rect_surface, 5)
+        rect = betChoiceArea.get_rect(center=(842, 434))
+        GV.display.blit(betChoiceArea, rect)
+
+        rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
+        pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 50.5), width=2)
+        betChoiceArea = pygame.transform.rotate(rect_surface, 5)
+        rect = betChoiceArea.get_rect(center=(838, 387))
+        GV.display.blit(betChoiceArea, rect)
+
+        rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
+        pygame.draw.rect(rect_surface, GV.white_colour, (0, 0, 76, 50.5), width=2)
+        betChoiceArea = pygame.transform.rotate(rect_surface, 5)
+        rect = betChoiceArea.get_rect(center=(834, 339))
+        GV.display.blit(betChoiceArea, rect)
+        #----------#
 
 GO = game_objects()
 
