@@ -197,7 +197,8 @@ class game_variable: # Game variables
 
         self.exchangeConfirmation = False
 
-
+        self.chipBet1 = []
+        self.chipBet2 = []
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -340,7 +341,6 @@ class game_objects:
                 pygame.draw.circle(GV.display, chipOutlineColour, (pos[0], pos[1]), 42, width=2)
                 
     def game_space(self):
-        tBTWidth, tBTLength = GV.tableFont.size("BETTING")
         tETWidth, tETLength = GV.tableFont.size("EXCHANGE") 
 
         # Printing areas of the table
@@ -482,10 +482,6 @@ class game_objects:
         rect = betArea.get_rect(center=(725, 425))
         GV.display.blit(betArea, rect)
 
-        pygame.draw.circle(GV.display, (255, 0, 0), (470, 425), 5)
-        pygame.draw.circle(GV.display, (0, 255, 0), (725, 425), 5)
-
-
 GO = game_objects()
 
 class game_functions:
@@ -568,9 +564,6 @@ class game_functions:
                                 GV.chipPositions[index].append([((GV.chipStartPositions)[GV.chipValues[index]])[0] - GV.sideOffset, ((GV.chipStartPositions[GV.chipValues[index]])[1] - GV.offsetreal)])
                                 GV.offset += 10
 
-                        print(CHIPS)
-                        print(oldchips)
-                        print(differencechips)
                         GV.chipDisplayPriority.clear()
 
                         for indexa, lista in enumerate(GV.chipPositions):
@@ -615,14 +608,14 @@ class game_functions:
             chipPositiony = ((GV.chipPositions[self.indexChipPosition[0]])[self.indexChipPosition[1]])[1]
 
             exchange_remove = True
+            bet1_remove = True
+            bet2_remove = True
             for position in GV.chipExchangePosChords:
-
                 if 636.8793960430015 <= chipPositionx <= position[0] and -100 <= chipPositiony <= position[1]:
                     exchange_remove = False
                     if self.indexChipPosition not in GV.chipExchange:
                         GV.chipExchange.append(self.indexChipPosition)
                         GV.chipExchangeOn = True
-                        print(GV.chipExchange)
                     break
 
             # betting space tracking
@@ -639,24 +632,33 @@ class game_functions:
             rectRotatedy2 = rectCentrex2 * sind(-5) + rectCentrey2 * cosd(-5)
 
             if -75 <= rectRotatedx1 <= 75 and -100 <= rectRotatedy1 <= 100:
-                print("check check")
+                bet1_remove = False
+                if self.indexChipPosition not in GV.chipBet1:
+                    GV.chipBet1.append(self.indexChipPosition)
+
+                
             elif -75 <= rectRotatedx2 <= 75 and -100 <= rectRotatedy2 <= 100:
-                print("check check2")
+                bet2_remove = False
+                if self.indexChipPosition not in GV.chipBet2:
+                    GV.chipBet2.append(self.indexChipPosition)
+
 
             if exchange_remove:
                 if self.indexChipPosition in GV.chipExchange: 
                     GV.chipExchange.remove(self.indexChipPosition)
-                    print(GV.chipExchange)
 
-                # NOT NEEDED YET
-                if self.indexChipPosition in GV.chipBettingGame:
-                    GV.chipBettingGame.remove(self.indexChipPosition)
-            
                 if not GV.chipExchange:
                     GV.chipExchangeOn = False
                     GV.chipExchangeValue1 = 0
                     GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
                     GV.chipExchangeStr1 = None
+
+            if bet1_remove == True:
+                if self.indexChipPosition in GV.chipBet1: 
+                    GV.chipBet1.remove(self.indexChipPosition)
+            if bet2_remove == True:
+                if self.indexChipPosition in GV.chipBet2: 
+                    GV.chipBet2.remove(self.indexChipPosition)
 
 GF = game_functions()
 
