@@ -196,6 +196,14 @@ class game_variable: # Game variables
 
         self.chipBet1 = []
         self.chipBet2 = []
+        self.betFuncOutlineL1 = False
+        self.betFuncOutlineL2 = False
+        self.betFuncOutlineL3 = False
+        self.betFuncOutlineL4 = False
+        self.betFuncOutlineR1 = False
+        self.betFuncOutlineR2 = False
+        self.betFuncOutlineR3 = False
+        self.betFuncOutlineR4 = False
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -484,7 +492,7 @@ class game_objects:
         GV.display.blit(betChoiceArea, rect)
 
         rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        pygame.draw.rect(rect_surface, GV.white_colour, (0, 0, 76, 50.5), width=2)
+        pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 50.5), width=2)
         betChoiceArea = pygame.transform.rotate(rect_surface, -5)
         rect = betChoiceArea.get_rect(center=(354, 434))
         GV.display.blit(betChoiceArea, rect)
@@ -496,7 +504,7 @@ class game_objects:
         GV.display.blit(betChoiceArea, rect)
 
         rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        pygame.draw.rect(rect_surface, GV.white_colour, (0, 0, 76, 50.5), width=2)
+        pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 50.5), width=2)
         betChoiceArea = pygame.transform.rotate(rect_surface, -5)
         rect = betChoiceArea.get_rect(center=(362, 339))
         GV.display.blit(betChoiceArea, rect)
@@ -533,7 +541,7 @@ class game_objects:
         GV.display.blit(betChoiceArea, rect)
 
         rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        pygame.draw.rect(rect_surface, GV.white_colour, (0, 0, 76, 50.5), width=2)
+        pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 50.5), width=2)
         betChoiceArea = pygame.transform.rotate(rect_surface, 5)
         rect = betChoiceArea.get_rect(center=(842, 434))
         GV.display.blit(betChoiceArea, rect)
@@ -545,7 +553,7 @@ class game_objects:
         GV.display.blit(betChoiceArea, rect)
 
         rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        pygame.draw.rect(rect_surface, GV.white_colour, (0, 0, 76, 50.5), width=2)
+        pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 50.5), width=2)
         betChoiceArea = pygame.transform.rotate(rect_surface, 5)
         rect = betChoiceArea.get_rect(center=(834, 339))
         GV.display.blit(betChoiceArea, rect)
@@ -654,6 +662,81 @@ class game_functions:
             if GV.mousePosChange == True:
                 ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0] = pygame.mouse.get_pos()[0] - GV.mouseStartPos[0] + GV.chipCurrentPos[0]
                 ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1] = pygame.mouse.get_pos()[1] - GV.mouseStartPos[1] + GV.chipCurrentPos[1]
+            
+            cursorPosx, cursorPosy = pygame.mouse.get_pos()
+            
+            rclx1 = cursorPosx - 349
+            rcly1 = cursorPosy - 486
+            rclx2 = cursorPosx - 354
+            rcly2 = cursorPosy - 434
+            rclx3 = cursorPosx - 358
+            rcly3 = cursorPosy - 387
+            rclx4 = cursorPosx - 362
+            rcly4 = cursorPosy - 339
+
+
+            rcrx1 = cursorPosx - 847
+            rcry1 = cursorPosy - 486
+            rcrx2 = cursorPosx - 842
+            rcry2 = cursorPosy - 434
+            rcrx3 = cursorPosx - 838
+            rcry3 = cursorPosy - 387
+            rcrx4 = cursorPosx - 834
+            rcry4 = cursorPosy - 339
+
+            rrlx1 = rclx1 * cosd(5) - rcly1 * sind(5)
+            rrly1 = rclx1 * sind(5) + rcly1 * cosd(5)
+            rrlx2 = rclx2 * cosd(5) - rcly2 * sind(5)
+            rrly2 = rclx2 * sind(5) + rcly2 * cosd(5)
+            rrlx3 = rclx3 * cosd(5) - rcly3 * sind(5)
+            rrly3 = rclx3 * sind(5) + rcly3 * cosd(5)
+            rrlx4 = rclx4 * cosd(5) - rcly4 * sind(5)
+            rrly4 = rclx4 * sind(5) + rcly4 * cosd(5)
+
+            rrrx1 = rcrx1 * cosd(-5) - rcry1 * sind(-5)
+            rrry1 = rcrx1 * sind(-5) + rcry1 * cosd(-5)
+            rrrx2 = rcrx2 * cosd(-5) - rcry2 * sind(-5)
+            rrry2 = rcrx2 * sind(-5) + rcry2 * cosd(-5)
+            rrrx3 = rcrx3 * cosd(-5) - rcry3 * sind(-5)
+            rrry3 = rcrx3 * sind(-5) + rcry3 * cosd(-5)
+            rrrx4 = rcrx4 * cosd(-5) - rcry4 * sind(-5)
+            rrry4 = rcrx4 * sind(-5) + rcry4 * cosd(-5)
+
+            if -38 <= rrlx1 <= 38 and -29.5 <= rrly1 <= 29.5:
+                GV.betFuncOutlineL1 = True
+            else:
+                GV.betFuncOutlineL1 = False
+            if -38 <= rrlx2 <= 38 and -25.25 <= rrly2 <= 25.25:
+                GV.betFuncOutlineL2 = True
+            else:
+                GV.betFuncOutlineL2 = False
+            if -38 <= rrlx3 <= 38 and -25.25 <= rrly3 <= 25.25:
+                GV.betFuncOutlineL3 = True
+            else:
+                GV.betFuncOutlineL3 = False
+            if -38 <= rrlx4 <= 38 and -25.25 <= rrly4 <= 25.25:
+                GV.betFuncOutlineL4 = True
+            else:
+                GV.betFuncOutlineL4 = False
+            
+            if -38 <= rrrx1 <= 38 and -29.5 <= rrry1 <= 29.5:
+                GV.betFuncOutlineR1 = True
+            else:
+                GV.betFuncOutlineR1 = False
+            if -38 <= rrrx2 <= 38 and -25.25 <= rrry2 <= 25.25:
+                GV.betFuncOutlineR2 = True
+            else:
+                GV.betFuncOutlineR2 = False
+            if -38 <= rrrx3 <= 38 and -25.25 <= rrry3 <= 25.25:
+                GV.betFuncOutlineR3 = True
+            else:
+                GV.betFuncOutlineR3 = False
+            if -38 <= rrrx4 <= 38 and -25.25 <= rrry4 <= 25.25:
+                GV.betFuncOutlineR4 = True
+            else:
+                GV.betFuncOutlineR4 = False
+
+            
             for indexexchange, self.smallExchangeChipPos in enumerate(reversed(GV.exchangeChipPos)):
 
                 cursorPosx, cursorPosy = pygame.mouse.get_pos()
@@ -670,6 +753,7 @@ class game_functions:
                 else:
                     GV.chipExchangeHighlight = None
                     GV.chipExchangehighlightOn = False
+            
 
     def betting_area(self):
         for self.indexChipPosition in reversed(GV.chipDisplayPriority):
