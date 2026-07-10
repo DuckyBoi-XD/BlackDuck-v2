@@ -175,12 +175,9 @@ class game_variable: # Game variables
         self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont)
         self.chipFontListSmall = (self.threeCharFontSmall, self.fourCharFontSmall, self.fiveCharFontSmall, self.sixCharFontSmall)
 
-        self.chipBettingGame = []
-        self.chipBettingPosChords = []
-
+        self.chipExchangeFunctionPosChords = []
         self.chipExchange = []
         self.chipExchangePosChords = []
-
 
         self.chipExchangeOn = False
         self.chipExchangehighlightOn = False
@@ -234,14 +231,14 @@ class game_objects:
             )
         GV.chipExchangePosChords.append((1102.1419140888395, 0))
 
-        GV.chipBettingPosChords.append((87.85808591116103, 0))
+        GV.chipExchangeFunctionPosChords.append((87.85808591116103, 0))
 
         for delta in range(245, 269, 1):
-            GV.chipBettingPosChords.append(
+            GV.chipExchangeFunctionPosChords.append(
                 ((cosd(delta) * 1200) + 595, 
                 -1003 - (sind(delta) * 1200))
             )
-        GV.chipBettingPosChords.append((553.120603956999, 0))
+        GV.chipExchangeFunctionPosChords.append((553.120603956999, 0))
     def on_init(self):
         self.chipCirclePoints1 = []
         self.chipCirclePoints2 = []
@@ -316,7 +313,7 @@ class game_objects:
             chipOutlineColour = None
             chipOutlineWidth = None
             if GV.mousePosChange and index_var == GV.chipDisplayPriority[-1]:
-                if index_var in GV.chipBettingGame or index_var in GV.chipExchange:
+                if index_var in GV.chipBet1 or index_var in GV.chipBet2 or index_var in GV.chipExchange:
                     chipOutlineColour = GV.yellow_green
                     chipOutlineWidth = 2
                 elif GV.chipValueColours[index_var[0]] == GV.yellow_colour:
@@ -325,7 +322,7 @@ class game_objects:
                 else:
                     chipOutlineColour = GV.yellow_colour
                     chipOutlineWidth = 2
-            elif index_var in GV.chipBettingGame or index_var in GV.chipExchange:
+            elif index_var in GV.chipBet1 or index_var in GV.chipBet2 or index_var in GV.chipExchange:
                 chipOutlineColour = GV.bright_green
                 chipOutlineWidth = 2
             elif GV.chipValueColours[index_var[0]] == GV.black_colour or GV.chipValueColours[index_var[0]] == GV.blue_colour:
@@ -347,8 +344,8 @@ class game_objects:
         pygame.draw.polygon(GV.display, GV.table_colour_accent, GV.chipExchangePosChords)
         pygame.draw.lines(GV.display, GV.white_colour, False, GV.chipExchangePosChords, width=5)
 
-        pygame.draw.polygon(GV.display, GV.table_colour_accent, GV.chipBettingPosChords)
-        pygame.draw.lines(GV.display, GV.white_colour, False, GV.chipBettingPosChords, width=5)
+        pygame.draw.polygon(GV.display, GV.table_colour_accent, GV.chipExchangeFunctionPosChords)
+        pygame.draw.lines(GV.display, GV.white_colour, False, GV.chipExchangeFunctionPosChords, width=5)
 
         # table colour inside arcs
         pygame.draw.arc(GV.display, GV.table_colour, (-605, -2100, 2400, 2400), math.radians(210), math.radians(350), width=90)
@@ -470,6 +467,12 @@ class game_objects:
 
 
         # Betting outline
+        rect_surface = pygame.Surface((76, 202), pygame.SRCALPHA)
+        pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 202), width=2)
+        betChoiceArea = pygame.transform.rotate(rect_surface, -5)
+        rect = betChoiceArea.get_rect(center=(355, 415))
+        GV.display.blit(betChoiceArea, rect)
+
         rect_surface = pygame.Surface((152, 202), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 152, 202), width=2)
         betArea = pygame.transform.rotate(rect_surface, -5)
@@ -481,6 +484,12 @@ class game_objects:
         betArea = pygame.transform.rotate(rect_surface, 5)
         rect = betArea.get_rect(center=(725, 425))
         GV.display.blit(betArea, rect)
+
+        rect_surface = pygame.Surface((76, 202), pygame.SRCALPHA)
+        pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 202), width=2)
+        betChoiceArea = pygame.transform.rotate(rect_surface, 5)
+        rect = betChoiceArea.get_rect(center=(840, 415))
+        GV.display.blit(betChoiceArea, rect)
 
 GO = game_objects()
 
