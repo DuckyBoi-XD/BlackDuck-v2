@@ -120,12 +120,17 @@ class game_variable: # Game variables
         self.bright_purple_colour = (127, 101, 227)
         self.yellow_colour = (241, 208, 93)
         self.orange_colour = (255, 176, 60)
-        self.dark_blue = (42, 52, 161)
+        self.dark_blue = (62, 72, 161)
         self.light_blue = (110, 177, 255)
         self.bright_green = (109, 255, 108)
         self.yellow_green = (183, 255, 0)
         self.bright_red = (255, 49, 49)
         self.highlight_yellow = (249, 203, 26)
+
+        self.darkgreen_colour = (18, 78, 49)
+        self.darkred_colour = (115, 20, 28)
+        self.darkblue_colour = (13, 23, 67)
+        self.darkorange_colour = (239, 142, 0)
 
         self._running = True
 
@@ -171,7 +176,10 @@ class game_variable: # Game variables
         self.exchangeFontFull = pygame.font.Font("assets/fonts/tableFont.ttf", 30)
 
         self.exchangeChipAmmount = pygame.font.Font("assets/fonts/tableFont.ttf", 20)
-        self.betFunctionFont = pygame.font.Font("assets/fonts/tableFont.ttf", 25)
+        self.betFunctionBetFont = pygame.font.Font("assets/fonts/tableFont.ttf", 30)
+        self.betFunctionStandFont = pygame.font.Font("assets/fonts/tableFont.ttf", 20)
+        self.betFunctionDoubleDownFont = pygame.font.Font("assets/fonts/tableFont.ttf", 15)
+        self.betFunctionSplitFont = pygame.font.Font("assets/fonts/tableFont.ttf", 25)
 
         self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont)
         self.chipFontListSmall = (self.threeCharFontSmall, self.fourCharFontSmall, self.fiveCharFontSmall, self.sixCharFontSmall)
@@ -488,10 +496,18 @@ class game_objects:
         # Betting option outline left
 
         box_surface = pygame.Surface((76, 59), pygame.SRCALPHA)
-        pygame.draw.rect(box_surface, GV.bright_green, (0, 0, 76, 59))
+        if GV.betFuncOutlineL1:
+            pygame.draw.rect(box_surface, GV.green_colour, (0, 0, 76, 59))
+        else:
+            pygame.draw.rect(box_surface, GV.darkgreen_colour, (0, 0, 76, 59))
         betFunctionBox = pygame.transform.rotate(box_surface, -5)
         rect = betFunctionBox.get_rect(center=(349, 486))
         GV.display.blit(betFunctionBox, rect)
+
+        bettext = GV.betFunctionBetFont.render("BET", True, GV.white_colour)
+        bettextrect = bettext.get_rect(center=(349, 486))
+        bettextrotated = pygame.transform.rotate(bettext, -5)
+        GV.display.blit(bettextrotated, bettextrect)
 
         rect_surface = pygame.Surface((76, 59), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 59), width=2)
@@ -499,18 +515,21 @@ class game_objects:
         rect = betChoiceArea.get_rect(center=(349, 486))
         GV.display.blit(betChoiceArea, rect)
 
-        bettext = GV.betFunctionFont.render("BET", True, GV.white_colour)
-        bettextrect = bettext.get_rect(center=(349, 486))
-        bettextrotated = pygame.transform.rotate(bettext, -5)
-        GV.display.blit(bettextrotated, bettextrect)
-
 
 
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        pygame.draw.rect(box_surface, GV.bright_green, (0, 0, 76, 50.5))
+        if GV.betFuncOutlineL2:
+            pygame.draw.rect(box_surface, GV.red_colour, (0, 0, 76, 50.5))
+        else:
+            pygame.draw.rect(box_surface, GV.darkred_colour, (0, 0, 76, 50.5))
         betFunctionBox = pygame.transform.rotate(box_surface, -5)
         rect = betFunctionBox.get_rect(center=(354, 434))
         GV.display.blit(betFunctionBox, rect)
+
+        bettext = GV.betFunctionStandFont.render("STAND", True, GV.white_colour)
+        bettextrect = bettext.get_rect(center=(354, 434))
+        bettextrotated = pygame.transform.rotate(bettext, -5)
+        GV.display.blit(bettextrotated, bettextrect)
         
         rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 50.5), width=2)
@@ -521,10 +540,22 @@ class game_objects:
         
 
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        pygame.draw.rect(box_surface, GV.bright_green, (0, 0, 76, 50.5))
+        if GV.betFuncOutlineL3:
+            pygame.draw.rect(box_surface, GV.blue_colour, (0, 0, 76, 50.5))
+        else:
+            pygame.draw.rect(box_surface, GV.darkblue_colour, (0, 0, 76, 50.5))
         betFunctionBox = pygame.transform.rotate(box_surface, -5)
         rect = betFunctionBox.get_rect(center=(358, 387))
         GV.display.blit(betFunctionBox, rect)
+
+        bettext1 = GV.betFunctionDoubleDownFont.render(f"DOULBE", True, GV.white_colour)
+        bettext2 = GV.betFunctionDoubleDownFont.render(f"DOWN", True, GV.white_colour)
+        bettextrect1 = bettext1.get_rect(center=(358, 379))
+        bettextrect2 = bettext2.get_rect(center=(355, 395))
+        bettextrotated1 = pygame.transform.rotate(bettext1, -5)
+        bettextrotated2 = pygame.transform.rotate(bettext2, -5)
+        GV.display.blit(bettextrotated1, bettextrect1)
+        GV.display.blit(bettextrotated2, bettextrect2)
 
         rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 50.5), width=2)
@@ -535,10 +566,18 @@ class game_objects:
 
 
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        pygame.draw.rect(box_surface, GV.bright_green, (0, 0, 76, 50.5))
+        if GV.betFuncOutlineL4:
+            pygame.draw.rect(box_surface, GV.orange_colour, (0, 0, 76, 50.5))
+        else:
+            pygame.draw.rect(box_surface, GV.darkorange_colour, (0, 0, 76, 50.5))
         betFunctionBox = pygame.transform.rotate(box_surface, -5)
         rect = betFunctionBox.get_rect(center=(362, 339))
         GV.display.blit(betFunctionBox, rect)
+
+        bettext = GV.betFunctionStandFont.render("SPLIT", True, GV.white_colour)
+        bettextrect = bettext.get_rect(center=(360, 339))
+        bettextrotated = pygame.transform.rotate(bettext, -5)
+        GV.display.blit(bettextrotated, bettextrect)
 
         rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 50.5), width=2)
@@ -573,10 +612,18 @@ class game_objects:
         # Betting option outline right
 
         box_surface = pygame.Surface((76, 59), pygame.SRCALPHA)
-        pygame.draw.rect(box_surface, GV.bright_green, (0, 0, 76, 59))
+        if GV.betFuncOutlineR1:
+            pygame.draw.rect(box_surface, GV.green_colour, (0, 0, 76, 59))
+        else:
+            pygame.draw.rect(box_surface, GV.darkgreen_colour, (0, 0, 76, 59))
         betFunctionBox = pygame.transform.rotate(box_surface, 5)
         rect = betFunctionBox.get_rect(center=(847, 486))
         GV.display.blit(betFunctionBox, rect)
+
+        bettext = GV.betFunctionBetFont.render("BET", True, GV.white_colour)
+        bettextrect = bettext.get_rect(center=(847, 486))
+        bettextrotated = pygame.transform.rotate(bettext, 5)
+        GV.display.blit(bettextrotated, bettextrect)
 
         rect_surface = pygame.Surface((76, 59), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 59), width=2)
@@ -587,10 +634,18 @@ class game_objects:
 
 
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        pygame.draw.rect(box_surface, GV.bright_green, (0, 0, 76, 50.5))
+        if GV.betFuncOutlineR2:
+            pygame.draw.rect(box_surface, GV.red_colour, (0, 0, 76, 50.5))
+        else:
+            pygame.draw.rect(box_surface, GV.darkred_colour, (0, 0, 76, 50.5))
         betFunctionBox = pygame.transform.rotate(box_surface, 5)
         rect = betFunctionBox.get_rect(center=(842, 434))
         GV.display.blit(betFunctionBox, rect)
+
+        bettext = GV.betFunctionStandFont.render("STAND", True, GV.white_colour)
+        bettextrect = bettext.get_rect(center=(842, 434))
+        bettextrotated = pygame.transform.rotate(bettext, 5)
+        GV.display.blit(bettextrotated, bettextrect)
 
         rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 50.5), width=2)
@@ -601,10 +656,22 @@ class game_objects:
 
 
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        pygame.draw.rect(box_surface, GV.bright_green, (0, 0, 76, 50.5))
+        if GV.betFuncOutlineR3:
+            pygame.draw.rect(box_surface, GV.blue_colour, (0, 0, 76, 50.5))
+        else:
+            pygame.draw.rect(box_surface, GV.darkblue_colour, (0, 0, 76, 50.5))
         betFunctionBox = pygame.transform.rotate(box_surface, 5)
         rect = betFunctionBox.get_rect(center=(838, 387))
         GV.display.blit(betFunctionBox, rect)
+
+        bettext1 = GV.betFunctionDoubleDownFont.render(f"DOULBE", True, GV.white_colour)
+        bettext2 = GV.betFunctionDoubleDownFont.render(f"DOWN", True, GV.white_colour)
+        bettextrect1 = bettext1.get_rect(center=(838, 379))
+        bettextrect2 = bettext2.get_rect(center=(838, 395))
+        bettextrotated1 = pygame.transform.rotate(bettext1, 5)
+        bettextrotated2 = pygame.transform.rotate(bettext2, 5)
+        GV.display.blit(bettextrotated1, bettextrect1)
+        GV.display.blit(bettextrotated2, bettextrect2)
 
         rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 50.5), width=2)
@@ -615,10 +682,18 @@ class game_objects:
 
 
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        pygame.draw.rect(box_surface, GV.bright_green, (0, 0, 76, 50.5))
+        if GV.betFuncOutlineR4:
+            pygame.draw.rect(box_surface, GV.orange_colour, (0, 0, 76, 50.5))
+        else:
+            pygame.draw.rect(box_surface, GV.darkorange_colour, (0, 0, 76, 50.5))
         betFunctionBox = pygame.transform.rotate(box_surface, 5)
         rect = betFunctionBox.get_rect(center=(834, 339))
         GV.display.blit(betFunctionBox, rect)
+
+        bettext = GV.betFunctionStandFont.render("SPLIT", True, GV.white_colour)
+        bettextrect = bettext.get_rect(center=(834, 339))
+        bettextrotated = pygame.transform.rotate(bettext, 5)
+        GV.display.blit(bettextrotated, bettextrect)
 
         rect_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
         pygame.draw.rect(rect_surface, GV.highlight_yellow, (0, 0, 76, 50.5), width=2)
@@ -772,36 +847,55 @@ class game_functions:
 
             if -38 <= rrlx1 <= 38 and -29.5 <= rrly1 <= 29.5:
                 GV.betFuncOutlineL1 = True
-            else:
-                GV.betFuncOutlineL1 = False
-            if -38 <= rrlx2 <= 38 and -25.25 <= rrly2 <= 25.25:
-                GV.betFuncOutlineL2 = True
-            else:
                 GV.betFuncOutlineL2 = False
-            if -38 <= rrlx3 <= 38 and -25.25 <= rrly3 <= 25.25:
-                GV.betFuncOutlineL3 = True
-            else:
                 GV.betFuncOutlineL3 = False
-            if -38 <= rrlx4 <= 38 and -25.25 <= rrly4 <= 25.25:
+                GV.betFuncOutlineL4 = False
+            elif -38 <= rrlx2 <= 38 and -25.25 <= rrly2 <= 25.25:
+                GV.betFuncOutlineL1 = False
+                GV.betFuncOutlineL2 = True
+                GV.betFuncOutlineL3 = False
+                GV.betFuncOutlineL4 = False
+            elif -38 <= rrlx3 <= 38 and -25.25 <= rrly3 <= 25.25:
+                GV.betFuncOutlineL1 = False
+                GV.betFuncOutlineL2 = False
+                GV.betFuncOutlineL3 = True
+                GV.betFuncOutlineL4 = False
+            elif -38 <= rrlx4 <= 38 and -25.25 <= rrly4 <= 25.25:
+                GV.betFuncOutlineL1 = False
+                GV.betFuncOutlineL2 = False
+                GV.betFuncOutlineL3 = False
                 GV.betFuncOutlineL4 = True
             else:
+                GV.betFuncOutlineL1 = False
+                GV.betFuncOutlineL2 = False
+                GV.betFuncOutlineL3 = False
                 GV.betFuncOutlineL4 = False
-            
+
+
             if -38 <= rrrx1 <= 38 and -29.5 <= rrry1 <= 29.5:
                 GV.betFuncOutlineR1 = True
-            else:
-                GV.betFuncOutlineR1 = False
-            if -38 <= rrrx2 <= 38 and -25.25 <= rrry2 <= 25.25:
-                GV.betFuncOutlineR2 = True
-            else:
                 GV.betFuncOutlineR2 = False
-            if -38 <= rrrx3 <= 38 and -25.25 <= rrry3 <= 25.25:
-                GV.betFuncOutlineR3 = True
-            else:
                 GV.betFuncOutlineR3 = False
-            if -38 <= rrrx4 <= 38 and -25.25 <= rrry4 <= 25.25:
+                GV.betFuncOutlineR4 = False
+            elif -38 <= rrrx2 <= 38 and -25.25 <= rrry2 <= 25.25:
+                GV.betFuncOutlineR1 = False
+                GV.betFuncOutlineR2 = True
+                GV.betFuncOutlineR3 = False
+                GV.betFuncOutlineR4 = False
+            elif -38 <= rrrx3 <= 38 and -25.25 <= rrry3 <= 25.25:
+                GV.betFuncOutlineR1 = False
+                GV.betFuncOutlineR2 = False
+                GV.betFuncOutlineR3 = True
+                GV.betFuncOutlineR4 = False
+            elif -38 <= rrrx4 <= 38 and -25.25 <= rrry4 <= 25.25:
+                GV.betFuncOutlineR1 = False
+                GV.betFuncOutlineR2 = False
+                GV.betFuncOutlineR3 = False
                 GV.betFuncOutlineR4 = True
             else:
+                GV.betFuncOutlineR1 = False
+                GV.betFuncOutlineR2 = False
+                GV.betFuncOutlineR3 = False
                 GV.betFuncOutlineR4 = False
 
             
