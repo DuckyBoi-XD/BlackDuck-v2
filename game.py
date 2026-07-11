@@ -750,11 +750,11 @@ class game_functions:
             rectCentrex2 = chipPositionx - 725
             rectCentrey2 = chipPositiony - 425
 
-            rectRotatedx1 = rectCentrex1 * cosd(5) - rectCentrey1 * sind(5)
-            rectRotatedy1 = rectCentrex1 * sind(5) + rectCentrey1 * cosd(5)
+            rectRotatedx1 = rectCentrex1 * cosd(-5) - rectCentrey1 * sind(-5)
+            rectRotatedy1 = rectCentrex1 * sind(-5) + rectCentrey1 * cosd(-5)
 
-            rectRotatedx2 = rectCentrex2 * cosd(-5) - rectCentrey2 * sind(-5)
-            rectRotatedy2 = rectCentrex2 * sind(-5) + rectCentrey2 * cosd(-5)
+            rectRotatedx2 = rectCentrex2 * cosd(5) - rectCentrey2 * sind(5)
+            rectRotatedy2 = rectCentrex2 * sind(5) + rectCentrey2 * cosd(5)
 
             if -75 <= rectRotatedx1 <= 75 and -100 <= rectRotatedy1 <= 100:
                 bet1_remove = False
