@@ -209,10 +209,13 @@ class game_variable: # Game variables
         self.betFuncOutline2 = False
         self.betFuncOutline3 = False
         self.betFuncOutline4 = False
-        betFunctionPosListy = [508.75, 458.5, 407.75, 357.25]
 
-        self.gameCHIPS = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        self.bettingGame = True
+        self.gameCHIPS1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.gameCHIPS2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.gameChipPos1 = []
+        self.gameChipPos2 = []
+        self.gameBet = [0, 0]
+        self.bettingGame = False
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -508,7 +511,10 @@ class game_objects:
         rect = box_surface.get_rect(center=(598, 508.75))
         GV.display.blit(box_surface, rect)
 
-        bettext = GV.betFunctionBetFont.render("BET", True, GV.white_colour)
+        if not GV.bettingGame:
+            bettext = GV.betFunctionBetFont.render("BET", True, GV.white_colour)
+        else:
+            bettext = GV.betFunctionBetFont.render("HIT", True, GV.white_colour)
         bettextrect = bettext.get_rect(center=(598, 508.75))
         GV.display.blit(bettext, bettextrect)
 
@@ -643,8 +649,6 @@ class game_functions:
                             CHIPS[chips[0]] -= 1
                         GV.chipExchange.clear()
 
-                        oldchips = CHIPS.copy()
-                        differencechips = []
                         for index, i in enumerate(GV.chipSmallExchangeListtemp):
                             CHIPS[index] += i
 
@@ -674,7 +678,30 @@ class game_functions:
                     else:
                         GV.exchangeConfirmation = False
 
-                    
+                    if GV.betFuncOutline1:
+                        GV.gameCHIPS1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        GV.gameCHIPS2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        GV.gameChipPos1.clear()
+                        GV.gameChipPos2.clear()
+                        GV.gameBet = [0, 0]
+                        if len(GV.chipBet1) != 0:
+                            for chip in GV.chipBet1:
+                                GV.gameCHIPS1[chip[0]] += 1
+                                GV.gameChipPos1.append(GV.chipPositions[chip[0]][chip[1]])
+                                GV.gameBet[0] += int(GV.chipValues[chip[0]])
+                                GV.bettingGame = True
+                        if len(GV.chipBet2) != 0:
+                            for chip in GV.chipBet2:
+                                GV.gameCHIPS2[chip[0]] += 1
+                                GV.gameChipPos2.append(GV.chipPositions[chip[0]][chip[1]])
+                                GV.gameBet[0] += int(GV.chipValues[chip[0]])
+                                GV.bettingGame = True
+
+                        print(GV.gameCHIPS1)
+                        print(GV.gameCHIPS2)
+                        print(GV.gameChipPos1)
+                        print(GV.gameChipPos2)
+                        print(GV.gameBet)
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
