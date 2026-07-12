@@ -210,6 +210,39 @@ class game_variable: # Game variables
         self.betFuncOutline3 = False
         self.betFuncOutline4 = False
 
+        self.cardDeck = {}
+
+        self.spadesCards = (("assets/Carddeck/Spades/2.png"), ("assets/Carddeck/Spades/3.png"), ("assets/Carddeck/Spades/4.png"),
+                            ("assets/Carddeck/Spades/5.png"), ("assets/Carddeck/Spades/6.png"), ("assets/Carddeck/Spades/7.png"),
+                            ("assets/Carddeck/Spades/8.png"), ("assets/Carddeck/Spades/9.png"), ("assets/Carddeck/Spades/10.png"),
+                            ("assets/Carddeck/Spades/J.png"), ("assets/Carddeck/Spades/Q.png"), ("assets/Carddeck/Spades/K.png"),
+                            ("assets/Carddeck/Spades/A.png"))
+        
+        self.heartsCards = (("assets/Carddeck/Hearts/2.png"), ("assets/Carddeck/Hearts/3.png"), ("assets/Carddeck/Hearts/4.png"),
+                            ("assets/Carddeck/Hearts/5.png"), ("assets/Carddeck/Hearts/6.png"), ("assets/Carddeck/Hearts/7.png"),
+                            ("assets/Carddeck/Hearts/8.png"), ("assets/Carddeck/Hearts/9.png"), ("assets/Carddeck/Hearts/10.png"),
+                            ("assets/Carddeck/Hearts/J.png"), ("assets/Carddeck/Hearts/Q.png"), ("assets/Carddeck/Hearts/K.png"),
+                            ("assets/Carddeck/Hearts/A.png"))
+        
+        self.diamondsCards = (("assets/Carddeck/Diamonds/2.png"), ("assets/Carddeck/Diamonds/3.png"), ("assets/Carddeck/Diamonds/4.png"),
+                            ("assets/Carddeck/Diamonds/5.png"), ("assets/Carddeck/Diamonds/6.png"), ("assets/Carddeck/Diamonds/7.png"),
+                            ("assets/Carddeck/Diamonds/8.png"), ("assets/Carddeck/Diamonds/9.png"), ("assets/Carddeck/Diamonds/10.png"),
+                            ("assets/Carddeck/Diamonds/J.png"), ("assets/Carddeck/Diamonds/Q.png"), ("assets/Carddeck/Diamonds/K.png"),
+                            ("assets/Carddeck/Diamonds/A.png"))
+        
+        self.clubsCards = (("assets/Carddeck/Clubs/2.png"), ("assets/Carddeck/Clubs/3.png"), ("assets/Carddeck/Clubs/4.png"),
+                            ("assets/Carddeck/Clubs/5.png"), ("assets/Carddeck/Clubs/6.png"), ("assets/Carddeck/Clubs/7.png"),
+                            ("assets/Carddeck/Clubs/8.png"), ("assets/Carddeck/Clubs/9.png"), ("assets/Carddeck/Clubs/10.png"),
+                            ("assets/Carddeck/Clubs/J.png"), ("assets/Carddeck/Clubs/Q.png"), ("assets/Carddeck/Clubs/K.png"),
+                            ("assets/Carddeck/Clubs/A.png"))
+        
+        self.CardSuits = ("Spades", "Hearts", "Diamonds", "Clubs")
+        for suit in self.CardSuits:
+            for value in range(2, 11):
+                self.cardDeck[f"{suit[0]}{value}"] = value
+            self.cardDeck[f"{suit[0]}J"] =  self.cardDeck[f"{suit[0]}Q"] =  self.cardDeck[f"{suit[0]}K"] = 10
+            self.cardDeck[f"{suit[0]}A"] = 11 
+
         self.gameCHIPS1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.gameCHIPS2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.gameChipPos1 = []
