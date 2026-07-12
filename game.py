@@ -236,12 +236,12 @@ class game_variable: # Game variables
                             ("assets/Carddeck/Clubs/J.png"), ("assets/Carddeck/Clubs/Q.png"), ("assets/Carddeck/Clubs/K.png"),
                             ("assets/Carddeck/Clubs/A.png"))
         
-        self.CardSuits = ("Spades", "Hearts", "Diamonds", "Clubs")
+        self.CardSuits = ("Spades0", "Hearts1", "Diamonds2", "Clubs3")
         for suit in self.CardSuits:
             for value in range(2, 11):
-                self.cardDeck[f"{suit[0]}{value}"] = value
-            self.cardDeck[f"{suit[0]}J"] =  self.cardDeck[f"{suit[0]}Q"] =  self.cardDeck[f"{suit[0]}K"] = 10
-            self.cardDeck[f"{suit[0]}A"] = 11 
+                self.cardDeck[f"{suit[-1]}{value}"] = value
+            self.cardDeck[f"{suit[-1]}J"] =  self.cardDeck[f"{suit[-1]}Q"] =  self.cardDeck[f"{suit[-1]}K"] = 10
+            self.cardDeck[f"{suit[-1]}A"] = 11 
 
         self.gameCHIPS1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.gameCHIPS2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
