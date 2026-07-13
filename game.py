@@ -208,10 +208,10 @@ class game_variable: # Game variables
 
         self.chipBet1 = []
         self.chipBet2 = []
-        self.betFuncOutline1 = False
-        self.betFuncOutline2 = False
-        self.betFuncOutline3 = False
-        self.betFuncOutline4 = False
+        self.BET_HIT_Button = False
+        self.STAY_Button = False
+        self.DOUBLEDOWN_Button = False
+        self.SPLIT_Button = False
         self.betChipOverride = False
 
         self.tempcardDeck = []
@@ -253,6 +253,7 @@ class game_variable: # Game variables
 
         self.cardDeck = self.tempcardDeck * 6
         random.shuffle(self.cardDeck)
+        random.shuffle(self.cardDeck)
 
         self.gameCHIPS1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.gameCHIPS2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -266,12 +267,15 @@ class game_variable: # Game variables
         self.cardPositions = [self.cardPositions1, self.cardPositions2]
         self.addCard1 = False
         self.addCard2 = False
-        self.gameStart = False
+        self.gameStart1 = False
+        self.gameStart2 = False
         self.CardPositioningx1 = 450
         self.CardPositioningx2 = 689
-        self.CardValues1 = []
-        self.CardValues2 = []
-        self.CardValues = [self.CardValues1, self.CardValues2]
+        self.CardPositioningy1 = 260
+        self.CardPositioningy2 = 260
+        self.CardHand1 = []
+        self.CardHand2 = []
+        self.CardHands = [self.CardHand1, self.CardHand2]
 
 
 
@@ -566,7 +570,7 @@ class game_objects:
 
         # Bet Functions
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        if GV.betFuncOutline1:
+        if GV.BET_HIT_Button:
             pygame.draw.rect(box_surface, GV.green_colour, (0, 0, 76, 50.5))
         else:
             pygame.draw.rect(box_surface, GV.darkgreen_colour, (0, 0, 76, 50.5))
@@ -588,7 +592,7 @@ class game_objects:
 
 
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        if GV.betFuncOutline2 and GV.bettingGame:
+        if GV.STAY_Button and GV.bettingGame:
             pygame.draw.rect(box_surface, GV.red_colour, (0, 0, 76, 50.5))
         else:
             pygame.draw.rect(box_surface, GV.darkred_colour, (0, 0, 76, 50.5))
@@ -607,7 +611,7 @@ class game_objects:
 
 
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        if GV.betFuncOutline3 and GV.bettingGame:
+        if GV.DOUBLEDOWN_Button and GV.bettingGame:
             pygame.draw.rect(box_surface, GV.blue_colour, (0, 0, 76, 50.5))
         else:
             pygame.draw.rect(box_surface, GV.darkblue_colour, (0, 0, 76, 50.5))
@@ -629,7 +633,7 @@ class game_objects:
         
 
         box_surface = pygame.Surface((76, 51), pygame.SRCALPHA)
-        if GV.betFuncOutline4 and GV.bettingGame:
+        if GV.SPLIT_Button and GV.bettingGame:
             pygame.draw.rect(box_surface, GV.orange_colour, (0, 0, 76, 51))
         else:
             pygame.draw.rect(box_surface, GV.darkorange_colour, (0, 0, 76, 51))
@@ -649,12 +653,13 @@ class game_objects:
 
         for indexa, cardlist in enumerate(GV.cardPositions):
             for indexb, cardpos in enumerate(cardlist):
-
-                suit_var = int(((GV.CardValues[indexa])[indexb])[0])
-                if len(((GV.CardValues[indexa])[indexb])) == 3:
-                    value_var = int(((GV.CardValues[indexa])[indexb])[1:2])
+                
+                suit_var = int(((GV.CardHands[indexa])[indexb])[0])
+                if len(((GV.CardHands[indexa])[indexb])) == 3:
+                    value_var = int(((GV.CardHands[indexa])[indexb])[1:3])
                 else:
-                    value_var = int(((GV.CardValues[indexa])[indexb])[1])
+                    value_var = int(((GV.CardHands[indexa])[indexb])[1])
+
                 value_var -= 2
                 card = pygame.transform.smoothscale(pygame.image.load((GV.CardFiles[suit_var][value_var])), (105, 140)).convert_alpha()
                 rect = card.get_rect(center=(cardpos))
@@ -770,7 +775,7 @@ class game_functions:
                     else:
                         GV.exchangeConfirmation = False
 
-                    if GV.betFuncOutline1 and GV.bettingGame is False:
+                    if GV.BET_HIT_Button and GV.bettingGame is False:
                         GV.gameCHIPS1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                         GV.gameCHIPS2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                         GV.gameChipPos1.clear()
@@ -783,7 +788,7 @@ class game_functions:
                                 GV.gameBet[0] += int(GV.chipValues[chip[0]])
                                 GV.bettingGame = True
                                 GV.addCard1 = True
-                                GV.gameStart = True
+                                GV.gameStart1 = True
                         if len(GV.chipBet2) != 0:
                             for chip in GV.chipBet2:
                                 GV.gameCHIPS2[chip[0]] += 1
@@ -791,7 +796,9 @@ class game_functions:
                                 GV.gameBet[1] += int(GV.chipValues[chip[0]])
                                 GV.bettingGame = True
                                 GV.addCard2 = True
-                                GV.gameStart = True
+                                GV.gameStart2 = True
+                    elif GV.BET_HIT_Button and GV.bettingGame:
+                        GV.addCard1 = True
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
@@ -808,22 +815,22 @@ class game_functions:
             for indexed, i in enumerate(betFunctionPosListy):
                 minusi = i - 25.25
                 plusi = i + 25.25
-                GV.betFuncOutline1 = False
-                GV.betFuncOutline2 = False
-                GV.betFuncOutline3 = False
-                GV.betFuncOutline4 = False
+                GV.BET_HIT_Button = False
+                GV.STAY_Button = False
+                GV.DOUBLEDOWN_Button = False
+                GV.SPLIT_Button = False
                 if 560 <= cursorPosx <= 636 and minusi <= cursorPosy <= plusi:
                     if indexed == 0:
-                        GV.betFuncOutline1 = True
+                        GV.BET_HIT_Button = True
                         break
                     elif indexed == 1:
-                        GV.betFuncOutline2 = True
+                        GV.STAY_Button = True
                         break
                     elif indexed == 2:
-                        GV.betFuncOutline3 = True
+                        GV.DOUBLEDOWN_Button = True
                         break
                     elif indexed == 3:
-                        GV.betFuncOutline4 = True
+                        GV.SPLIT_Button = True
                         break
 
             for indexexchange, self.smallExchangeChipPos in enumerate(reversed(GV.exchangeChipPos)):
@@ -903,50 +910,50 @@ class game_functions:
                     GV.chipBet2.remove(self.indexChipPosition)
 
     def blackjack(self):
-        if GV.gameStart:
-            if GV.gameBet[0] != 0:
-                if GV.addCard1:
-
-                    GV.CardValues1.append(GV.cardDeck[0])
+        if GV.gameBet[0] != 0:
+            if GV.gameStart1 and GV.addCard1:
+                for i in range(0,2):
+                    GV.CardHand1.append(GV.cardDeck[0])
+                    GV.cardDeck.append(GV.cardDeck[0])
                     GV.cardDeck.pop(0)
-                    GV.cardPositions1.append(RICD(GV.CardPositioningx1, 250))
+                    GV.cardPositions1.append(RICD(GV.CardPositioningx1, GV.CardPositioningy1))
                     GV.CardPositioningx1 += 20
-
-                    GV.CardValues1.append(GV.cardDeck[0])
-                    GV.cardDeck.pop(0)
-                    GV.cardPositions1.append(RICD(GV.CardPositioningx1, 250))
-                    GV.CardPositioningx1 += 20
-
-                    GV.addCard1 = False
-            if GV.gameBet[1] != 0:
-                if GV.addCard2:
-
-                    GV.CardValues2.append(GV.cardDeck[0])
-                    GV.cardDeck.pop(0)
-                    GV.cardPositions2.append(RICD(GV.CardPositioningx2, 250))
-                    GV.CardPositioningx2 += 20
-
-                    GV.CardValues2.append(GV.cardDeck[0])
-                    GV.cardDeck.pop(0)
-                    GV.cardPositions2.append(RICD(GV.CardPositioningx2, 250))
-                    GV.CardPositioningx2 += 20
-                    GV.addCard2 = False
-
-
-        elif GV.gameBet[0] != 0:
-            if GV.addCard1:
-                GV.CardValues1.append(GV.cardDeck[0])
-                GV.cardDeck.pop(0)
-                GV.cardPositions1.append(RICD(GV.CardPositioningx1, 250))
-                GV.CardPositioningx1 += 20
+                    GV.CardPositioningy1 -= 20
                 GV.addCard1 = False
-        elif GV.gameBet[1] != 0:
-            if GV.addCard2:
-                GV.CardValues2.append(GV.cardDeck[0])
-                GV.cardDeck.pop(0)
-                GV.cardPositions2.append(RICD(GV.CardPositioningx2, 250))
-                GV.CardPositioningx1 += 20
+                GV.gameStart1 = False
+
+            elif len(GV.CardHand1) == 5:
+                pass
+            else:
+                if GV.addCard1:
+                    GV.CardHand1.append(GV.cardDeck[0])
+                    GV.cardDeck.append(GV.cardDeck[0])
+                    GV.cardDeck.pop(0)
+                    GV.cardPositions1.append(RICD(GV.CardPositioningx1, GV.CardPositioningy1))
+                    GV.CardPositioningx1 += 20
+                    GV.CardPositioningy1 -= 20
+                    GV.addCard1 = False
+
+        if GV.gameBet[1] != 0:
+            if GV.gameStart2 and GV.addCard2:
+                for i in range(0,2):
+                    GV.CardHand2.append(GV.cardDeck[0])
+                    GV.cardDeck.pop(0)
+                    GV.cardPositions2.append(RICD(GV.CardPositioningx2, GV.CardPositioningy2))
+                    GV.CardPositioningx2 += 20
+                    GV.CardPositioningy2 -= 20
                 GV.addCard2 = False
+                GV.gameStart2 = False
+
+            elif GV.addCard2:
+                GV.CardHand2.append(GV.cardDeck[0])
+                GV.cardDeck.pop(0)
+                GV.cardPositions2.append(RICD(GV.CardPositioningx2, GV.CardPositioningy2))
+                GV.CardPositioningx2 += 20
+                GV.CardPositioningy2 -= 20
+                GV.addCard2 = False
+            
+
 
 GF = game_functions()
 
