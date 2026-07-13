@@ -255,6 +255,8 @@ class game_variable: # Game variables
         random.shuffle(self.cardDeck)
         random.shuffle(self.cardDeck)
 
+        self.Values = (2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11)
+
         self.gameCHIPS1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.gameCHIPS2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.gameChipPos1 = []
@@ -279,6 +281,10 @@ class game_variable: # Game variables
         self.CardHand3 = []
         self.CardHand4 = []
         self.CardHands = [self.CardHand1, self.CardHand2, self.CardHand3, self.CardHand4]
+        self.CardValue1 = 0
+        self.CardValue2 = 0
+        self.CardValue3 = 0
+        self.CardValue4 = 0
 
 
 
@@ -655,8 +661,6 @@ class game_objects:
         for indexa, cardlist in enumerate(GV.cardPositions):
             for indexb, cardpos in enumerate(cardlist):
 
-                print(cardpos)
-
                 suit_var = int(((GV.CardHands[indexa])[indexb])[0])
                 if len(((GV.CardHands[indexa])[indexb])) == 3:
                     value_var = int(((GV.CardHands[indexa])[indexb])[1:3])
@@ -918,12 +922,18 @@ class game_functions:
                 for i in range(0,2):
                     GV.CardHand1.append(GV.cardDeck[0])
                     GV.cardDeck.append(GV.cardDeck[0])
+
+                    if len(GV.cardDeck[0]) == 3:
+                        GV.CardValue1 += int(GV.Values[int((GV.cardDeck[0])[1:3])-2])
+                    else:    
+                        GV.CardValue1 += int(GV.Values[int((GV.cardDeck[0])[1])-2])
                     GV.cardDeck.pop(0)
                     GV.cardPositions1.append(RICD(GV.cardStartPos1[0], GV.cardStartPos1[1]))
                     GV.cardStartPos1[0] += 20
                     GV.cardStartPos1[1] -= 20
                 GV.addCard[0] = 0
                 GV.gameStart[0] = 0
+                print(GV.CardValue1)
 
             elif len(GV.CardHand1) == 5:
                 pass
@@ -931,16 +941,29 @@ class game_functions:
                 if GV.addCard[0] == 1:
                     GV.CardHand1.append(GV.cardDeck[0])
                     GV.cardDeck.append(GV.cardDeck[0])
+
+                    if len(GV.cardDeck[0]) == 3:
+                        GV.CardValue1 += int(GV.Values[int((GV.cardDeck[0])[1:3])-2])
+                    else:    
+                        GV.CardValue1 += int(GV.Values[int((GV.cardDeck[0])[1])-2])
                     GV.cardDeck.pop(0)
                     GV.cardPositions1.append(RICD(GV.cardStartPos1[0], GV.cardStartPos1[1]))
                     GV.cardStartPos1[0] += 20
                     GV.cardStartPos1[1] -= 20
                     GV.addCard[0] = 0
 
+                    print(GV.CardValue1)
+
         if GV.gameBet[1] != 0:
             if GV.gameStart[1] == 1 and GV.addCard[1] == 1:
                 for i in range(0,2):
                     GV.CardHand2.append(GV.cardDeck[0])
+                    GV.cardDeck.append(GV.cardDeck[0])
+
+                    if len(GV.cardDeck[0]) == 3:
+                        GV.CardValue1 += int(GV.Values[int((GV.cardDeck[0])[1:3])-2])
+                    else:    
+                        GV.CardValue1 += int(GV.Values[int((GV.cardDeck[0])[1])-2])
                     GV.cardDeck.pop(0)
                     GV.cardPositions2.append(RICD(GV.cardStartPos2[0], GV.cardStartPos2[1]))
                     GV.cardStartPos2[0] += 20
@@ -948,13 +971,22 @@ class game_functions:
                 GV.addCard[1] = 0
                 GV.gameStart[1] = 0
 
-            elif GV.gameStart[1] == 1:
-                GV.CardHand2.append(GV.cardDeck[0])
-                GV.cardDeck.pop(0)
-                GV.cardPositions2.append(RICD(GV.cardStartPos2[0], GV.cardStartPos2[1]))
-                GV.cardStartPos2[0] += 20
-                GV.cardStartPos2[1] -= 20
-                GV.addCard[1] = 0
+            elif len(GV.CardHand1) == 5:
+                pass
+            else:
+                if GV.addCard[1] == 1:
+                    GV.CardHand2.append(GV.cardDeck[0])
+                    GV.cardDeck.append(GV.cardDeck[0])
+
+                    if len(GV.cardDeck[0]) == 3:
+                        GV.CardValue1 += int(GV.Values[int((GV.cardDeck[0])[1:3])-2])
+                    else:    
+                        GV.CardValue1 += int(GV.Values[int((GV.cardDeck[0])[1])-2])
+                    GV.cardDeck.pop(0)
+                    GV.cardPositions2.append(RICD(GV.cardStartPos2[0], GV.cardStartPos2[1]))
+                    GV.cardStartPos2[0] += 20
+                    GV.cardStartPos2[1] -= 20
+                    GV.addCard[1] = 0
             
 
 
