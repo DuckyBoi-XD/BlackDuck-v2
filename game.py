@@ -104,6 +104,9 @@ def cosd(x):
 def sind(x):
     return math.sin(math.radians(x))
 
+def RICD(midx, midy):# random int card display
+    return random.randint(midx-3, midx+3), random.randint(midy-3, midy+3)
+
 class game_variable: # Game variables
     def __init__(self):
         pygame.init()
@@ -211,7 +214,7 @@ class game_variable: # Game variables
         self.betFuncOutline4 = False
         self.betChipOverride = False
 
-        self.cardDeck = {}
+        self.tempcardDeck = []
 
         self.spadesCards = (("assets/Carddeck/Spades/2.png"), ("assets/Carddeck/Spades/3.png"), ("assets/Carddeck/Spades/4.png"),
                             ("assets/Carddeck/Spades/5.png"), ("assets/Carddeck/Spades/6.png"), ("assets/Carddeck/Spades/7.png"),
@@ -242,9 +245,14 @@ class game_variable: # Game variables
         self.CardSuits = ("Spades0", "Hearts1", "Diamonds2", "Clubs3")
         for suit in self.CardSuits:
             for value in range(2, 11):
-                self.cardDeck[f"{suit[-1]}{value}"] = value
-            self.cardDeck[f"{suit[-1]}J"] =  self.cardDeck[f"{suit[-1]}Q"] =  self.cardDeck[f"{suit[-1]}K"] = 10
-            self.cardDeck[f"{suit[-1]}A"] = 11 
+                self.tempcardDeck.append(f"{suit[-1]}{value}")
+            self.tempcardDeck.append(f"{suit[-1]}11")
+            self.tempcardDeck.append(f"{suit[-1]}12")
+            self.tempcardDeck.append(f"{suit[-1]}13")
+            self.tempcardDeck.append(f"{suit[-1]}14")
+
+        self.cardDeck = self.tempcardDeck * 6
+        random.shuffle(self.cardDeck)
 
         self.gameCHIPS1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.gameCHIPS2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -252,6 +260,23 @@ class game_variable: # Game variables
         self.gameChipPos2 = []
         self.gameBet = [0, 0]
         self.bettingGame = False
+
+        self.cardPositions1 = []
+        self.cardPositions2 = []
+        self.cardPositions = [self.cardPositions1, self.cardPositions2]
+        self.addCard1 = False
+        self.addCard2 = False
+        self.CardPositioningx1 = 450
+        self.CardPositioningx2 = 689
+        self.CardValues1 = []
+        self.CardValues2 = []
+        self.CardValues = [self.CardValues1, self.CardValues2]
+
+
+
+
+
+
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -620,14 +645,19 @@ class game_objects:
         rect = rect_surface.get_rect(center=(598, 433))
         GV.display.blit(rect_surface, rect)
 
-        card = pygame.transform.smoothscale(pygame.image.load(GV.CardFiles[0][0]), (105, 140)).convert_alpha()
-        rect = card.get_rect(center=(500, 250))
-        GV.display.blit(card, rect)
 
-        card = pygame.transform.smoothscale(pygame.image.load(GV.CardFiles[3][9]), (105, 140)).convert_alpha()
-        rect = card.get_rect(center=(689, 250))
-        GV.display.blit(card, rect)
+        for indexa, cardlist in enumerate(GV.cardPositions):
+            for indexb, cardpos in enumerate(cardlist):
 
+                suit_var = int(((GV.CardValues[indexa])[indexb])[0])
+                if len(((GV.CardValues[indexa])[indexb])) == 3:
+                    value_var = int(((GV.CardValues[indexa])[indexb])[1:2])
+                else:
+                    value_var = int(((GV.CardValues[indexa])[indexb])[1])
+                value_var -= 2
+                card = pygame.transform.smoothscale(pygame.image.load((GV.CardFiles[suit_var][value_var])), (105, 140)).convert_alpha()
+                rect = card.get_rect(center=(cardpos))
+                GV.display.blit(card, rect)
 GO = game_objects()
 
 class game_functions:
@@ -751,12 +781,14 @@ class game_functions:
                                 GV.gameChipPos1.append(GV.chipPositions[chip[0]][chip[1]])
                                 GV.gameBet[0] += int(GV.chipValues[chip[0]])
                                 GV.bettingGame = True
+                                GV.addCard1 = True
                         if len(GV.chipBet2) != 0:
                             for chip in GV.chipBet2:
                                 GV.gameCHIPS2[chip[0]] += 1
                                 GV.gameChipPos2.append(GV.chipPositions[chip[0]][chip[1]])
-                                GV.gameBet[0] += int(GV.chipValues[chip[0]])
+                                GV.gameBet[1] += int(GV.chipValues[chip[0]])
                                 GV.bettingGame = True
+                                GV.addCard2 = True
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
@@ -867,6 +899,22 @@ class game_functions:
                 if self.indexChipPosition in GV.chipBet2: 
                     GV.chipBet2.remove(self.indexChipPosition)
 
+    def blackjack(self):
+        if GV.gameBet[0] != 0:
+            if GV.addCard1:
+                GV.CardValues1.append(GV.cardDeck[0])
+                GV.cardDeck.pop(0)
+                GV.cardPositions1.append(RICD(GV.CardPositioningx1, 250))
+                GV.CardPositioningx1 += 20
+                GV.addCard1 = False
+        if GV.gameBet[1] != 0:
+            if GV.addCard2:
+                GV.CardValues2.append(GV.cardDeck[0])
+                GV.cardDeck.pop(0)
+                GV.cardPositions2.append(RICD(GV.CardPositioningx2, 250))
+                GV.CardPositioningx1 += 20
+                GV.addCard2 = False
+
 GF = game_functions()
 
 class pygame_function:
@@ -904,6 +952,7 @@ class pygame_function:
             self.FPS.tick(self.fps)
             GF.move_chip()
             GF.betting_area()
+            GF.blackjack()
             self.on_loop()
             self.on_render()
             pygame.display.flip()
