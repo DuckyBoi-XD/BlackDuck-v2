@@ -209,6 +209,7 @@ class game_variable: # Game variables
         self.betFuncOutline2 = False
         self.betFuncOutline3 = False
         self.betFuncOutline4 = False
+        self.betChipOverride = False
 
         self.cardDeck = {}
 
@@ -235,6 +236,8 @@ class game_variable: # Game variables
                             ("assets/Carddeck/Clubs/8.png"), ("assets/Carddeck/Clubs/9.png"), ("assets/Carddeck/Clubs/10.png"),
                             ("assets/Carddeck/Clubs/J.png"), ("assets/Carddeck/Clubs/Q.png"), ("assets/Carddeck/Clubs/K.png"),
                             ("assets/Carddeck/Clubs/A.png"))
+        
+        self.CardFiles = (self.spadesCards, self.heartsCards, self.diamondsCards, self.clubsCards)
         
         self.CardSuits = ("Spades0", "Hearts1", "Diamonds2", "Clubs3")
         for suit in self.CardSuits:
@@ -617,6 +620,14 @@ class game_objects:
         rect = rect_surface.get_rect(center=(598, 433))
         GV.display.blit(rect_surface, rect)
 
+        card = pygame.transform.smoothscale(pygame.image.load(GV.CardFiles[0][0]), (105, 140)).convert_alpha()
+        rect = card.get_rect(center=(500, 250))
+        GV.display.blit(card, rect)
+
+        card = pygame.transform.smoothscale(pygame.image.load(GV.CardFiles[3][9]), (105, 140)).convert_alpha()
+        rect = card.get_rect(center=(689, 250))
+        GV.display.blit(card, rect)
+
 GO = game_objects()
 
 class game_functions:
@@ -657,8 +668,11 @@ class game_functions:
                         CursorPos_CirclePosy = cursorPosy - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1]
 
                         CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
-                        if CursorPos_CirclePos <= GV.chipRadius**2:
-                            pass # for some reason fixes double click glitch
+                        print(GV.chipBet1)
+                        print(GV.chipBet2)
+                        if (self.index_var in GV.chipBet1 or self.index_var in GV.chipBet2) and GV.bettingGame:
+                            GV.betChipOverride = True
+                        if CursorPos_CirclePos <= GV.chipRadius**2 and GV.betChipOverride is False:
                             GV.mouseStartPos = pygame.mouse.get_pos()
                             GV.mousePosChange = True
                             GV.chipCurrentPos[0] = ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[0]
@@ -668,7 +682,7 @@ class game_functions:
                             GV.chipDisplayPriority.append(self.index_var)
                             break
                         else:
-                            pass
+                            GV.betChipOverride = False
                     if GV.mousePosChange == True:
                         break
                     CursorPos_CirclePosx = cursorPosx - 305
@@ -711,7 +725,9 @@ class game_functions:
                     else:
                         GV.exchangeConfirmation = False
 
-                    if GV.betFuncOutline1:
+                    print(GV.bettingGame)
+                    if GV.betFuncOutline1 and GV.bettingGame is False:
+                        print("WOK")
                         GV.gameCHIPS1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                         GV.gameCHIPS2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                         GV.gameChipPos1.clear()
@@ -818,13 +834,13 @@ class game_functions:
 
             if -75 <= rectRotatedx1 <= 75 and -100 <= rectRotatedy1 <= 100:
                 bet1_remove = False
-                if self.indexChipPosition not in GV.chipBet1:
+                if self.indexChipPosition not in GV.chipBet1 and GV.bettingGame is False:
                     GV.chipBet1.append(self.indexChipPosition)
 
                 
             elif -75 <= rectRotatedx2 <= 75 and -100 <= rectRotatedy2 <= 100:
                 bet2_remove = False
-                if self.indexChipPosition not in GV.chipBet2:
+                if self.indexChipPosition not in GV.chipBet2 and GV.bettingGame is False:
                     GV.chipBet2.append(self.indexChipPosition)
 
 
