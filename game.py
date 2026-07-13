@@ -264,18 +264,29 @@ class game_variable: # Game variables
 
         self.cardPositions1 = []
         self.cardPositions2 = []
-        self.cardPositions = [self.cardPositions1, self.cardPositions2]
+        self.cardPositions3 = []
+        self.cardPositions4 = []
+        self.cardPositions = [self.cardPositions1, self.cardPositions2, self.cardPositions3, self.cardPositions4]
         self.addCard1 = False
         self.addCard2 = False
         self.gameStart1 = False
         self.gameStart2 = False
+        self.addCard = [0, 0, 0, 0]
+        self.gameStart = [0, 0, 0, 0]
+        self.cardStartPos1 = [450, 200]
+        self.cardStartPos2 = [689, 260]
+        self.cardStartPos3 = [450, 260] # not correct
+        self.cardStartPos4 = [689, 260] # not correct
+        self.cardStartPos = [self.cardStartPos1, self.cardStartPos2, self.cardStartPos3, self.cardStartPos4]
         self.CardPositioningx1 = 450
         self.CardPositioningx2 = 689
         self.CardPositioningy1 = 260
         self.CardPositioningy2 = 260
         self.CardHand1 = []
         self.CardHand2 = []
-        self.CardHands = [self.CardHand1, self.CardHand2]
+        self.CardHand3 = []
+        self.CardHand4 = []
+        self.CardHands = [self.CardHand1, self.CardHand2, self.CardHand3, self.CardHand4]
 
 
 
@@ -653,7 +664,9 @@ class game_objects:
 
         for indexa, cardlist in enumerate(GV.cardPositions):
             for indexb, cardpos in enumerate(cardlist):
-                
+
+                print(cardpos)
+
                 suit_var = int(((GV.CardHands[indexa])[indexb])[0])
                 if len(((GV.CardHands[indexa])[indexb])) == 3:
                     value_var = int(((GV.CardHands[indexa])[indexb])[1:3])
@@ -787,18 +800,18 @@ class game_functions:
                                 GV.gameChipPos1.append(GV.chipPositions[chip[0]][chip[1]])
                                 GV.gameBet[0] += int(GV.chipValues[chip[0]])
                                 GV.bettingGame = True
-                                GV.addCard1 = True
-                                GV.gameStart1 = True
+                                GV.addCard[0] = 1
+                                GV.gameStart[0] = 1
                         if len(GV.chipBet2) != 0:
                             for chip in GV.chipBet2:
                                 GV.gameCHIPS2[chip[0]] += 1
                                 GV.gameChipPos2.append(GV.chipPositions[chip[0]][chip[1]])
                                 GV.gameBet[1] += int(GV.chipValues[chip[0]])
                                 GV.bettingGame = True
-                                GV.addCard2 = True
-                                GV.gameStart2 = True
+                                GV.addCard[1] = 1
+                                GV.gameStart[1] = 1
                     elif GV.BET_HIT_Button and GV.bettingGame:
-                        GV.addCard1 = True
+                        GV.addCard[0] = 1
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
@@ -911,47 +924,47 @@ class game_functions:
 
     def blackjack(self):
         if GV.gameBet[0] != 0:
-            if GV.gameStart1 and GV.addCard1:
+            if GV.gameStart[0] == 1 and GV.addCard[0] == 1:
                 for i in range(0,2):
                     GV.CardHand1.append(GV.cardDeck[0])
                     GV.cardDeck.append(GV.cardDeck[0])
                     GV.cardDeck.pop(0)
-                    GV.cardPositions1.append(RICD(GV.CardPositioningx1, GV.CardPositioningy1))
-                    GV.CardPositioningx1 += 20
-                    GV.CardPositioningy1 -= 20
-                GV.addCard1 = False
-                GV.gameStart1 = False
+                    GV.cardPositions1.append(RICD(GV.cardStartPos1[0], GV.cardStartPos1[1]))
+                    GV.cardStartPos1[0] += 20
+                    GV.cardStartPos1[1] -= 20
+                GV.addCard[0] = 0
+                GV.gameStart[0] = 0
 
             elif len(GV.CardHand1) == 5:
                 pass
             else:
-                if GV.addCard1:
+                if GV.addCard[0] == 1:
                     GV.CardHand1.append(GV.cardDeck[0])
                     GV.cardDeck.append(GV.cardDeck[0])
                     GV.cardDeck.pop(0)
-                    GV.cardPositions1.append(RICD(GV.CardPositioningx1, GV.CardPositioningy1))
-                    GV.CardPositioningx1 += 20
-                    GV.CardPositioningy1 -= 20
-                    GV.addCard1 = False
+                    GV.cardPositions1.append(RICD(GV.cardStartPos1[0], GV.cardStartPos1[1]))
+                    GV.cardStartPos1[0] += 20
+                    GV.cardStartPos1[1] -= 20
+                    GV.addCard[0] = 0
 
         if GV.gameBet[1] != 0:
-            if GV.gameStart2 and GV.addCard2:
+            if GV.gameStart[1] == 1 and GV.addCard[1] == 1:
                 for i in range(0,2):
                     GV.CardHand2.append(GV.cardDeck[0])
                     GV.cardDeck.pop(0)
-                    GV.cardPositions2.append(RICD(GV.CardPositioningx2, GV.CardPositioningy2))
-                    GV.CardPositioningx2 += 20
-                    GV.CardPositioningy2 -= 20
-                GV.addCard2 = False
-                GV.gameStart2 = False
+                    GV.cardPositions2.append(RICD(GV.cardStartPos2[0], GV.cardStartPos2[1]))
+                    GV.cardStartPos2[0] += 20
+                    GV.cardStartPos2[1] -= 20
+                GV.addCard[1] = 0
+                GV.gameStart[1] = 0
 
-            elif GV.addCard2:
+            elif GV.gameStart[1] == 1:
                 GV.CardHand2.append(GV.cardDeck[0])
                 GV.cardDeck.pop(0)
-                GV.cardPositions2.append(RICD(GV.CardPositioningx2, GV.CardPositioningy2))
-                GV.CardPositioningx2 += 20
-                GV.CardPositioningy2 -= 20
-                GV.addCard2 = False
+                GV.cardPositions2.append(RICD(GV.cardStartPos2[0], GV.cardStartPos2[1]))
+                GV.cardStartPos2[0] += 20
+                GV.cardStartPos2[1] -= 20
+                GV.addCard[1] = 0
             
 
 
