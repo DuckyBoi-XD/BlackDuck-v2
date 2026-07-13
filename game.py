@@ -266,6 +266,7 @@ class game_variable: # Game variables
         self.cardPositions = [self.cardPositions1, self.cardPositions2]
         self.addCard1 = False
         self.addCard2 = False
+        self.gameStart = False
         self.CardPositioningx1 = 450
         self.CardPositioningx2 = 689
         self.CardValues1 = []
@@ -782,6 +783,7 @@ class game_functions:
                                 GV.gameBet[0] += int(GV.chipValues[chip[0]])
                                 GV.bettingGame = True
                                 GV.addCard1 = True
+                                GV.gameStart = True
                         if len(GV.chipBet2) != 0:
                             for chip in GV.chipBet2:
                                 GV.gameCHIPS2[chip[0]] += 1
@@ -789,6 +791,7 @@ class game_functions:
                                 GV.gameBet[1] += int(GV.chipValues[chip[0]])
                                 GV.bettingGame = True
                                 GV.addCard2 = True
+                                GV.gameStart = True
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
@@ -900,14 +903,44 @@ class game_functions:
                     GV.chipBet2.remove(self.indexChipPosition)
 
     def blackjack(self):
-        if GV.gameBet[0] != 0:
+        if GV.gameStart:
+            if GV.gameBet[0] != 0:
+                if GV.addCard1:
+
+                    GV.CardValues1.append(GV.cardDeck[0])
+                    GV.cardDeck.pop(0)
+                    GV.cardPositions1.append(RICD(GV.CardPositioningx1, 250))
+                    GV.CardPositioningx1 += 20
+
+                    GV.CardValues1.append(GV.cardDeck[0])
+                    GV.cardDeck.pop(0)
+                    GV.cardPositions1.append(RICD(GV.CardPositioningx1, 250))
+                    GV.CardPositioningx1 += 20
+
+                    GV.addCard1 = False
+            if GV.gameBet[1] != 0:
+                if GV.addCard2:
+
+                    GV.CardValues2.append(GV.cardDeck[0])
+                    GV.cardDeck.pop(0)
+                    GV.cardPositions2.append(RICD(GV.CardPositioningx2, 250))
+                    GV.CardPositioningx2 += 20
+
+                    GV.CardValues2.append(GV.cardDeck[0])
+                    GV.cardDeck.pop(0)
+                    GV.cardPositions2.append(RICD(GV.CardPositioningx2, 250))
+                    GV.CardPositioningx2 += 20
+                    GV.addCard2 = False
+
+
+        elif GV.gameBet[0] != 0:
             if GV.addCard1:
                 GV.CardValues1.append(GV.cardDeck[0])
                 GV.cardDeck.pop(0)
                 GV.cardPositions1.append(RICD(GV.CardPositioningx1, 250))
                 GV.CardPositioningx1 += 20
                 GV.addCard1 = False
-        if GV.gameBet[1] != 0:
+        elif GV.gameBet[1] != 0:
             if GV.addCard2:
                 GV.CardValues2.append(GV.cardDeck[0])
                 GV.cardDeck.pop(0)
