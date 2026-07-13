@@ -699,6 +699,11 @@ class game_functions:
                         for index, i in enumerate(GV.chipSmallExchangeListtemp):
                             CHIPS[index] += i
 
+                        for index, value in enumerate(GV.gameCHIPS1):
+                            CHIPS[index] -= value
+                        for index, value in enumerate(GV.gameCHIPS2):
+                            CHIPS[index] -= value
+                            
                         for value in GV.chipPositions:
                             value.clear()
                         for index, i in enumerate(CHIPS):
@@ -725,9 +730,7 @@ class game_functions:
                     else:
                         GV.exchangeConfirmation = False
 
-                    print(GV.bettingGame)
                     if GV.betFuncOutline1 and GV.bettingGame is False:
-                        print("WOK")
                         GV.gameCHIPS1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                         GV.gameCHIPS2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                         GV.gameChipPos1.clear()
@@ -746,6 +749,8 @@ class game_functions:
                                 GV.gameBet[0] += int(GV.chipValues[chip[0]])
                                 GV.bettingGame = True
 
+                        print(GV.chipBet1)
+                        print(GV.chipBet2)
                         print(GV.gameCHIPS1)
                         print(GV.gameCHIPS2)
                         print(GV.gameChipPos1)
