@@ -269,18 +269,16 @@ class game_variable: # Game variables
         self.cardPositions = [self.cardPositions1, self.cardPositions2, self.cardPositions3, self.cardPositions4]
         self.addCard = [0, 0, 0, 0]
         self.gameStart = [0, 0, 0, 0]
-        self.cardStartPos1 = [450, 200]
+        self.cardStartPos1 = [450, 260]
         self.cardStartPos2 = [689, 260]
-        self.cardStartPos3 = [450, 260] # not correct
-        self.cardStartPos4 = [689, 260] # not correct
+        self.cardStartPos3 = [180, 260]
+        self.cardStartPos4 = [1019, 260]
         self.cardStartPos = [self.cardStartPos1, self.cardStartPos2, self.cardStartPos3, self.cardStartPos4]
         self.CardHand1 = []
         self.CardHand2 = []
         self.CardHand3 = []
         self.CardHand4 = []
         self.CardHands = [self.CardHand1, self.CardHand2, self.CardHand3, self.CardHand4]
-
-
 
 
 
