@@ -668,8 +668,6 @@ class game_functions:
                         CursorPos_CirclePosy = cursorPosy - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1]
 
                         CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
-                        print(GV.chipBet1)
-                        print(GV.chipBet2)
                         if (self.index_var in GV.chipBet1 or self.index_var in GV.chipBet2) and GV.bettingGame:
                             GV.betChipOverride = True
                         if CursorPos_CirclePos <= GV.chipRadius**2 and GV.betChipOverride is False:
@@ -699,11 +697,14 @@ class game_functions:
                         for index, i in enumerate(GV.chipSmallExchangeListtemp):
                             CHIPS[index] += i
 
-                        for index, value in enumerate(GV.gameCHIPS1):
-                            CHIPS[index] -= value
-                        for index, value in enumerate(GV.gameCHIPS2):
-                            CHIPS[index] -= value
-                            
+                        if GV.bettingGame:
+                            for index, value in enumerate(GV.gameCHIPS1):
+                                CHIPS[index] -= value
+                            for index, value in enumerate(GV.gameCHIPS2):
+                                CHIPS[index] -= value
+
+                        print(CHIPS)
+
                         for value in GV.chipPositions:
                             value.clear()
                         for index, i in enumerate(CHIPS):
@@ -716,12 +717,20 @@ class game_functions:
                                 GV.chipPositions[index].append([((GV.chipStartPositions)[GV.chipValues[index]])[0] - GV.sideOffset, ((GV.chipStartPositions[GV.chipValues[index]])[1] - GV.offsetreal)])
                                 GV.offset += 10
 
+                        if GV.bettingGame:
+                            for index, value in enumerate(GV.chipBet1):
+                                GV.chipPositions[value[0]].append(GV.gameChipPos1[index])
+                            for index, value in enumerate(GV.chipBet2):
+                                GV.chipPositions[value[0]].append(GV.gameChipPos2[index])
+
                         GV.chipDisplayPriority.clear()
 
                         for indexa, lista in enumerate(GV.chipPositions):
+                            indexb = 0
                             for indexb, value in enumerate(lista):
                                 GV.chipDisplayPriority.append((indexa, indexb))
-
+                                indexb
+                            
                         GV.chipExchangeValue1 = 0
                         
                         GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
@@ -748,14 +757,6 @@ class game_functions:
                                 GV.gameChipPos2.append(GV.chipPositions[chip[0]][chip[1]])
                                 GV.gameBet[0] += int(GV.chipValues[chip[0]])
                                 GV.bettingGame = True
-
-                        print(GV.chipBet1)
-                        print(GV.chipBet2)
-                        print(GV.gameCHIPS1)
-                        print(GV.gameCHIPS2)
-                        print(GV.gameChipPos1)
-                        print(GV.gameChipPos2)
-                        print(GV.gameBet)
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
