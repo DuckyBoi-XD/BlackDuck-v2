@@ -129,6 +129,7 @@ class game_variable: # Game variables
         self.yellow_green = (183, 255, 0)
         self.bright_red = (255, 49, 49)
         self.highlight_yellow = (249, 203, 26)
+        self.bright_blue = (14, 142, 255)
 
         self.darkgreen_colour = (18, 78, 49)
         self.darkred_colour = (115, 20, 28)
@@ -208,8 +209,9 @@ class game_variable: # Game variables
 
         self.chipBet1 = []
         self.chipBet2 = []
+        self.chipBet = [self.chipBet1, self.chipBet2]
         self.BET_HIT_Button = False
-        self.STAY_Button = False
+        self.STAND_Button = False
         self.DOUBLEDOWN_Button = False
         self.SPLIT_Button = False
         self.betChipOverride = False
@@ -259,8 +261,10 @@ class game_variable: # Game variables
 
         self.gameCHIPS1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.gameCHIPS2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.gameCHIPS = [self.gameCHIPS1, self.gameCHIPS2]
         self.gameChipPos1 = []
         self.gameChipPos2 = []
+        self.gameChipPos = [self.gameChipPos1, self.gameChipPos2]
         self.gameBet = [0, 0]
         self.bettingGame = False
 
@@ -271,9 +275,9 @@ class game_variable: # Game variables
         self.cardPositions = [self.cardPositions1, self.cardPositions2, self.cardPositions3, self.cardPositions4]
         self.addCard = [0, 0, 0, 0]
         self.gameStart = [0, 0, 0, 0]
-        self.cardStartPos1 = [450, 260]
-        self.cardStartPos2 = [689, 260]
-        self.cardStartPos3 = [180, 260]
+        self.cardStartPos1 = [180, 260]
+        self.cardStartPos2 = [450, 260]
+        self.cardStartPos3 = [689, 260]
         self.cardStartPos4 = [1019, 260]
         self.cardStartPos = [self.cardStartPos1, self.cardStartPos2, self.cardStartPos3, self.cardStartPos4]
         self.CardHand1 = []
@@ -285,12 +289,16 @@ class game_variable: # Game variables
         self.HandValue2 = 0
         self.HandValue3 = 0
         self.HandValue4 = 0
+        self.HandValues = [self.HandValue1, self.HandValue2, self.HandValue3, self.HandValue4]
         self.CardValues1 = []
         self.CardValues2 = []
         self.CardValues3 = []
         self.CardValues4 = []
+        self.CardValues = [self.CardValues1, self.CardValues2, self.CardValues3, self.CardValues4]
         self.bust = [0, 0, 0, 0]
+        self.stand = [0, 0, 0, 0]
         self.gamefocus = [0, 0, 0, 0]
+
 
 
 
@@ -606,7 +614,7 @@ class game_objects:
 
 
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
-        if GV.STAY_Button and GV.bettingGame:
+        if GV.STAND_Button and GV.bettingGame:
             pygame.draw.rect(box_surface, GV.red_colour, (0, 0, 76, 50.5))
         else:
             pygame.draw.rect(box_surface, GV.darkred_colour, (0, 0, 76, 50.5))
@@ -664,7 +672,6 @@ class game_objects:
         rect = rect_surface.get_rect(center=(598, 433))
         GV.display.blit(rect_surface, rect)
 
-
         for indexa, cardlist in enumerate(GV.cardPositions):
             for indexb, cardpos in enumerate(cardlist):
 
@@ -679,19 +686,28 @@ class game_objects:
                 rect = card.get_rect(center=(cardpos))
                 GV.display.blit(card, rect)
 
-                if GV.bust[0] == 1:
-                    if indexa == 0:
-                        pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
-                elif GV.gamefocus[0] == 1:
-                    if indexa == 0:
-                        pygame.draw.rect(GV.display, GV.bright_green, rect.inflate(2, 2), width=2, border_radius=3)
-
+                print(GV.gamefocus)
                 if GV.bust[1] == 1:
                     if indexa == 1:
                         pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
-                elif GV.gamefocus[1] == 1:
+                elif GV.stand[1] == 1:
                     if indexa == 1:
                         pygame.draw.rect(GV.display, GV.bright_green, rect.inflate(2, 2), width=2, border_radius=3)
+                elif GV.gamefocus[1] == 1:
+                    if indexa == 1:
+                        pygame.draw.rect(GV.display, GV.bright_blue, rect.inflate(2, 2), width=2, border_radius=3)
+
+
+
+                if GV.bust[2] == 1:
+                    if indexa == 2:
+                        pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
+                elif GV.stand[2] == 1:
+                    if indexa == 2:
+                        pygame.draw.rect(GV.display, GV.bright_green, rect.inflate(2, 2), width=2, border_radius=3)
+                elif GV.gamefocus[2] == 1:
+                    if indexa == 2:
+                        pygame.draw.rect(GV.display, GV.bright_blue, rect.inflate(2, 2), width=2, border_radius=3)
             
 
 
@@ -813,29 +829,34 @@ class game_functions:
                         GV.gameChipPos2.clear()
                         GV.gameBet = [0, 0]
                         GV.gamefocus = [0, 0, 0, 0]
+
+                        for indexs, value in enumerate(GV.chipBet):
+                            if len(value) != 0:
+                                for chip in value:
+                                    indexs += 1
+                                    GV.gameCHIPS[indexs][chip[0]] += 1
+                                    GV.gameChipPos[indexs].append(GV.chipPositions[chip[0]][chip[1]])
+                                    GV.gameBet[indexs] += int(GV.chipValues[chip[0]])
+                                    GV.bettingGame = True
+                                    GV.addCard[indexs] = 1
+                                    GV.gameStart[indexs] = 1
+                        
                         if len(GV.chipBet1) != 0:
-                            for chip in GV.chipBet1:
-                                GV.gameCHIPS1[chip[0]] += 1
-                                GV.gameChipPos1.append(GV.chipPositions[chip[0]][chip[1]])
-                                GV.gameBet[0] += int(GV.chipValues[chip[0]])
-                                GV.bettingGame = True
-                                GV.addCard[0] = 1
-                                GV.gameStart[0] = 1
-                                GV.gamefocus[0] = 1
-                        if len(GV.chipBet2) != 0:
-                            for chip in GV.chipBet2:
-                                GV.gameCHIPS2[chip[0]] += 1
-                                GV.gameChipPos2.append(GV.chipPositions[chip[0]][chip[1]])
-                                GV.gameBet[1] += int(GV.chipValues[chip[0]])
-                                GV.bettingGame = True
-                                GV.addCard[1] = 1
-                                GV.gameStart[1] = 1
-                                GV.gamefocus[1] = 1
+                            GV.gamefocus[1] = 1
+                        elif len(GV.chipBet2) != 0:
+                            GV.gamefocus[2] = 1
+
                     elif GV.BET_HIT_Button and GV.bettingGame:
-                        if GV.gamefocus[0] == 1:
-                            GV.addCard[0] = 1
-                        elif GV.gamefocus[1] == 1:
+                        if GV.gamefocus[1] == 1:
                             GV.addCard[1] = 1
+                        elif GV.gamefocus[2] == 1:
+                            GV.addCard[2] = 1
+
+                    elif GV.STAND_Button and GV.bettingGame:
+                        if GV.gamefocus[1] == 1:
+                            GV.stand[1] = 1
+                        elif GV.gamefocus[2] == 1:
+                            GV.stand[2] = 1
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
@@ -853,7 +874,7 @@ class game_functions:
                 minusi = i - 25.25
                 plusi = i + 25.25
                 GV.BET_HIT_Button = False
-                GV.STAY_Button = False
+                GV.STAND_Button = False
                 GV.DOUBLEDOWN_Button = False
                 GV.SPLIT_Button = False
                 if 560 <= cursorPosx <= 636 and minusi <= cursorPosy <= plusi:
@@ -861,7 +882,7 @@ class game_functions:
                         GV.BET_HIT_Button = True
                         break
                     elif indexed == 1:
-                        GV.STAY_Button = True
+                        GV.STAND_Button = True
                         break
                     elif indexed == 2:
                         GV.DOUBLEDOWN_Button = True
@@ -947,132 +968,78 @@ class game_functions:
                     GV.chipBet2.remove(self.indexChipPosition)
 
     def blackjack(self):
-        if GV.gameBet[1] != 0:
-            if GV.gameStart[1] == 1 and GV.addCard[1] == 1:
-                GV.bust[1] = 0
-                for i in range(0,2):
-                    GV.CardHand2.append(GV.cardDeck[0])
+        for index, hand in enumerate(GV.gameBet):
+            if hand != 0:
+                if GV.gameStart[index] == 1 and GV.addCard[index] == 1:
+                    GV.bust[index] = 0
+                    for i in range(0,2):
+                        GV.CardHands[index].append(GV.cardDeck[0])
+                        GV.cardDeck.append(GV.cardDeck[0])
+
+                        if len(GV.cardDeck[0]) == 3:
+                            GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1:3])-2]))
+                        else:    
+                            GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
+
+                        for indexing, value in enumerate(GV.CardValues[index]):
+                            GV.HandValues[index] = sum(GV.CardValues[index])
+                            if GV.HandValues[index] > 21:
+                                if value == 11:
+                                    (GV.CardValues[index])[indexing] = 1
+                            else:
+                                break
+                        
+                        GV.HandValues[index] = sum(GV.CardValues[index])
+
+                        GV.cardDeck.pop(0)
+                        GV.cardPositions[index].append(RICD((GV.cardStartPos[index])[0], (GV.cardStartPos[index])[1]))
+                        (GV.cardStartPos[index])[0] += 20
+                        (GV.cardStartPos[index])[1] -= 20
+
+                    GV.addCard[index] = 0
+                    GV.gameStart[index] = 0
+
+                elif GV.stand[index]:
+                    GV.gamefocus[index] = 0
+                    GV.stand[index] = 1
+
+                elif len(GV.CardHands[index]) == 5:
+                    pass
+
+                elif GV.addCard[index] == 1 and GV.bust[index] != 1:
+                    GV.CardHands[index].append(GV.cardDeck[0])
                     GV.cardDeck.append(GV.cardDeck[0])
 
                     if len(GV.cardDeck[0]) == 3:
-                        GV.CardValues2.append(int(GV.Values[int((GV.cardDeck[0])[1:3])-2]))
+                        GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1:3])-2]))
                     else:    
-                        GV.CardValues2.append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
+                        GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
 
-                    for index, value in enumerate(GV.CardValues2):
-                        GV.HandValue2 = sum(GV.CardValues2)
-                        if GV.HandValue2 > 21:
+                    for indexing, value in enumerate(GV.CardValues[index]):
+                        GV.HandValues[index] = sum(GV.CardValues[index])
+                        if GV.HandValues[index] > 21:
                             if value == 11:
-                                GV.CardValues2[index] = 1
+                                (GV.CardValues[index])[indexing] = 1
                         else:
                             break
                     
-                    GV.HandValue2 = sum(GV.CardValues2)
+                    GV.HandValues[index] = sum(GV.CardValues[index])
+
+                    if GV.HandValues[index] > 21:
+                        GV.bust[index] = 1
+                        if GV.HandValue4 != 0:   # Fix
+                            GV.gamefocus[index] = 0
+                            GV.gamefocus[3] = 1  # fix
+                        else:
+                            GV.gamefocus[index] = 0
 
                     GV.cardDeck.pop(0)
-                    GV.cardPositions2.append(RICD(GV.cardStartPos2[0], GV.cardStartPos2[1]))
-                    GV.cardStartPos2[0] += 20
-                    GV.cardStartPos2[1] -= 20
-                GV.addCard[1] = 0
-                GV.gameStart[1] = 0
+                    GV.cardPositions[index].append(RICD((GV.cardStartPos[index])[0], (GV.cardStartPos[index])[1]))
+                    (GV.cardStartPos[index])[0] += 20
+                    (GV.cardStartPos[index])[1] -= 20
+                    GV.addCard[index] = 0
 
-            elif len(GV.CardHand2) == 5:
-                pass
-            else:
-                if GV.addCard[1] == 1:
-                    GV.CardHand2.append(GV.cardDeck[0])
-                    GV.cardDeck.append(GV.cardDeck[0])
-
-                    if len(GV.cardDeck[0]) == 3:
-                        GV.CardValues2.append(int(GV.Values[int((GV.cardDeck[0])[1:3])-2]))
-                    else:    
-                        GV.CardValues2.append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
-
-                    for index, value in enumerate(GV.CardValues2):
-                        GV.HandValue2 = sum(GV.CardValues2)
-                        if GV.HandValue2 > 21:
-                            if value == 11:
-                                GV.CardValues2[index] = 1
-                        else:
-                            break
-                    
-                    GV.HandValue2 = sum(GV.CardValues2)
-
-                    if GV.HandValue2 > 21:
-                        GV.bust[1] = 1
-                        if GV.HandValue4 != 0:  
-                            GV.gamefocus[1] = 0
-                            GV.gamefocus[3] = 1
-                        else:
-                            GV.gamefocus[1] = 0
-
-                    GV.cardDeck.pop(0)
-                    GV.cardPositions2.append(RICD(GV.cardStartPos2[0], GV.cardStartPos2[1]))
-                    GV.cardStartPos2[0] += 20
-                    GV.cardStartPos2[1] -= 20
-                    GV.addCard[1] = 0
-
-        if GV.gameBet[0] != 0:
-            if GV.gameStart[0] == 1 and GV.addCard[0] == 1:
-                GV.bust[0] = 0
-                for i in range(0,2):
-                    GV.CardHand1.append(GV.cardDeck[0])
-                    GV.cardDeck.append(GV.cardDeck[0])
-
-                    if len(GV.cardDeck[0]) == 3:
-                        GV.CardValues1.append(int(GV.Values[int((GV.cardDeck[0])[1:3])-2]))
-                    else:    
-                        GV.CardValues1.append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
-
-                    for index, value in enumerate(GV.CardValues1):
-                        GV.HandValue1 = sum(GV.CardValues1)
-                        if GV.HandValue1 > 21:
-                            if value == 11:
-                                GV.CardValues1[index] = 1
-                        else:
-                            break
-                    GV.HandValue1 = sum(GV.CardValues1)
-
-                    GV.cardDeck.pop(0)
-                    GV.cardPositions1.append(RICD(GV.cardStartPos1[0], GV.cardStartPos1[1]))
-                    GV.cardStartPos1[0] += 20
-                    GV.cardStartPos1[1] -= 20
-                GV.addCard[0] = 0
-                GV.gameStart[0] = 0
-
-            elif len(GV.CardHand1) == 5:
-                pass
-            else:
-                if GV.addCard[0] == 1:
-                    GV.CardHand1.append(GV.cardDeck[0])
-                    GV.cardDeck.append(GV.cardDeck[0])             
-
-                    if len(GV.cardDeck[0]) == 3:
-                        GV.CardValues1.append(int(GV.Values[int((GV.cardDeck[0])[1:3])-2]))
-                    else:    
-                        GV.CardValues1.append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
-
-                    for index, value in enumerate(GV.CardValues1):
-                        GV.HandValue1 = sum(GV.CardValues1)
-                        if GV.HandValue1 > 21:
-                            if value == 11:
-                                GV.CardValues1[index] = 1
-                        else:
-                            break
-                    
-                    GV.HandValue1 = sum(GV.CardValues1)
-
-                    if GV.HandValue1 > 21:
-                        GV.bust[0] = 1
-                        if GV.HandValue2 != 0:  
-                            GV.gamefocus[0] = 0
-                            GV.gamefocus[1] = 1
-
-                    GV.cardDeck.pop(0)
-                    GV.cardPositions1.append(RICD(GV.cardStartPos1[0], GV.cardStartPos1[1]))
-                    GV.cardStartPos1[0] += 20
-                    GV.cardStartPos1[1] -= 20
-                    GV.addCard[0] = 0
+                    print(GV.cardPositions[index])
 
 
 GF = game_functions()
