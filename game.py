@@ -686,7 +686,6 @@ class game_objects:
                 rect = card.get_rect(center=(cardpos))
                 GV.display.blit(card, rect)
 
-                print(GV.gamefocus)
                 if GV.bust[1] == 1:
                     if indexa == 1:
                         pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
@@ -830,13 +829,15 @@ class game_functions:
                         GV.gameBet = [0, 0]
                         GV.gamefocus = [0, 0, 0, 0]
 
+                        print(GV.chipBet)
+
                         for indexs, value in enumerate(GV.chipBet):
                             if len(value) != 0:
                                 for chip in value:
-                                    indexs += 1
                                     GV.gameCHIPS[indexs][chip[0]] += 1
                                     GV.gameChipPos[indexs].append(GV.chipPositions[chip[0]][chip[1]])
                                     GV.gameBet[indexs] += int(GV.chipValues[chip[0]])
+                                    indexs += 1
                                     GV.bettingGame = True
                                     GV.addCard[indexs] = 1
                                     GV.gameStart[indexs] = 1
@@ -968,7 +969,40 @@ class game_functions:
                     GV.chipBet2.remove(self.indexChipPosition)
 
     def blackjack(self):
-        for index, hand in enumerate(GV.gameBet):
+        
+        for index, value in enumerate(GV.gameStart[1:3]):
+            if value == 1 and (GV.addCard[1:3][index]) == 1:
+                index += 1
+                GV.bust[index] = 0
+                for i in range(0,2):
+                    GV.CardHands[index].append(GV.cardDeck[0])
+                    GV.cardDeck.append(GV.cardDeck[0])
+
+                    if len(GV.cardDeck[0]) == 3:
+                        GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1:3])-2]))
+                    else:    
+                        GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
+
+                    for indexing, value in enumerate(GV.CardValues[index]):
+                        GV.HandValues[index] = sum(GV.CardValues[index])
+                        if GV.HandValues[index] > 21:
+                            if value == 11:
+                                (GV.CardValues[index])[indexing] = 1
+                        else:
+                            break
+                    
+                    GV.HandValues[index] = sum(GV.CardValues[index])
+
+                    GV.cardDeck.pop(0)
+                    GV.cardPositions[index].append(RICD((GV.cardStartPos[index])[0], (GV.cardStartPos[index])[1]))
+                    (GV.cardStartPos[index])[0] += 20
+                    (GV.cardStartPos[index])[1] -= 20
+
+                GV.addCard[index] = 0
+                GV.gameStart[index] = 0
+
+
+        for index, hand in enumerate(GV.gamefocus):
             if hand != 0:
                 if GV.gameStart[index] == 1 and GV.addCard[index] == 1:
                     GV.bust[index] = 0
@@ -1000,8 +1034,12 @@ class game_functions:
                     GV.gameStart[index] = 0
 
                 elif GV.stand[index]:
-                    GV.gamefocus[index] = 0
                     GV.stand[index] = 1
+                    if index != 3:   # Fix
+                            GV.gamefocus[index] = 0
+                            GV.gamefocus[index+1] = 1  # fix
+                    else:
+                        GV.gamefocus[index] = 0
 
                 elif len(GV.CardHands[index]) == 5:
                     pass
@@ -1027,9 +1065,9 @@ class game_functions:
 
                     if GV.HandValues[index] > 21:
                         GV.bust[index] = 1
-                        if GV.HandValue4 != 0:   # Fix
+                        if index != 3:   # Fix
                             GV.gamefocus[index] = 0
-                            GV.gamefocus[3] = 1  # fix
+                            GV.gamefocus[index+1] = 1  # fix
                         else:
                             GV.gamefocus[index] = 0
 
