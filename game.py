@@ -130,6 +130,7 @@ class game_variable: # Game variables
         self.bright_red = (255, 49, 49)
         self.highlight_yellow = (249, 203, 26)
         self.bright_blue = (14, 142, 255)
+        self.bright_orange = (255, 127, 14)
 
         self.darkgreen_colour = (18, 78, 49)
         self.darkred_colour = (115, 20, 28)
@@ -307,13 +308,11 @@ class game_variable: # Game variables
         self.CardValues = [self.CardValues1, self.CardValues2, self.CardValues3, self.CardValues4]
         self.dCardValues = []
 
-        self.bust = [0, 0, 0, 0]
         self.dbust = False
-        self.stand = [0, 0, 0, 0]
-        self.blackjack = [0, 0, 0, 0]
         self.gamefocus = [0, 0, 0, 0]
-        self.fiveCardCharlie = [0, 0, 0, 0]
-        self.gameOutput = [0, 0, 0, 0]
+        self.HandState = [0, 0, 0, 0] # 1 stand, 2 bust, 3 blackjack, 4 five card charlie
+        self.gameOutput = [0, 0, 0, 0] # 1 tie, 2 lose, 3, win
+        self.dOutcome = False
 
 
 
@@ -704,20 +703,28 @@ class game_objects:
                 GV.display.blit(card, rect)
 
                 for i in range(0, 4):
-                    if GV.bust[i] == 1:
-                        if indexa == i:
-                            pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
-                    elif GV.stand[i] == 1:
+                    if GV.gameOutput[i] == 1:
                         if indexa == i:
                             pygame.draw.rect(GV.display, GV.highlight_yellow, rect.inflate(2, 2), width=2, border_radius=3)
-                    elif GV.fiveCardCharlie[i] == 1:
+                    elif GV.gameOutput[i] == 2:
+                        if indexa == i:
+                            pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
+                    elif GV.gameOutput[i] == 3:
+                        if indexa == i:
+                            pygame.draw.rect(GV.display, GV.bright_green, rect.inflate(2, 2), width=2, border_radius=3)
+                    elif GV.HandState[i] == 2:
+                        if indexa == i:
+                            pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
+                    elif GV.HandState[i] == 1:
+                        if indexa == i:
+                            pygame.draw.rect(GV.display, GV.highlight_yellow, rect.inflate(2, 2), width=2, border_radius=3)
+                    elif GV.HandState[i] == 4:
                         if indexa == i:
                             pygame.draw.rect(GV.display, GV.highlight_yellow, rect.inflate(2, 2), width=2, border_radius=3)
                     elif GV.gamefocus[i] == 1:
                         if indexa == i:
                             pygame.draw.rect(GV.display, GV.bright_blue, rect.inflate(2, 2), width=2, border_radius=3)
 
-        #print(1000, GV.dcardPosition)
         for indexb, dcard in enumerate(GV.dcardPosition):
             suit_var = int((GV.dCardHand[indexb])[0])
             if len((GV.dCardHand[indexb])) == 3:
@@ -726,12 +733,38 @@ class game_objects:
                 value_var = int((GV.dCardHand[indexb])[1])
 
             value_var -= 2
+            
             if indexb == 0 and GV.dTurn is False:
                 card = pygame.transform.smoothscale(pygame.image.load("assets/Carddeck/back.png"), (105, 140)).convert_alpha()
             else:
                 card = pygame.transform.smoothscale(pygame.image.load((GV.CardFiles[suit_var][value_var])), (105, 140)).convert_alpha()
             rect = card.get_rect(center=(dcard))
             GV.display.blit(card, rect)
+
+            if GV.dTurn:
+                if GV.dDrawTime == -1:
+                    print(GV.HandValues)
+                    print(GV.dHandValue)
+                    print(GV.gameOutput)
+                    print()
+                    
+                    gameOutput1 = all([v == 1 for v in GV.gameOutput if v != 0])    
+                    gameOutput2 = all([v == 2 for v in GV.gameOutput if v != 0])
+                    gameOutput3 = all([v == 3 for v in GV.gameOutput if v != 0])
+
+                    if GV.dbust == 1:
+                        pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
+                    elif gameOutput1:
+                        pygame.draw.rect(GV.display, GV.highlight_yellow, rect.inflate(2, 2), width=2, border_radius=3)
+                    elif gameOutput2:
+                        pygame.draw.rect(GV.display, GV.bright_green, rect.inflate(2, 2), width=2, border_radius=3)
+                    elif gameOutput3:
+                        pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
+
+                    
+                else:
+                    pygame.draw.rect(GV.display, GV.bright_blue, rect.inflate(2, 2), width=2, border_radius=3)
+
 
 GO = game_objects()
 
@@ -847,9 +880,10 @@ class game_functions:
                     if GV.BET_HIT_Button and GV.bettingGame is False:
                         GV.dbust = False
                         GV.dStart = True
+                        GV.dOutcome = False
                         
                         self.clearlists = [GV.cardPositions, GV.CardValues, GV.CardHands, GV.gameChipPos]
-                        self.clear0lists = [GV.addCard, GV.gameStart, GV.gameBet, GV.gameCHIPS1, GV.gameCHIPS2, GV.HandValues, GV.bust, GV.stand, GV.gamefocus, GV.fiveCardCharlie, GV.blackjack, GV.gameOutput]
+                        self.clear0lists = [GV.addCard, GV.gameStart, GV.gameBet, GV.gameCHIPS1, GV.gameCHIPS2, GV.HandValues, GV.gamefocus,GV.gameOutput, GV.HandState]
 
                         for indexs, value in enumerate(GV.chipBet):
                             if len(value) != 0:
@@ -875,9 +909,9 @@ class game_functions:
 
                     elif GV.STAND_Button and GV.bettingGame:
                         if GV.gamefocus[1] == 1:
-                            GV.stand[1] = 1
+                            GV.HandState[1] = 1
                         elif GV.gamefocus[2] == 1:
-                            GV.stand[2] = 1
+                            GV.HandState[2] = 1
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
@@ -993,7 +1027,6 @@ class game_functions:
         for index, value in enumerate(GV.gameStart[1:3]):
             if value == 1 and (GV.addCard[1:3][index]) == 1:
                 index += 1
-                GV.bust[index] = 0
                 for i in range(0,2):
                     GV.CardHands[index].append(GV.cardDeck[0])
                     GV.cardDeck.append(GV.cardDeck[0])
@@ -1054,7 +1087,7 @@ class game_functions:
         for index, hand in enumerate(GV.gamefocus):
             if hand != 0:
                 if GV.gameStart[index] == 1 and GV.addCard[index] == 1:
-                    GV.bust[index] = 0
+                    GV.HandState[index] != 2
                     for i in range(0,2):
                         GV.CardHands[index].append(GV.cardDeck[0])
                         GV.cardDeck.append(GV.cardDeck[0])
@@ -1082,9 +1115,10 @@ class game_functions:
                     GV.addCard[index] = 0
                     GV.gameStart[index] = 0
 
-                elif GV.stand[index]:
-                    GV.stand[index] = 1
+                elif GV.HandState[index] == 1:
                     GV.gamefocus[index] = 0
+                    if GV.HandValues[index] == 21:
+                        GV.HandState[index] = 3
                     if index != 3:
                         if GV.HandValues[index+1] != 0:
                             GV.gamefocus[index+1] = 1
@@ -1093,18 +1127,7 @@ class game_functions:
                     else:
                         GV.dTurn = True
 
-                elif len(GV.CardHands[index]) == 5:
-                    GV.fiveCardCharlie[index] = 1
-                    GV.gamefocus[index] = 0
-                    if index != 3:
-                        if GV.HandValues[index+1] != 0:
-                            GV.gamefocus[index+1] = 1
-                        else:
-                            GV.dTurn = True
-                    else:
-                        GV.dTurn = True
-
-                elif GV.addCard[index] == 1 and GV.bust[index] != 1:
+                elif GV.addCard[index] == 1 and GV.HandState[index] != 1:
                     GV.CardHands[index].append(GV.cardDeck[0])
                     GV.cardDeck.append(GV.cardDeck[0])
 
@@ -1123,8 +1146,8 @@ class game_functions:
                     
                     GV.HandValues[index] = sum(GV.CardValues[index])
 
-                    if GV.HandValues[index] == 21:
-                        GV.blackjack[index] = 1
+                    if GV.HandValues[index] > 21:
+                        GV.HandState[index] = 2
                         GV.gamefocus[index] = 0
                         if index != 3:
                             if GV.HandValues[index+1] != 0:
@@ -1133,9 +1156,9 @@ class game_functions:
                                 GV.dTurn = True
                         else:
                             GV.dTurn = True
-
-                    if GV.HandValues[index] > 21:
-                        GV.bust[index] = 1
+                    
+                    elif len(GV.CardHands[index]) == 5:
+                        GV.HandState[index] = 4
                         GV.gamefocus[index] = 0
                         if index != 3:
                             if GV.HandValues[index+1] != 0:
@@ -1153,8 +1176,42 @@ class game_functions:
 
                     print(GV.cardPositions[index])
 
+                    
+
         if GV.dTurn:
-            if GV.dDrawTime == 60 or GV.dDrawTime == 30 or GV.dDrawTime == 0:
+            if all(hand > 21 for hand in GV.HandValues if hand != 0):
+                GV.dDrawTime = -1
+                GV.dOutcome = True
+                for indexinges, hand in enumerate(GV.HandValues):
+                    if hand != 0:
+                        GV.gameOutput[indexinges] = 2
+
+            if 4 in GV.HandState and 21 >= GV.dHandValue and len(GV.dCardHand) == 5:
+                for indexinges, i in enumerate(GV.HandState):
+                    if i == 4:
+                        GV.dDrawTime = -1
+                        GV.dOutcome = True
+                        GV.gameOutput[indexinges] = 1
+            
+            elif 4 in GV.HandState and  21 >= GV.dHandValue >= 17:
+                for indexinges, i in enumerate(GV.HandState):
+                    if i == 4:
+                        GV.dDrawTime = -1
+                        GV.dOutcome = True
+                        GV.gameOutput[indexinges] = 3
+
+            elif 21 >= GV.dHandValue >= 17:
+                    GV.dDrawTime = -1
+                    GV.dOutcome = True
+                    for indexinges, hand in enumerate(GV.HandValues):
+                        if 21 >= hand != 0:
+                            if GV.dHandValue < hand:
+                                GV.gameOutput[indexinges] = 3
+                            elif GV.dHandValue > hand:
+                                GV.gameOutput[indexinges] = 2
+                            elif GV.dHandValue == hand:
+                                GV.gameOutput[indexinges] = 1
+            elif GV.dDrawTime == 60 or GV.dDrawTime == 30 or GV.dDrawTime == 0:
                 GV.dCardHand.append(GV.cardDeck[0])
                 GV.cardDeck.append(GV.cardDeck[0])
 
@@ -1178,34 +1235,29 @@ class game_functions:
                 (GV.dcardStartPos)[0] += 20
                 (GV.dcardStartPos)[1] += 20
 
-                if GV.dHandValue > 21:
-                    GV.dbust = True
-
-                if len(GV.dCardHand) == 5 or GV.dHandValue == 21:
-                    for indexinges, hand in enumerate(GV.HandValues):
-                        if GV.blackjack[indexinges] == 1 or GV.fiveCardCharlie[indexinges] == 1:
-                            pass
-                        else:
-                            pass
-
-                
-                if GV.dHandValue >= 17:
+                if 21 >= GV.dHandValue and len(GV.dCardHand) == 5:
+                    GV.dDrawTime = -1
+                    GV.dOutcome = True
                     for indexinges, hand in enumerate(GV.HandValues):
                         if hand != 0:
-                            if GV.dHandValue < hand:
-                                GV.gameOutput[indexinges] = 3
-                            elif GV.dHandValue > hand:
-                                GV.gameOutput[indexinges] = 2
-                            elif GV.dHandValue == hand:
+                            if GV.HandState[indexinges] == 4:
                                 GV.gameOutput[indexinges] = 1
-
+                            else:
+                                GV.gameOutput[indexinges] = 2
                 
-                            
+                elif GV.dHandValue > 21:
+                    GV.dDrawTime = -1
+                    GV.dbust = True
+                    GV.dOutcome = True
+                    for indexinges, hand in enumerate(GV.HandValues):
+                        if hand != 0:
+                            GV.gameOutput[indexinges] = 3
+           
 
-                if GV.dDrawTime == -1:
-                    pass
-                else:
-                    GV.dDrawTime -= 1
+            if GV.dDrawTime == -1:
+                pass
+            else:
+                GV.dDrawTime -= 1
 
 
 GF = game_functions()
