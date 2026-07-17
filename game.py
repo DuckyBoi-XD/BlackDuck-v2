@@ -759,7 +759,10 @@ class game_objects:
                     elif gameOutput2:
                         pygame.draw.rect(GV.display, GV.bright_green, rect.inflate(2, 2), width=2, border_radius=3)
                     elif gameOutput3:
-                        pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
+                        if GV.dbust:
+                            pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
+                        else:
+                            pygame.draw.rect(GV.display, GV.bright_orange, rect.inflate(2, 2), width=2, border_radius=3)
 
                     
                 else:
