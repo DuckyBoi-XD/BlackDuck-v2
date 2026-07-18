@@ -1262,7 +1262,54 @@ class game_functions:
             else:
                 GV.dDrawTime -= 1
 
+        if GV.dOutcome:
+            for index, value in enumerate(GV.gameOutput):
+                if value == 1:
+                    if index == range(0,2):
+                        for valuea in GV.gameCHIPS1:
+                            valuea = 0
+                        for valuea in GV.gameChipPos1:
+                            for valueb in GV.chipPositions:
+                                for valuec in valueb:
+                                    if valuea == valuec:
+                                        valueb.remove(valuea)
+                                        print("Remove")
+                    elif index == range(2,4):
+                        for valuea in GV.gameCHIPS2:
+                            valuea = 0
+                        for valuea in GV.gameChipPos1:
+                            for valueb in GV.chipPositions:
+                                for valuec in valueb:
+                                    if valuea == valuec:
+                                        valueb.remove(valuea)
+                                        print("Remove")
+                    
+                elif value == 2:
+                    if index == range(0,2):
+                        pass
+                    elif index == range(2,4):
+                        pass
+                elif value == 3:
+                    if index == range(0,2):
+                        for indexing, valuea in GV.gameCHIPS1:
+                            CHIPS[indexing] += valuea
+                    elif index == range(2,4):
+                        for indexing, valuea in GV.gameCHIPS2:
+                            CHIPS[indexing] += valuea
+                
+                if value == 2 or value == 3:
+                    if index == range(0,2):
+                        for valuea in GV.gameChipPos1:
+                            pass
+                    elif index == range(2,4):
+                        GV.gameChipPos2
 
+                    GV.chipPositions
+                    GV.chipDisplayPriority
+
+            GV.bettingGame = False
+            for value in GV.gameChipPos:
+                value.clear()
 GF = game_functions()
 
 class pygame_function:
