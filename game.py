@@ -893,50 +893,50 @@ class game_functions:
                         GV.dbust = False
                         GV.dStart = True
                         GV.dOutcome = False
+                        if True: # Fold indentation for redefining variables to reset the gamw
+                            GV.cardPositions1 = []
+                            GV.cardPositions2 = []
+                            GV.cardPositions3 = []
+                            GV.cardPositions4 = []
+                            GV.cardPositions = [GV.cardPositions1, GV.cardPositions2, GV.cardPositions3, GV.cardPositions4]
+                            GV.dcardPosition = []
 
-                        GV.cardPositions1 = []
-                        GV.cardPositions2 = []
-                        GV.cardPositions3 = []
-                        GV.cardPositions4 = []
-                        GV.cardPositions = [GV.cardPositions1, GV.cardPositions2, GV.cardPositions3, GV.cardPositions4]
-                        GV.dcardPosition = []
+                            GV.addCard = [0, 0, 0, 0]
+                            GV.daddCard = 0
 
-                        GV.addCard = [0, 0, 0, 0]
-                        GV.daddCard = 0
+                            GV.gameStart = [0, 0, 0, 0]
+                            GV.dTurn = False
+                            GV.dDrawTime = 90
 
-                        GV.gameStart = [0, 0, 0, 0]
-                        GV.dTurn = False
-                        GV.dDrawTime = 90
+                            GV.cardStartPos1 = [120, 240]
+                            GV.cardStartPos2 = [400, 300]
+                            GV.cardStartPos3 = [780, 300]
+                            GV.cardStartPos4 = [1050, 240]
+                            GV.cardStartPos = [GV.cardStartPos1, GV.cardStartPos2, GV.cardStartPos3, GV.cardStartPos4]
+                            GV.dcardStartPos = [594, 80]
 
-                        GV.cardStartPos1 = [120, 240]
-                        GV.cardStartPos2 = [400, 300]
-                        GV.cardStartPos3 = [780, 300]
-                        GV.cardStartPos4 = [1050, 240]
-                        GV.cardStartPos = [GV.cardStartPos1, GV.cardStartPos2, GV.cardStartPos3, GV.cardStartPos4]
-                        GV.dcardStartPos = [594, 80]
+                            GV.CardHand1 = []
+                            GV.CardHand2 = []
+                            GV.CardHand3 = []
+                            GV.CardHand4 = []
+                            GV.CardHands = [GV.CardHand1, GV.CardHand2, GV.CardHand3, GV.CardHand4]
+                            GV.dCardHand = []
 
-                        GV.CardHand1 = []
-                        GV.CardHand2 = []
-                        GV.CardHand3 = []
-                        GV.CardHand4 = []
-                        GV.CardHands = [GV.CardHand1, GV.CardHand2, GV.CardHand3, GV.CardHand4]
-                        GV.dCardHand = []
+                            GV.HandValues = [0, 0, 0, 0]
+                            GV.dHandValue = 0
 
-                        GV.HandValues = [0, 0, 0, 0]
-                        GV.dHandValue = 0
+                            GV.CardValues1 = []
+                            GV.CardValues2 = []
+                            GV.CardValues3 = []
+                            GV.CardValues4 = []
+                            GV.CardValues = [GV.CardValues1, GV.CardValues2, GV.CardValues3, GV.CardValues4]
+                            GV.dCardValues = []
 
-                        GV.CardValues1 = []
-                        GV.CardValues2 = []
-                        GV.CardValues3 = []
-                        GV.CardValues4 = []
-                        GV.CardValues = [GV.CardValues1, GV.CardValues2, GV.CardValues3, GV.CardValues4]
-                        GV.dCardValues = []
-
-                        GV.dbust = False
-                        GV.gamefocus = [0, 0, 0, 0]
-                        GV.HandState = [0, 0, 0, 0] # 1 stand, 2 bust, 3 blackjack, 4 five card charlie
-                        GV.gameOutput = [0, 0, 0, 0] # 1 tie, 2 lose, 3, win
-                        GV.dOutcome = False
+                            GV.dbust = False
+                            GV.gamefocus = [0, 0, 0, 0]
+                            GV.HandState = [0, 0, 0, 0]
+                            GV.gameOutput = [0, 0, 0, 0]
+                            GV.dOutcome = False
 
                         for indexs, value in enumerate(GV.chipBet):
                             if len(value) != 0:
