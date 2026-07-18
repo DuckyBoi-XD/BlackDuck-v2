@@ -688,85 +688,89 @@ class game_objects:
         rect = rect_surface.get_rect(center=(598, 433))
         GV.display.blit(rect_surface, rect)
 
-        for indexa, cardlist in enumerate(GV.cardPositions):
-            for indexb, cardpos in enumerate(cardlist):
+        if GV.bettingGame:
+            for indexa, cardlist in enumerate(GV.cardPositions):
+                for indexb, cardpos in enumerate(cardlist):
 
-                suit_var = int(((GV.CardHands[indexa])[indexb])[0])
-                if len(((GV.CardHands[indexa])[indexb])) == 3:
-                    value_var = int(((GV.CardHands[indexa])[indexb])[1:3])
+                    suit_var = int(((GV.CardHands[indexa])[indexb])[0])
+                    if len(((GV.CardHands[indexa])[indexb])) == 3:
+                        value_var = int(((GV.CardHands[indexa])[indexb])[1:3])
+                    else:
+                        value_var = int(((GV.CardHands[indexa])[indexb])[1])
+
+                    value_var -= 2
+                    card = pygame.transform.smoothscale(pygame.image.load((GV.CardFiles[suit_var][value_var])), (105, 140)).convert_alpha()
+                    rect = card.get_rect(center=(cardpos))
+                    GV.display.blit(card, rect)
+
+                    for i in range(0, 4):
+                        if GV.gameOutput[i] == 1:
+                            if indexa == i:
+                                pygame.draw.rect(GV.display, GV.highlight_yellow, rect.inflate(2, 2), width=2, border_radius=3)
+                        elif GV.gameOutput[i] == 2:
+                            if indexa == i:
+                                pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
+                        elif GV.gameOutput[i] == 3:
+                            if indexa == i:
+                                pygame.draw.rect(GV.display, GV.bright_green, rect.inflate(2, 2), width=2, border_radius=3)
+                        elif GV.HandState[i] == 2:
+                            if indexa == i:
+                                pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
+                        elif GV.HandState[i] == 1:
+                            if indexa == i:
+                                pygame.draw.rect(GV.display, GV.highlight_yellow, rect.inflate(2, 2), width=2, border_radius=3)
+                        elif GV.HandState[i] == 4:
+                            if indexa == i:
+                                pygame.draw.rect(GV.display, GV.highlight_yellow, rect.inflate(2, 2), width=2, border_radius=3)
+                        elif GV.gamefocus[i] == 1:
+                            if indexa == i:
+                                pygame.draw.rect(GV.display, GV.bright_blue, rect.inflate(2, 2), width=2, border_radius=3)
+
+            for indexb, dcard in enumerate(GV.dcardPosition):
+                suit_var = int((GV.dCardHand[indexb])[0])
+                if len((GV.dCardHand[indexb])) == 3:
+                    value_var = int((GV.dCardHand[indexb])[1:3])
                 else:
-                    value_var = int(((GV.CardHands[indexa])[indexb])[1])
+                    value_var = int((GV.dCardHand[indexb])[1])
 
                 value_var -= 2
-                card = pygame.transform.smoothscale(pygame.image.load((GV.CardFiles[suit_var][value_var])), (105, 140)).convert_alpha()
-                rect = card.get_rect(center=(cardpos))
+                
+                if indexb == 0 and GV.dTurn is False:
+                    card = pygame.transform.smoothscale(pygame.image.load("assets/Carddeck/back.png"), (105, 140)).convert_alpha()
+                else:
+                    card = pygame.transform.smoothscale(pygame.image.load((GV.CardFiles[suit_var][value_var])), (105, 140)).convert_alpha()
+                rect = card.get_rect(center=(dcard))
                 GV.display.blit(card, rect)
 
-                for i in range(0, 4):
-                    if GV.gameOutput[i] == 1:
-                        if indexa == i:
-                            pygame.draw.rect(GV.display, GV.highlight_yellow, rect.inflate(2, 2), width=2, border_radius=3)
-                    elif GV.gameOutput[i] == 2:
-                        if indexa == i:
+                if GV.dTurn:
+                    if GV.dDrawTime == -1:
+
+                        '''
+                        print(GV.HandValues)
+                        print(GV.dHandValue)
+                        print(GV.gameOutput)
+                        print()
+                        '''
+
+                        gameOutput1 = all([v == 1 for v in GV.gameOutput if v != 0])    
+                        gameOutput2 = all([v == 2 for v in GV.gameOutput if v != 0])
+                        gameOutput3 = all([v == 3 for v in GV.gameOutput if v != 0])
+
+                        if GV.dbust == 1:
                             pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
-                    elif GV.gameOutput[i] == 3:
-                        if indexa == i:
+                        elif gameOutput1:
+                            pygame.draw.rect(GV.display, GV.highlight_yellow, rect.inflate(2, 2), width=2, border_radius=3)
+                        elif gameOutput2:
                             pygame.draw.rect(GV.display, GV.bright_green, rect.inflate(2, 2), width=2, border_radius=3)
-                    elif GV.HandState[i] == 2:
-                        if indexa == i:
-                            pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
-                    elif GV.HandState[i] == 1:
-                        if indexa == i:
-                            pygame.draw.rect(GV.display, GV.highlight_yellow, rect.inflate(2, 2), width=2, border_radius=3)
-                    elif GV.HandState[i] == 4:
-                        if indexa == i:
-                            pygame.draw.rect(GV.display, GV.highlight_yellow, rect.inflate(2, 2), width=2, border_radius=3)
-                    elif GV.gamefocus[i] == 1:
-                        if indexa == i:
-                            pygame.draw.rect(GV.display, GV.bright_blue, rect.inflate(2, 2), width=2, border_radius=3)
+                        elif gameOutput3:
+                            if GV.dbust:
+                                pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
+                            else:
+                                pygame.draw.rect(GV.display, GV.bright_orange, rect.inflate(2, 2), width=2, border_radius=3)
 
-        for indexb, dcard in enumerate(GV.dcardPosition):
-            suit_var = int((GV.dCardHand[indexb])[0])
-            if len((GV.dCardHand[indexb])) == 3:
-                value_var = int((GV.dCardHand[indexb])[1:3])
-            else:
-                value_var = int((GV.dCardHand[indexb])[1])
-
-            value_var -= 2
-            
-            if indexb == 0 and GV.dTurn is False:
-                card = pygame.transform.smoothscale(pygame.image.load("assets/Carddeck/back.png"), (105, 140)).convert_alpha()
-            else:
-                card = pygame.transform.smoothscale(pygame.image.load((GV.CardFiles[suit_var][value_var])), (105, 140)).convert_alpha()
-            rect = card.get_rect(center=(dcard))
-            GV.display.blit(card, rect)
-
-            if GV.dTurn:
-                if GV.dDrawTime == -1:
-                    print(GV.HandValues)
-                    print(GV.dHandValue)
-                    print(GV.gameOutput)
-                    print()
-                    
-                    gameOutput1 = all([v == 1 for v in GV.gameOutput if v != 0])    
-                    gameOutput2 = all([v == 2 for v in GV.gameOutput if v != 0])
-                    gameOutput3 = all([v == 3 for v in GV.gameOutput if v != 0])
-
-                    if GV.dbust == 1:
-                        pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
-                    elif gameOutput1:
-                        pygame.draw.rect(GV.display, GV.highlight_yellow, rect.inflate(2, 2), width=2, border_radius=3)
-                    elif gameOutput2:
-                        pygame.draw.rect(GV.display, GV.bright_green, rect.inflate(2, 2), width=2, border_radius=3)
-                    elif gameOutput3:
-                        if GV.dbust:
-                            pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
-                        else:
-                            pygame.draw.rect(GV.display, GV.bright_orange, rect.inflate(2, 2), width=2, border_radius=3)
-
-                    
-                else:
-                    pygame.draw.rect(GV.display, GV.bright_blue, rect.inflate(2, 2), width=2, border_radius=3)
+                        
+                    else:
+                        pygame.draw.rect(GV.display, GV.bright_blue, rect.inflate(2, 2), width=2, border_radius=3)
 
 
 GO = game_objects()
@@ -809,8 +813,13 @@ class game_functions:
                         CursorPos_CirclePosy = cursorPosy - ((GV.chipPositions[self.index_var[0]])[self.index_var[1]])[1]
 
                         CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
+
+                        if CursorPos_CirclePos <= GV.chipRadius**2 and GV.bettingGame and GV.dOutcome:
+                            GV.bettingGame = False
+
                         if (self.index_var in GV.chipBet1 or self.index_var in GV.chipBet2) and GV.bettingGame:
                             GV.betChipOverride = True
+
                         if CursorPos_CirclePos <= GV.chipRadius**2 and GV.betChipOverride is False:
                             GV.mouseStartPos = pygame.mouse.get_pos()
                             GV.mousePosChange = True
@@ -884,9 +893,29 @@ class game_functions:
                         GV.dbust = False
                         GV.dStart = True
                         GV.dOutcome = False
+
+                        GV.cardStartPos1 = [120, 240]
+                        GV.cardStartPos2 = [400, 300]
+                        GV.cardStartPos3 = [780, 300]
+                        GV.cardStartPos4 = [1050, 240]
+                        GV.dcardStartPos = [594, 80]
+                        GV.dDrawTime = 90
+                        GV.dHandValue = 0
+                        GV.daddCard = 0
+                        GV.dTurn = False
                         
-                        self.clearlists = [GV.cardPositions, GV.CardValues, GV.CardHands, GV.gameChipPos]
-                        self.clear0lists = [GV.addCard, GV.gameStart, GV.gameBet, GV.gameCHIPS1, GV.gameCHIPS2, GV.HandValues, GV.gamefocus,GV.gameOutput, GV.HandState]
+                        clearlist = [GV.dCardHand, GV.dCardValues, GV.dcardPosition]
+                        clearlists = [GV.cardPositions, GV.CardValues, GV.CardHands, GV.gameChipPos]
+                        clear0lists = [GV.addCard, GV.gameStart, GV.gameBet, GV.gameCHIPS1, GV.gameCHIPS2, GV.HandValues, GV.gamefocus, GV.gameOutput, GV.HandState]
+
+                        for list_var in clearlist:
+                            list_var.clear()
+                        for list_var in clearlists:
+                            for value in list_var:
+                                value.clear()
+                        for list_0 in clear0lists:
+                            for value in list_0:
+                                value = 0
 
                         for indexs, value in enumerate(GV.chipBet):
                             if len(value) != 0:
@@ -1289,6 +1318,7 @@ class game_functions:
                         pass
                     elif index == range(2,4):
                         pass
+
                 elif value == 3:
                     if index == range(0,2):
                         for indexing, valuea in GV.gameCHIPS1:
@@ -1307,7 +1337,6 @@ class game_functions:
                     GV.chipPositions
                     GV.chipDisplayPriority
 
-            GV.bettingGame = False
             for value in GV.gameChipPos:
                 value.clear()
 GF = game_functions()
