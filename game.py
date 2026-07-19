@@ -839,7 +839,6 @@ class game_functions:
 
                     CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
                     if CursorPos_CirclePos <= GV.chipRadius**2 and GV.chipExchangeValue1 == GV.chipExchangeValue2:
-                        GV.exchangeConfirmation = True
 
                         for chips in GV.chipExchange:
                             CHIPS[chips[0]] -= 1
@@ -853,8 +852,6 @@ class game_functions:
                                 CHIPS[index] -= value
                             for index, value in enumerate(GV.gameCHIPS2):
                                 CHIPS[index] -= value
-
-                        print(CHIPS)
 
                         for value in GV.chipPositions:
                             value.clear()
@@ -898,7 +895,7 @@ class game_functions:
                         for list_var in GV.gameCHIPS:
                             for value in list_var:
                                 value = 0
-                        if True: # Fold indentation for redefining variables to reset the gamw
+                        if True: # Fold indentation for redefining variables to reset the game
                             GV.cardPositions1 = []
                             GV.cardPositions2 = []
                             GV.cardPositions3 = []
@@ -944,7 +941,12 @@ class game_functions:
                             GV.dOutcome = False
                             GV.payout = True
 
+                        print(9999, GV.gameCHIPS)
                         print(GV.chipBet)
+                        print(CHIPS)
+                        print()
+
+                        GV.exchangeConfirmation = True
                         for indexs, value in enumerate(GV.chipBet):
                             if len(value) != 0:
                                 for chip in value:
@@ -1395,8 +1397,10 @@ class game_functions:
                     if value == 2:
                         for value in GV.gameChipPos:
                             value.clear()
+                        print(GV.gameChipPos)
                         for value in GV.chipBet:
                             value.clear()
+                        print(GV.chipBet)
                         
                         print()
                         print(GV.gameCHIPS1)
@@ -1410,37 +1414,37 @@ class game_functions:
                         print(6, CHIPS)
 
 
-                GV.payout = False
-                print(CHIPS)
-                
-                for list_var in GV.gameCHIPS:
-                    for value in list_var:
-                        value = 0
-                for value in GV.chipPositions:
-                    value.clear()
-                for index, i in enumerate(CHIPS):
-                    GV.offset = 5
-                    GV.offsetreal = 0
-                    GV.sideOffset = 0
-                    for GV.chipID in range(0, i):
-                        GV.sideOffset = int(str(GV.offset/350)[0]) * 5
-                        GV.offsetreal = GV.offset - int(str(GV.offset/350)[0]) * 350
-                        GV.chipPositions[index].append([((GV.chipStartPositions)[GV.chipValues[index]])[0] - GV.sideOffset, ((GV.chipStartPositions[GV.chipValues[index]])[1] - GV.offsetreal)])
-                        GV.offset += 10
+            GV.payout = False
+            print(CHIPS)
+            
+            for indexious, value in enumerate(GV.gameCHIPS1):
+                GV.gameCHIPS1[indexious] = GV.gameCHIPS2[indexious] = 0
+            print(10000, GV.gameCHIPS1)
+            for value in GV.chipPositions:
+                value.clear()
+            for index, i in enumerate(CHIPS):
+                GV.offset = 5
+                GV.offsetreal = 0
+                GV.sideOffset = 0
+                for GV.chipID in range(0, i):
+                    GV.sideOffset = int(str(GV.offset/350)[0]) * 5
+                    GV.offsetreal = GV.offset - int(str(GV.offset/350)[0]) * 350
+                    GV.chipPositions[index].append([((GV.chipStartPositions)[GV.chipValues[index]])[0] - GV.sideOffset, ((GV.chipStartPositions[GV.chipValues[index]])[1] - GV.offsetreal)])
+                    GV.offset += 10
 
-                if GV.bettingGame:
-                    for index, value in enumerate(GV.chipBet1):
-                        GV.chipPositions[value[0]].append(GV.gameChipPos1[index])
-                    for index, value in enumerate(GV.chipBet2):
-                        GV.chipPositions[value[0]].append(GV.gameChipPos2[index])
+            if GV.bettingGame:
+                for index, value in enumerate(GV.chipBet1):
+                    GV.chipPositions[value[0]].append(GV.gameChipPos1[index])
+                for index, value in enumerate(GV.chipBet2):
+                    GV.chipPositions[value[0]].append(GV.gameChipPos2[index])
 
-                GV.chipDisplayPriority.clear()
+            GV.chipDisplayPriority.clear()
 
-                for indexa, lista in enumerate(GV.chipPositions):
-                    indexb = 0
-                    for indexb, value in enumerate(lista):
-                        GV.chipDisplayPriority.append((indexa, indexb))
-                        indexb
+            for indexa, lista in enumerate(GV.chipPositions):
+                indexb = 0
+                for indexb, value in enumerate(lista):
+                    GV.chipDisplayPriority.append((indexa, indexb))
+                    indexb
 GF = game_functions()
 
 class pygame_function:
