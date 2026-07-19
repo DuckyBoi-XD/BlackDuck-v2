@@ -313,6 +313,7 @@ class game_variable: # Game variables
         self.HandState = [0, 0, 0, 0] # 1 stand, 2 bust, 3 blackjack, 4 five card charlie
         self.gameOutput = [0, 0, 0, 0] # 1 tie, 2 lose, 3, win
         self.dOutcome = False
+        self.payout = False
 
 
 
@@ -893,6 +894,10 @@ class game_functions:
                         GV.dbust = False
                         GV.dStart = True
                         GV.dOutcome = False
+
+                        for list_var in GV.gameCHIPS:
+                            for value in list_var:
+                                value = 0
                         if True: # Fold indentation for redefining variables to reset the gamw
                             GV.cardPositions1 = []
                             GV.cardPositions2 = []
@@ -937,11 +942,12 @@ class game_functions:
                             GV.HandState = [0, 0, 0, 0]
                             GV.gameOutput = [0, 0, 0, 0]
                             GV.dOutcome = False
+                            GV.payout = True
 
+                        print(GV.chipBet)
                         for indexs, value in enumerate(GV.chipBet):
                             if len(value) != 0:
                                 for chip in value:
-                                    print(chip)
                                     GV.gameCHIPS[indexs][chip[0]] += 1
                                     GV.gameChipPos[indexs].append(GV.chipPositions[chip[0]][chip[1]])
                                     GV.gameBet[indexs] += int(GV.chipValues[chip[0]])
@@ -1311,63 +1317,130 @@ class game_functions:
             else:
                 GV.dDrawTime -= 1
 
-        if GV.dOutcome:
+        if GV.dOutcome and GV.payout:
             for index, value in enumerate(GV.gameOutput):
-                if value == 2:
-                    if index in range(0,2):
-                        for valuea in GV.gameCHIPS1:
-                            valuea = 0
+                if value != 0:
+                    if value == 2:
+                        if index in range(0,2):
+                            ''' # Temp
+                            for indexing, valuea in enumerate(GV.gameCHIPS1):
+                                if valuea > 0:
+                                    print("remove 1-2")
+                                    CHIPS[indexing] -= valuea
+                            '''
 
-                        for valuea in GV.gameChipPos1:
-                            for indexa, valueb in enumerate(GV.chipPositions):
-                                for indexb, valuec in enumerate(valueb):
-                                    if valuea == valuec:
-                                        valueb.remove(valuea)
+                            for valuea in GV.gameCHIPS1:
+                                valuea = 0
 
-                                        for indexation in GV.chipDisplayPriority:
-                                            print(indexation)
-                                            print((indexa, indexb))
-                                            if indexation == (indexa, indexb):
-                                                GV.chipDisplayPriority.remove(indexation)
+                            for valuea in GV.gameChipPos1:
+                                for indexa, valueb in enumerate(GV.chipPositions):
+                                    for indexb, valuec in enumerate(valueb):
+                                        if valuea == valuec:
+                                            valueb.remove(valuea)
 
-                    elif index in range(2,4):
-                        for valuea in GV.gameCHIPS2:
-                            valuea = 0
-                        for valuea in GV.gameChipPos1:
-                            for valueb in GV.chipPositions:
-                                for valuec in valueb:
-                                    if valuea == valuec:
-                                        valueb.remove(valuea)
-                                        print("Remove")
+                                            for indexation in GV.chipDisplayPriority:
+                                                if indexation == (indexa, indexb):
+                                                    GV.chipDisplayPriority.remove(indexation)
+
+                        elif index in range(2,4):
+
+                            ''' # Temp
+                            for indexing, valuea in enumerate(GV.gameCHIPS2):
+                                if valuea > 0:
+                                    print("remove 3-4")
+                                    CHIPS[indexing] -= valuea
+                            '''
+
+                            for valuea in GV.gameCHIPS2:
+                                valuea = 0
+
+                            for valuea in GV.gameChipPos2:
+                                for indexa, valueb in enumerate(GV.chipPositions):
+                                    for indexb, valuec in enumerate(valueb):
+                                        if valuea == valuec:
+                                            valueb.remove(valuea)
+
+                                            for indexation in GV.chipDisplayPriority:
+                                                if indexation == (indexa, indexb):
+                                                    GV.chipDisplayPriority.remove(indexation)
+                        print(1, CHIPS)
+
+                        GV.payout = False
+                        
+                    elif value == 1:
+                        pass
+
+                    elif value == 3:
+                        if index in range(0,2):
+                            print(GV.gameCHIPS1)
+                            for indexing, valuea in enumerate(GV.gameCHIPS1):
+                                if valuea > 0:
+                                    CHIPS[indexing] += valuea
+                                    print("Add")
+                        elif index in range(2,4):
+                            for indexing, valuea in enumerate(GV.gameCHIPS2):
+                                if valuea > 0:
+                                    CHIPS[indexing] += valuea
+                                    print("Add")
+                        GV.payout = False
+                        print(4, CHIPS)
                     
-                elif value == 1:
-                    if index in range(0,2):
-                        pass
-                    elif index in range(2,4):
-                        pass
+                    if value == 1 or value == 3:
+                        if index in range(0,2):
+                            for valuea in GV.gameChipPos1:
+                                pass
+                        elif index in range(2,4):
+                            GV.gameChipPos2
 
-                elif value == 3:
-                    if index in range(0,2):
-                        for indexing, valuea in GV.gameCHIPS1:
-                            CHIPS[indexing] += valuea
-                    elif index in range(2,4):
-                        for indexing, valuea in GV.gameCHIPS2:
-                            CHIPS[indexing] += valuea
+                    if value == 2:
+                        for value in GV.gameChipPos:
+                            value.clear()
+                        for value in GV.chipBet:
+                            value.clear()
+                        
+                        print()
+                        print(GV.gameCHIPS1)
+                        print(GV.gameCHIPS2)
+                        print()
+
+                        for index, value in enumerate(GV.gameCHIPS1):
+                            CHIPS[index] -= value
+                        for index, value in enumerate(GV.gameCHIPS2):
+                            CHIPS[index] -= value
+                        print(6, CHIPS)
+
+
+                GV.payout = False
+                print(CHIPS)
                 
-                if value == 1 or value == 3:
-                    if index in range(0,2):
-                        for valuea in GV.gameChipPos1:
-                            pass
-                    elif index in range(2,4):
-                        GV.gameChipPos2
+                for list_var in GV.gameCHIPS:
+                    for value in list_var:
+                        value = 0
+                for value in GV.chipPositions:
+                    value.clear()
+                for index, i in enumerate(CHIPS):
+                    GV.offset = 5
+                    GV.offsetreal = 0
+                    GV.sideOffset = 0
+                    for GV.chipID in range(0, i):
+                        GV.sideOffset = int(str(GV.offset/350)[0]) * 5
+                        GV.offsetreal = GV.offset - int(str(GV.offset/350)[0]) * 350
+                        GV.chipPositions[index].append([((GV.chipStartPositions)[GV.chipValues[index]])[0] - GV.sideOffset, ((GV.chipStartPositions[GV.chipValues[index]])[1] - GV.offsetreal)])
+                        GV.offset += 10
 
-                    GV.chipPositions
-                    GV.chipDisplayPriority
+                if GV.bettingGame:
+                    for index, value in enumerate(GV.chipBet1):
+                        GV.chipPositions[value[0]].append(GV.gameChipPos1[index])
+                    for index, value in enumerate(GV.chipBet2):
+                        GV.chipPositions[value[0]].append(GV.gameChipPos2[index])
 
-            for value in GV.gameChipPos:
-                value.clear()
-            for value in GV.chipBet:
-                value.clear()
+                GV.chipDisplayPriority.clear()
+
+                for indexa, lista in enumerate(GV.chipPositions):
+                    indexb = 0
+                    for indexb, value in enumerate(lista):
+                        GV.chipDisplayPriority.append((indexa, indexb))
+                        indexb
 GF = game_functions()
 
 class pygame_function:
@@ -1402,6 +1475,9 @@ class pygame_function:
         if self.on_init() == False:
             GV._running = False 
         while(GV._running):
+            for i in CHIPS:
+                if i < 0:
+                    print("AHHHHHHH")
             self.FPS.tick(self.fps)
             GF.move_chip()
             GF.betting_area()
