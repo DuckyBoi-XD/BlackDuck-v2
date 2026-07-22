@@ -1366,17 +1366,19 @@ class game_functions:
                         for indexing, valuea in enumerate(gameCHIPSVar):
                             if valuea > 0:
                                 CHIPS[indexing] += valuea
-                                print("Add")
 
                     elif value == 2:
                         pass
 
                     elif value == 3:
-                        for j in range(0, 2):
+                        if GV.HandState[index] == 3 or GV.HandState[index] == 4:
                             for indexing, valuea in enumerate(gameCHIPSVar):
                                 if valuea > 0:
-                                    CHIPS[indexing] += valuea
-                                    print("Add")
+                                    CHIPS[indexing] += valuea * 3
+                        else:
+                            for indexing, valuea in enumerate(gameCHIPSVar):
+                                if valuea > 0:
+                                    CHIPS[indexing] += valuea * 2
 
 
                     gameChipPosVar.clear()
