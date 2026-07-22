@@ -96,7 +96,7 @@ def save_game(money_value = None, chip_info = None):
         f.write(encoded_bytes)
 
 MONEY, CHIPS = load_game()
-CHIPS = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+CHIPS = [0, 0, 0, 6, 0, 0, 0, 0, 0, 0]
 debug_var = True
 
 def cosd(x):
@@ -710,13 +710,11 @@ class game_objects:
                     rect = card.get_rect(center=(cardpos))
                     GV.display.blit(card, rect)
 
-                    print(GV.gameOutput)
                     for i in range(0, 4):
                         if GV.gameOutput[i] == 1:
                             if indexa == i:
                                 pygame.draw.rect(GV.display, GV.highlight_yellow, rect.inflate(2, 2), width=2, border_radius=3)
                         elif GV.gameOutput[i] == 2:
-                            print("trigger")
                             if indexa == i:
                                 pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
                         elif GV.gameOutput[i] == 3:
@@ -855,8 +853,8 @@ class game_functions:
                         for index, i in enumerate(GV.chipSmallExchangeListtemp):
                             CHIPS[index] += i
 
-                        for value in GV.chipPositions:
-                            value.clear()
+                        for index, value in enumerate(GV.chipPositions):
+                            GV.chipPositions[index].clear()
                         for index, i in enumerate(CHIPS):
                             GV.offset = 5
                             GV.offsetreal = 0
@@ -1326,7 +1324,7 @@ class game_functions:
                     GV.dbust = True
                     GV.dOutcome = True
                     for indexinges, hand in enumerate(GV.HandValues):
-                        if hand != 0:
+                        if hand != 0 and GV.gameOutput[indexinges] != 2:
                             GV.gameOutput[indexinges] = 3
            
 
