@@ -137,6 +137,16 @@ class game_variable: # Game variables
         self.darkblue_colour = (13, 23, 67)
         self.darkorange_colour = (239, 142, 0)
 
+        self.button_blue = (34, 87, 122)
+        self.button_blue2 = (56, 163, 165)
+        self.button_green = (87, 204, 153)
+        self.button_green2 = (128, 237, 153)
+
+        self.button_blue_dark = (17, 43, 61)
+        self.button_blue2_dark = (28, 81, 82)
+        self.button_green_dark = (34, 112, 78)
+        self.button_green2_dark = (23, 160, 54)
+
         self._running = True
 
         self.chipRadius = 40
@@ -321,12 +331,9 @@ class game_variable: # Game variables
         self.dOutcome = False
         self.payout = False
 
-
-
-
-
-
-
+        self.gameBetChipValue = [0, 0, 0, 0]
+        self.splitActivation1 = False
+        self.splitActivation2 = False
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -453,7 +460,7 @@ class game_objects:
                 else:
                     chipOutlineColour = GV.yellow_colour
                     chipOutlineWidth = 2
-            elif index_var in GV.chipBet2 or index_var in GV.chipBet3 or index_var in GV.chipExchange:
+            elif index_var in GV.chipBet1 or index_var in GV.chipBet2 or index_var in GV.chipBet3 or index_var in GV.chipBet4 or index_var in GV.chipExchange:
                 chipOutlineColour = GV.bright_green
                 chipOutlineWidth = 2
             elif GV.chipValueColours[index_var[0]] == GV.black_colour or GV.chipValueColours[index_var[0]] == GV.blue_colour:
@@ -616,9 +623,9 @@ class game_objects:
         # Bet Functions
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
         if GV.BET_HIT_Button:
-            pygame.draw.rect(box_surface, GV.green_colour, (0, 0, 76, 50.5))
+            pygame.draw.rect(box_surface, GV.button_green2, (0, 0, 76, 50.5))
         else:
-            pygame.draw.rect(box_surface, GV.darkgreen_colour, (0, 0, 76, 50.5))
+            pygame.draw.rect(box_surface, GV.button_green2_dark, (0, 0, 76, 50.5))
         rect = box_surface.get_rect(center=(598, 508.75))
         GV.display.blit(box_surface, rect)
 
@@ -638,9 +645,9 @@ class game_objects:
 
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
         if GV.STAND_Button and GV.bettingGame:
-            pygame.draw.rect(box_surface, GV.red_colour, (0, 0, 76, 50.5))
+            pygame.draw.rect(box_surface, GV.button_green, (0, 0, 76, 50.5))
         else:
-            pygame.draw.rect(box_surface, GV.darkred_colour, (0, 0, 76, 50.5))
+            pygame.draw.rect(box_surface, GV.button_green_dark, (0, 0, 76, 50.5))
         rect = box_surface.get_rect(center=(598, 458.5))
         GV.display.blit(box_surface, rect)
 
@@ -657,9 +664,11 @@ class game_objects:
 
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
         if GV.DOUBLEDOWN_Button and GV.bettingGame:
-            pygame.draw.rect(box_surface, GV.blue_colour, (0, 0, 76, 50.5))
+            pygame.draw.rect(box_surface, GV.button_blue2, (0, 0, 76, 50.5))
+        elif GV.bettingGame:
+            pygame.draw.rect(box_surface, GV.darkred_colour, (0, 0, 76, 51))
         else:
-            pygame.draw.rect(box_surface, GV.darkblue_colour, (0, 0, 76, 50.5))
+            pygame.draw.rect(box_surface, GV.button_blue2_dark, (0, 0, 76, 50.5))
         rect = box_surface.get_rect(center=(598, 407.75))
         GV.display.blit(box_surface, rect)
 
@@ -678,10 +687,28 @@ class game_objects:
         
 
         box_surface = pygame.Surface((76, 51), pygame.SRCALPHA)
-        if GV.SPLIT_Button and GV.bettingGame:
-            pygame.draw.rect(box_surface, GV.orange_colour, (0, 0, 76, 51))
+        if GV.bettingGame:
+            for indexs, value in enumerate(GV.gamefocus):
+                if value == 1:
+                    if indexs == 1:
+                        if GV.splitActivation1:
+                            temp_box_colour = GV.button_blue_dark
+                        else:
+                            temp_box_colour = GV.darkred_colour
+                    elif indexs == 2:
+                        if GV.splitActivation2:
+                            temp_box_colour = GV.button_blue_dark
+                        else:
+                            temp_box_colour = GV.darkred_colour
+                    else:
+                        temp_box_colour = GV.darkred_colour
+                else:
+                    temp_box_colour = GV.darkred_colour
+        elif GV.SPLIT_Button and GV.bettingGame:
+            temp_box_colour = GV.button_blue
         else:
-            pygame.draw.rect(box_surface, GV.darkorange_colour, (0, 0, 76, 51))
+            temp_box_colour = GV.button_blue_dark
+        pygame.draw.rect(box_surface, temp_box_colour, (0, 0, 76, 51))
         rect = box_surface.get_rect(center=(598, 357.25))
         GV.display.blit(box_surface, rect)
 
@@ -942,6 +969,10 @@ class game_functions:
                             GV.dOutcome = False
                             GV.payout = True
 
+                            GV.gameBetChipValue = [0, 0, 0, 0]
+                            GV.splitActivation1 = False
+                            GV.splitActivation2 = False
+
                         print(9999, GV.gameCHIPS)
                         print(GV.chipBet)
                         print(CHIPS)
@@ -1047,6 +1078,8 @@ class game_functions:
             exchange_remove = True
             bet1_remove = True
             bet2_remove = True
+            bet3_remove = True
+            bet4_remove = True
             for position in GV.chipExchangePosChords:
                 if 636.8793960430015 <= chipPositionx <= position[0] and -100 <= chipPositiony <= position[1]:
                     exchange_remove = False
@@ -1069,13 +1102,24 @@ class game_functions:
             rectRotatedy2 = rectCentrex2 * sind(5) + rectCentrey2 * cosd(5)
 
             if -75 <= rectRotatedx1 <= 75 and -100 <= rectRotatedy1 <= 100:
-                bet1_remove = False
+                bet2_remove = False
+
+                if len(GV.CardHands[1]) == 2:
+                    bet1_remove = False
+                    if self.indexChipPosition not in GV.chipBet1:
+                        GV.chipBet1.append(self.indexChipPosition)
+
                 if self.indexChipPosition not in GV.chipBet2 and GV.bettingGame is False:
                     GV.chipBet2.append(self.indexChipPosition)
 
                 
             elif -75 <= rectRotatedx2 <= 75 and -100 <= rectRotatedy2 <= 100:
-                bet2_remove = False
+                bet3_remove = False
+
+                if len(GV.CardHands[2]) == 2:
+                    bet4_remove = False
+                    if self.indexChipPosition not in GV.chipBet4:
+                        GV.chipBet4.append(self.indexChipPosition)
                 if self.indexChipPosition not in GV.chipBet3 and GV.bettingGame is False:
                     GV.chipBet3.append(self.indexChipPosition)
 
@@ -1086,19 +1130,36 @@ class game_functions:
 
                 if not GV.chipExchange:
                     GV.chipExchangeOn = False
-                    GV.chipExchangeValue1 = 0
+                    GV.chipExchangeValue = 0
                     GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
                     GV.chipExchangeStr1 = None
 
             if bet1_remove == True:
+                if self.indexChipPosition in GV.chipBet1: 
+                    GV.chipBet1.remove(self.indexChipPosition)
+            if bet2_remove == True:
                 if self.indexChipPosition in GV.chipBet2: 
                     GV.chipBet2.remove(self.indexChipPosition)
-            if bet2_remove == True:
+            if bet3_remove == True:
                 if self.indexChipPosition in GV.chipBet3: 
                     GV.chipBet3.remove(self.indexChipPosition)
+            if bet4_remove == True:
+                if self.indexChipPosition in GV.chipBet4: 
+                    GV.chipBet4.remove(self.indexChipPosition)
+
+        for indexs, list_var in enumerate(GV.chipBet):
+            if list_var:
+                for value in list_var:
+                    GV.gameBetChipValue[indexs] += int((GV.chipValues)[value[0]])
+
+        if GV.gameBetChipValue[0] == GV.gameBetChipValue[1]:
+            GV.splitActivation1 = True
+        if GV.gameBetChipValue[2] == GV.gameBetChipValue[3]:
+            GV.splitActivation2 = True
 
     def blackjack(self):
         for index, value in enumerate(GV.gameStart[1:3]):
+            print(GV.chipBet)
             if value == 1 and (GV.addCard[1:3][index]) == 1:
                 index += 1
                 for i in range(0,2):
