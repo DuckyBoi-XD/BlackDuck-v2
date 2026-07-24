@@ -692,7 +692,6 @@ class game_objects:
         
 
         box_surface = pygame.Surface((76, 51), pygame.SRCALPHA)
-        print(GV.bettingGame)
         temp_box_colour = GV.yellow_colour
         if GV.bettingGame:
             if GV.gamefocus[1] == 1:
@@ -786,13 +785,6 @@ class game_objects:
 
                 if GV.dTurn:
                     if GV.dDrawTime == -1:
-
-                        ''' score debug
-                        print(GV.HandValues)
-                        print(GV.dHandValue)
-                        print(GV.gameOutput)
-                        print()
-                        '''
 
                         gameOutput1 = all([v == 1 for v in GV.gameOutput if v != 0])    
                         gameOutput2 = all([v == 2 for v in GV.gameOutput if v != 0])
@@ -927,9 +919,9 @@ class game_functions:
                         GV.dStart = True
                         GV.dOutcome = False
 
-                        for list_var in GV.gameCHIPS:
-                            for value in list_var:
-                                value = 0
+                        for indexsa, list_var in enumerate(GV.gameCHIPS):
+                            for indexsb, value in enumerate(list_var):
+                                (GV.gameCHIPS[indexsa])[indexsb] = 0
                         if True: # Fold indentation for redefining variables to reset the game
                             GV.gameBet = [0, 0, 0, 0]
                             GV.cardPositions1 = []
@@ -985,34 +977,21 @@ class game_functions:
                             GV.splitOverride1 = False
                             GV.splitOverride2 = False
 
-                        print(9999, GV.gameCHIPS)
-                        print(GV.chipBet)
-                        print(CHIPS)
-                        print(GV.chipPositions)
-                        print()
-
                         GV.exchangeConfirmation = True
+                        print(GV.chipBet)
                         for indexs, value in enumerate(GV.chipBet):
                             if len(value) != 0:
                                 for chip in value:
-                                    print(chip)
-                                    print(value)
-                                    print(chip[0])
-                                    print(chip[1])
-                                    print(GV.chipPositions[chip[0]][chip[1]])
                                     GV.gameCHIPS[indexs][chip[0]] += 1
                                     GV.gameChipPos[indexs].append(GV.chipPositions[chip[0]][chip[1]])
                                     GV.gameBet[indexs] += int(GV.chipValues[chip[0]])
                                     GV.bettingGame = True
                                     GV.addCard[indexs] = 1
                                     GV.gameStart[indexs] = 1
-                        for index, value in enumerate(GV.gameCHIPS2):
-                            CHIPS[index] -= value
-                        for index, value in enumerate(GV.gameCHIPS3):
-                            CHIPS[index] -= value
 
-                        print(GV.gameBet)
-                        print(GV.gameStart)
+                        for indexa, list_var in enumerate(GV.gameCHIPS):
+                            for indexb, value in enumerate(list_var):
+                                CHIPS[indexb] -= value
                         
                         if len(GV.chipBet2) != 0:
                             GV.gamefocus[1] = 1
@@ -1043,9 +1022,18 @@ class game_functions:
                         if GV.gamefocus[1] == 1:
                             if GV.splitActivation1:
                                 GV.splitConfirmation1 = True
+                                for chip in GV.chipBet1:
+                                    GV.gameCHIPS[0][chip[0]] += 1
+                                print(GV.chipBet1)
+                                print(GV.gameCHIPS)
+
                         elif GV.gamefocus[2] == 1:
                             if GV.splitActivation2:
                                 GV.splitConfirmation2 = True
+                                for chip in GV.chipBet4:
+                                    GV.gameCHIPS[3][chip[0]] += 1
+                                print(GV.chipBet4)
+                                print(GV.gameCHIPS)
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
@@ -1134,7 +1122,7 @@ class game_functions:
 
                 if len(GV.CardHands[1]) == 2:
                     bet1_remove = False
-                    if self.indexChipPosition not in GV.chipBet1 and self.indexChipPosition not in GV.chipBet2:
+                    if self.indexChipPosition not in GV.chipBet1 and self.indexChipPosition not in GV.chipBet2 and not GV.splitOverride1 and GV.bettingGame:
                         GV.chipBet1.append(self.indexChipPosition)
 
                 if self.indexChipPosition not in GV.chipBet2 and GV.bettingGame is False:
@@ -1146,7 +1134,7 @@ class game_functions:
 
                 if len(GV.CardHands[2]) == 2:
                     bet4_remove = False
-                    if self.indexChipPosition not in GV.chipBet4 and self.indexChipPosition not in GV.chipBet3:
+                    if self.indexChipPosition not in GV.chipBet4 and self.indexChipPosition not in GV.chipBet3 and not GV.splitOverride2 and GV.bettingGame:
                         GV.chipBet4.append(self.indexChipPosition)
 
                 if self.indexChipPosition not in GV.chipBet3 and GV.bettingGame is False:
@@ -1196,10 +1184,10 @@ class game_functions:
 
     def blackjack(self):
         for index, value in enumerate(GV.gameStart[1:3]):
-            print(GV.chipBet)
             if value == 1 and (GV.addCard[1:3][index]) == 1:
                 index += 1
                 for i in range(0,2):
+                    print(index)
                     GV.CardHands[index].append(GV.cardDeck[0])
                     GV.cardDeck.append(GV.cardDeck[0])
 
@@ -1227,7 +1215,6 @@ class game_functions:
                 GV.gameStart[index] = 0
         
         if GV.dStart:
-            print(CHIPS)
             for i in range(0,2):
                 GV.dCardHand.append(GV.cardDeck[0])
                 GV.cardDeck.append(GV.cardDeck[0])
@@ -1289,7 +1276,7 @@ class game_functions:
                     GV.gameStart[index] = 0
 
                 elif index == 1 and GV.splitConfirmation1 and not GV.splitOverride1:
-                    # Adds second card of the other hnad ---
+                    # Adds second card of the other hand ---
                     GV.CardHands[0].append((GV.CardHands[index])[-1])
 
                     if len((GV.CardHands[index])[-1]) == 3:
@@ -1311,10 +1298,8 @@ class game_functions:
                     (GV.cardStartPos[0])[0] += 20
                     (GV.cardStartPos[0])[1] -= 20
 
+                    print(123456789, GV.CardHands[0])
                     #---
-
-
-
                     GV.CardHands[index].pop(-1)
                     GV.cardPositions[index].pop(-1)
                     (GV.cardStartPos[index])[0] -= 20
@@ -1383,6 +1368,8 @@ class game_functions:
                     print(GV.CardValues)
                     print(GV.HandValues)
                     print(GV.cardPositions)
+                    print(GV.addCard)
+                    print(GV.gameStart)
                     print("|----------|")
 
 
@@ -1537,12 +1524,13 @@ class game_functions:
         if GV.dOutcome and GV.payout:
             print("--------------")
             print(GV.gameOutput)
-            print()
             print(CHIPS)
+            print()
             print(GV.gameCHIPS1)
             print(GV.gameCHIPS2)
             print(GV.gameCHIPS3)
             print(GV.gameCHIPS4)
+            print()
             for index, value in enumerate(GV.gameOutput):
                 if value != 0: 
 
@@ -1588,7 +1576,6 @@ class game_functions:
                         gameCHIPSVar[indexation] = 0
 
             GV.payout = False
-            print(CHIPS)
     
             for indexation, value in enumerate(GV.chipPositions):
                 GV.chipPositions[indexation].clear()
@@ -1609,8 +1596,10 @@ class game_functions:
                 for indexb, value in enumerate(lista):
                     GV.chipDisplayPriority.append((indexa, indexb))
                     indexb
+            
+            for indexa, temp in enumerate(GV.chipBet):
+                    GV.chipBet[indexa].clear()
 
-            print(GV.chipDisplayPriority)
             print()
             print("--------------")
             print(CHIPS)
