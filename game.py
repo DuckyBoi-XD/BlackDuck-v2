@@ -334,6 +334,11 @@ class game_variable: # Game variables
         self.gameBetChipValue = [0, 0, 0, 0]
         self.splitActivation1 = False
         self.splitActivation2 = False
+        self.splitConfirmation1 = False
+        self.splitConfirmation2 = False
+        self.splitOverride1 = False
+        self.splitOverride2 = False
+
 
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -451,7 +456,7 @@ class game_objects:
             chipOutlineColour = None
             chipOutlineWidth = None
             if GV.mousePosChange and index_var == GV.chipDisplayPriority[-1]:
-                if index_var in GV.chipBet2 or index_var in GV.chipBet3 or index_var in GV.chipExchange:
+                if index_var in GV.chipBet1 or index_var in GV.chipBet2 or index_var in GV.chipBet3 or index_var in GV.chipBet4 or index_var in GV.chipExchange:
                     chipOutlineColour = GV.yellow_green
                     chipOutlineWidth = 2
                 elif GV.chipValueColours[index_var[0]] == GV.yellow_colour:
@@ -687,25 +692,28 @@ class game_objects:
         
 
         box_surface = pygame.Surface((76, 51), pygame.SRCALPHA)
+        print(GV.bettingGame)
+        temp_box_colour = GV.yellow_colour
         if GV.bettingGame:
-            for indexs, value in enumerate(GV.gamefocus):
-                if value == 1:
-                    if indexs == 1:
-                        if GV.splitActivation1:
-                            temp_box_colour = GV.button_blue_dark
-                        else:
-                            temp_box_colour = GV.darkred_colour
-                    elif indexs == 2:
-                        if GV.splitActivation2:
-                            temp_box_colour = GV.button_blue_dark
-                        else:
-                            temp_box_colour = GV.darkred_colour
+            if GV.gamefocus[1] == 1:
+                if GV.splitActivation1:
+                    if GV.SPLIT_Button:
+                        temp_box_colour = GV.button_blue
                     else:
-                        temp_box_colour = GV.darkred_colour
+                        temp_box_colour = GV.button_blue_dark
                 else:
                     temp_box_colour = GV.darkred_colour
-        elif GV.SPLIT_Button and GV.bettingGame:
-            temp_box_colour = GV.button_blue
+            elif GV.gamefocus[2] == 1:
+                if GV.splitActivation2:
+                    if GV.SPLIT_Button:
+                        temp_box_colour = GV.button_blue
+                    else:
+                        temp_box_colour = GV.button_blue_dark
+                else:
+                    temp_box_colour = GV.darkred_colour
+            else:
+                temp_box_colour = GV.darkred_colour
+            
         else:
             temp_box_colour = GV.button_blue_dark
         pygame.draw.rect(box_surface, temp_box_colour, (0, 0, 76, 51))
@@ -851,7 +859,7 @@ class game_functions:
                         if CursorPos_CirclePos <= GV.chipRadius**2 and GV.bettingGame and GV.dOutcome:
                             GV.bettingGame = False
 
-                        if (self.index_var in GV.chipBet2 or self.index_var in GV.chipBet3) and GV.bettingGame:
+                        if (self.index_var in GV.chipBet1 or self.index_var in GV.chipBet2 or self.index_var in GV.chipBet3 or self.index_var in GV.chipBet4) and GV.bettingGame:
                             GV.betChipOverride = True
 
                         if CursorPos_CirclePos <= GV.chipRadius**2 and GV.betChipOverride is False:
@@ -972,6 +980,10 @@ class game_functions:
                             GV.gameBetChipValue = [0, 0, 0, 0]
                             GV.splitActivation1 = False
                             GV.splitActivation2 = False
+                            GV.splitConfirmation1 = False
+                            GV.splitConfirmation2 = False
+                            GV.splitOverride1 = False
+                            GV.splitOverride2 = False
 
                         print(9999, GV.gameCHIPS)
                         print(GV.chipBet)
@@ -1008,16 +1020,32 @@ class game_functions:
                             GV.gamefocus[2] = 1
 
                     elif GV.BET_HIT_Button and GV.bettingGame:
-                        if GV.gamefocus[1] == 1:
+                        if GV.gamefocus[0] == 1:
+                            GV.addCard[0] = 1
+                        elif GV.gamefocus[1] == 1:
                             GV.addCard[1] = 1
                         elif GV.gamefocus[2] == 1:
                             GV.addCard[2] = 1
+                        elif GV.gamefocus[3] == 1:
+                            GV.addCard[3] = 1
 
                     elif GV.STAND_Button and GV.bettingGame:
-                        if GV.gamefocus[1] == 1:
+                        if GV.gamefocus[0] == 1:
+                            GV.HandState[0] = 1
+                        elif GV.gamefocus[1] == 1:
                             GV.HandState[1] = 1
                         elif GV.gamefocus[2] == 1:
                             GV.HandState[2] = 1
+                        elif GV.gamefocus[3] == 1:
+                            GV.HandState[3] = 1
+                    
+                    elif GV.SPLIT_Button and GV.bettingGame:
+                        if GV.gamefocus[1] == 1:
+                            if GV.splitActivation1:
+                                GV.splitConfirmation1 = True
+                        elif GV.gamefocus[2] == 1:
+                            if GV.splitActivation2:
+                                GV.splitConfirmation2 = True
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
@@ -1106,7 +1134,7 @@ class game_functions:
 
                 if len(GV.CardHands[1]) == 2:
                     bet1_remove = False
-                    if self.indexChipPosition not in GV.chipBet1:
+                    if self.indexChipPosition not in GV.chipBet1 and self.indexChipPosition not in GV.chipBet2:
                         GV.chipBet1.append(self.indexChipPosition)
 
                 if self.indexChipPosition not in GV.chipBet2 and GV.bettingGame is False:
@@ -1118,8 +1146,9 @@ class game_functions:
 
                 if len(GV.CardHands[2]) == 2:
                     bet4_remove = False
-                    if self.indexChipPosition not in GV.chipBet4:
+                    if self.indexChipPosition not in GV.chipBet4 and self.indexChipPosition not in GV.chipBet3:
                         GV.chipBet4.append(self.indexChipPosition)
+
                 if self.indexChipPosition not in GV.chipBet3 and GV.bettingGame is False:
                     GV.chipBet3.append(self.indexChipPosition)
 
@@ -1148,14 +1177,22 @@ class game_functions:
                     GV.chipBet4.remove(self.indexChipPosition)
 
         for indexs, list_var in enumerate(GV.chipBet):
+            GV.gameBetChipValue[indexs] = 0
             if list_var:
                 for value in list_var:
                     GV.gameBetChipValue[indexs] += int((GV.chipValues)[value[0]])
 
-        if GV.gameBetChipValue[0] == GV.gameBetChipValue[1]:
-            GV.splitActivation1 = True
-        if GV.gameBetChipValue[2] == GV.gameBetChipValue[3]:
-            GV.splitActivation2 = True
+        if GV.gameBetChipValue[0] == GV.gameBetChipValue[1] and GV.CardValues2 and not GV.splitOverride1:
+            if GV.CardValues2[0] == GV.CardValues2[1]:
+                GV.splitActivation1 = True
+        else:
+            GV.splitActivation1 = False
+
+        if GV.gameBetChipValue[2] == GV.gameBetChipValue[3] and GV.CardValues3 and not GV.splitOverride2:
+            if GV.CardValues3[0] == GV.CardValues3[1]:
+                GV.splitActivation2 = True
+        else:
+            GV.splitActivation2 = False
 
     def blackjack(self):
         for index, value in enumerate(GV.gameStart[1:3]):
@@ -1250,6 +1287,109 @@ class game_functions:
 
                     GV.addCard[index] = 0
                     GV.gameStart[index] = 0
+
+                elif index == 1 and GV.splitConfirmation1 and not GV.splitOverride1:
+                    # Adds second card of the other hnad ---
+                    GV.CardHands[0].append((GV.CardHands[index])[-1])
+
+                    if len((GV.CardHands[index])[-1]) == 3:
+                        GV.CardValues[0].append(int(GV.Values[int((GV.cardDeck[0])[1:3])-2]))
+                    else:    
+                        GV.CardValues[0].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
+
+                    for indexing, value in enumerate(GV.CardValues[0]):
+                        GV.HandValues[0] = sum(GV.CardValues[0])
+                        if GV.HandValues[0] > 21:
+                            if value == 11:
+                                (GV.CardValues[0])[indexing] = 1
+                        else:
+                            break
+                    
+                    GV.HandValues[0] = sum(GV.CardValues[0])
+
+                    GV.cardPositions[0].append(RICD((GV.cardStartPos[0])[0], (GV.cardStartPos[0])[1]))
+                    (GV.cardStartPos[0])[0] += 20
+                    (GV.cardStartPos[0])[1] -= 20
+
+                    #---
+
+
+
+                    GV.CardHands[index].pop(-1)
+                    GV.cardPositions[index].pop(-1)
+                    (GV.cardStartPos[index])[0] -= 20
+                    (GV.cardStartPos[index])[1] += 20
+                    GV.CardValues[index].pop(-1)
+
+                    
+                    # first hand card replce ---
+                    GV.CardHands[index].append(GV.cardDeck[0])
+                    GV.cardDeck.append(GV.cardDeck[0])
+
+                    if len(GV.cardDeck[0]) == 3:
+                        GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1:3])-2]))
+                    else:    
+                        GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
+
+                    for indexing, value in enumerate(GV.CardValues[index]):
+                        GV.HandValues[index] = sum(GV.CardValues[index])
+                        if GV.HandValues[index] > 21:
+                            if value == 11:
+                                (GV.CardValues[index])[indexing] = 1
+                        else:
+                            break
+                    
+                    GV.HandValues[index] = sum(GV.CardValues[index])
+
+                    GV.cardDeck.pop(0)
+                    GV.cardPositions[index].append(RICD((GV.cardStartPos[index])[0], (GV.cardStartPos[index])[1]))
+                    (GV.cardStartPos[index])[0] += 20
+                    (GV.cardStartPos[index])[1] -= 20
+                    # ---
+
+
+                    # second hand card add ---
+                    GV.CardHands[0].append(GV.cardDeck[0])
+                    GV.cardDeck.append(GV.cardDeck[0])
+
+                    if len(GV.cardDeck[0]) == 3:
+                        GV.CardValues[0].append(int(GV.Values[int((GV.cardDeck[0])[1:3])-2]))
+                    else:    
+                        GV.CardValues[0].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
+
+                    for indexing, value in enumerate(GV.CardValues[0]):
+                        GV.HandValues[0] = sum(GV.CardValues[0])
+                        if GV.HandValues[0] > 21:
+                            if value == 11:
+                                (GV.CardValues[0])[indexing] = 1
+                        else:
+                            break
+                    
+                    GV.HandValues[0] = sum(GV.CardValues[0])
+
+                    GV.cardDeck.pop(0)
+                    GV.cardPositions[0].append(RICD((GV.cardStartPos[0])[0], (GV.cardStartPos[0])[1]))
+                    (GV.cardStartPos[0])[0] += 20
+                    (GV.cardStartPos[0])[1] -= 20
+                    #---
+
+                    GV.gamefocus[index] = 0
+                    GV.gamefocus[0] = 1
+                    GV.splitConfirmation1 = False
+                    GV.splitOverride1 = True
+
+                    print("|----------|")
+                    print(GV.CardHands)
+                    print(GV.CardValues)
+                    print(GV.HandValues)
+                    print(GV.cardPositions)
+                    print("|----------|")
+
+
+
+
+                elif index == 2 and GV.splitConfirmation2:
+                    pass
 
                 elif GV.HandState[index] == 1:
                     GV.gamefocus[index] = 0
