@@ -872,7 +872,8 @@ class game_functions:
 
                     CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
                     if CursorPos_CirclePos <= GV.chipRadius**2 and GV.chipExchangeValue1 == GV.chipExchangeValue2:
-
+                        
+                        print(f"-----------------{GV.chipExchange}=----------------- Exchange")
                         for chips in GV.chipExchange:
                             CHIPS[chips[0]] -= 1
                         GV.chipExchange.clear()
@@ -893,10 +894,14 @@ class game_functions:
                                 GV.offset += 10
 
                         if GV.bettingGame:
+                            for index, value in enumerate(GV.chipBet1):
+                                GV.chipPositions[value[0]].append(GV.gameChipPos1[index])
                             for index, value in enumerate(GV.chipBet2):
                                 GV.chipPositions[value[0]].append(GV.gameChipPos2[index])
                             for index, value in enumerate(GV.chipBet3):
                                 GV.chipPositions[value[0]].append(GV.gameChipPos3[index])
+                            for index, value in enumerate(GV.chipBet4):
+                                GV.chipPositions[value[0]].append(GV.gameChipPos4[index])
 
                         GV.chipDisplayPriority.clear()
 
@@ -990,6 +995,7 @@ class game_functions:
                                     GV.gameStart[indexs] = 1
 
                         for indexa, list_var in enumerate(GV.gameCHIPS):
+                            print(f"-----------------={list_var}=-----------------  Adding?")
                             for indexb, value in enumerate(list_var):
                                 CHIPS[indexb] -= value
                         
@@ -1568,7 +1574,6 @@ class game_functions:
                             for indexing, valuea in enumerate(gameCHIPSVar):
                                 if valuea > 0:
                                     CHIPS[indexing] += valuea * 2
-
 
                     gameChipPosVar.clear()
                     chipBetVar.clear()
