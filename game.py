@@ -1181,15 +1181,21 @@ class game_functions:
                     GV.gameBetChipValue[indexs] += int((GV.chipValues)[value[0]])
 
         if GV.gameBetChipValue[0] == GV.gameBetChipValue[1] and GV.CardValues2 and not GV.splitOverride1:
-            print(GV.CardValues2[0], GV.CardValues2[1])
             if GV.CardValues2[0] == GV.CardValues2[1]:
                 GV.splitActivation1 = True
+            elif len(GV.CardHand2[0]) == 3 and len(GV.CardHand2[1]) == 3:
+                if (GV.CardHand2[0])[1:3] == (GV.CardHand2[1])[1:3]:
+                    GV.splitActivation1 = True
+
         else:
             GV.splitActivation1 = False
 
         if GV.gameBetChipValue[2] == GV.gameBetChipValue[3] and GV.CardValues3 and not GV.splitOverride2:
             if GV.CardValues3[0] == GV.CardValues3[1]:
                 GV.splitActivation2 = True
+            elif len(GV.CardHand3[0]) == 3 and len(GV.CardHand3[1]) == 3:
+                if (GV.CardHand3[0])[1:3] == (GV.CardHand3[1])[1:3]:
+                    GV.splitActivation2 = True
         else:
             GV.splitActivation2 = False
 
@@ -1324,19 +1330,19 @@ class game_functions:
                     GV.cardDeck.append(GV.cardDeck[0])
 
                     if len(GV.cardDeck[0]) == 3:
-                        GV.CardValues[0].append(int(GV.Values[int((GV.cardDeck[0])[1:3])-2]))
+                        GV.CardValues[0].append(int(GV.Values[int(((GV.CardHands[0])[-1])[1:3])-2]))
                     else:    
-                        GV.CardValues[0].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
+                        GV.CardValues[0].append(int(GV.Values[int(((GV.CardHands[0])[-1])[1])-2]))
 
                     for indexing, value in enumerate(GV.CardValues[0]):
                         GV.HandValues[0] = sum(GV.CardValues[0])
                         if GV.HandValues[0] > 21:
                             if value == 11:
-                                (GV.CardValues[1])[indexing] = 1
+                                (GV.CardValues[0])[indexing] = 1
                         else:
                             break
                     
-                    GV.HandValues[1] = sum(GV.CardValues[0])
+                    GV.HandValues[0] = sum(GV.CardValues[0])
 
                     GV.cardDeck.pop(0)
                     GV.cardPositions[0].append(RICD((GV.cardStartPos[0])[0], (GV.cardStartPos[0])[1]))
@@ -1362,7 +1368,7 @@ class game_functions:
                         else:
                             break
                     
-                    GV.HandValues[0] = sum(GV.CardValues[1])
+                    GV.HandValues[1] = sum(GV.CardValues[1])
 
                     GV.cardDeck.pop(0)
                     GV.cardPositions[1].append(RICD((GV.cardStartPos[1])[0], (GV.cardStartPos[1])[1]))
@@ -1378,6 +1384,26 @@ class game_functions:
                     for chip in GV.chipBet1:
                         GV.gameChipPos1.append(GV.chipPositions[chip[0]][chip[1]])
                         GV.gameBet[0] += int(GV.chipValues[chip[0]])
+
+                    GV.CardValues[0].clear()
+                    GV.CardValues[1].clear()
+
+                    for indexesa, list_var in enumerate(GV.CardHands):
+                        for indexesb, value in enumerate(list_var):
+                            if len(value) == 3:
+                                GV.CardValues[indexesa].append(int(GV.Values[int(((GV.CardHands[indexesa])[indexesb])[1:3])-2]))
+                            else:
+                                GV.CardValues[indexesa].append(int(GV.Values[int(((GV.CardHands[indexesa])[indexesb])[1])-2]))
+
+                    for indexes, list_var in enumerate(GV.CardValues):
+                        for indexing, value in enumerate(list_var):
+                            GV.HandValues[indexes] = sum(GV.CardValues[indexes])
+                            if GV.HandValues[indexes] > 21:
+                                if value == 11:
+                                    (GV.CardValues[indexes])[indexing] = 1
+                            else:
+                                break
+                    
 
                     print(GV.CardValues[0], GV.CardValues[1])
                     print(GV.CardHands[0], GV.CardHands[1])
