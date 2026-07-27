@@ -849,8 +849,6 @@ class game_functions:
                         CursorPos_CirclePos = CursorPos_CirclePosx**2 + CursorPos_CirclePosy**2
 
                         if GV.bettingGame:
-
-                            print(GV.chipBet)
                             if CursorPos_CirclePos <= GV.chipRadius**2 and GV.dOutcome:
                                 GV.bettingGame = False
 
@@ -1162,11 +1160,9 @@ class game_functions:
             if bet1_remove == True:
                 if self.indexChipPosition in GV.chipBet1 and not GV.splitOverride1: 
                     GV.chipBet1.remove(self.indexChipPosition)
-                    print("POP")
             if bet2_remove == True:
                 if self.indexChipPosition in GV.chipBet2 and not GV.splitOverride1 and not GV.bettingGame: 
                     GV.chipBet2.remove(self.indexChipPosition)
-                    print("POP")
             if bet3_remove == True:
                 if self.indexChipPosition in GV.chipBet3: 
                     GV.chipBet3.remove(self.indexChipPosition)
@@ -1262,9 +1258,6 @@ class game_functions:
 
         for index, hand in enumerate(GV.gamefocus):
             if hand != 0:
-                if index == 0:
-                    print(GV.gameOutput[0])
-                    print(GV.HandValues[0])
                 if GV.gameStart[index] == 1 and GV.addCard[index] == 1:
                     GV.HandState[index] != 2
                     for i in range(0,2):
@@ -1403,11 +1396,6 @@ class game_functions:
                                     (GV.CardValues[indexes])[indexing] = 1
                             else:
                                 break
-                    
-
-                    print(GV.CardValues[0], GV.CardValues[1])
-                    print(GV.CardHands[0], GV.CardHands[1])
-                    print(GV.cardPositions)
 
                 elif index == 2 and GV.splitConfirmation2:
                     # Adds second card of the other hand ---
