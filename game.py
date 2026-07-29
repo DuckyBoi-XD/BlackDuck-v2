@@ -351,6 +351,7 @@ class game_variable: # Game variables
         self.DoubleDownChipTempList = [self.DoubleDownChipTempList1, self.DoubleDownChipTempList2,
                                        self.DoubleDownChipTempList3, self.DoubleDownChipTempList4]
         self.DoubleDownChipTempListremove = [0, 0, 0, 0]
+        self.DoubleDownOverride = [0, 0, 0, 0]
         
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -1037,6 +1038,7 @@ class game_functions:
                             GV.DoubleDownChipTempList = [GV.DoubleDownChipTempList1, GV.DoubleDownChipTempList2,
                                                             GV.DoubleDownChipTempList3, GV.DoubleDownChipTempList4]
                             GV.DoubleDownChipTempListremove = [0, 0, 0, 0]
+                            GV.DoubleDownOverride = [0, 0, 0, 0]
                         for indexs, value in enumerate(GV.chipBet):
                             if len(value) != 0:
                                 for chip in value:
@@ -1088,6 +1090,22 @@ class game_functions:
                                 GV.splitConfirmation2 = True
                                 for chip in GV.chipBet4:
                                     GV.gameCHIPS[3][chip[0]] += 1
+                    
+                    elif GV.DOUBLEDOWN_Button and GV.bettingGame:
+                        for indexes, value in enumerate(GV.gamefocus):
+                            if value == 1:
+                                if GV.DoubleDownChipValueTempList[indexes] == GV.gameBetChipValue[indexes] and GV.DoubleDownOverride[indexes] == 0:
+                                    GV.DoubleDownOverride[indexes] = 1
+                                    for value in GV.DoubleDownChipTempList[indexes]:
+                                        GV.chipBet[indexes].append(value)
+
+                        for indexs, list_var in enumerate(GV.chipBet):
+                            GV.gameBetChipValue[indexs] = 0
+                            if list_var:
+                                for value in list_var:
+                                    GV.gameBetChipValue[indexs] += int((GV.chipValues)[value[0]])
+
+
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
@@ -1191,7 +1209,12 @@ class game_functions:
                     for indexs, value in enumerate(GV.gamefocus[0:2]):
                         if value == 1:
                             GV.DoubleDownChipTempList[indexs].append(self.indexChipPosition)
-
+                    if GV.DoubleDownChipTempList:
+                        for indexes, value in enumerate(GV.DoubleDownChipTempList[0:2]):
+                            if value:
+                                print(value[0][0])
+                                GV.DoubleDownChipValueTempList[indexes] = 0
+                                GV.DoubleDownChipValueTempList[indexes] += int(GV.chipValues[value[0][0]])
                 
             elif -75 <= rectRotatedx2 <= 75 and -100 <= rectRotatedy2 <= 100:
                 bet3_remove = False
@@ -1211,6 +1234,11 @@ class game_functions:
                         if value == 1:
                             indexs += 2
                             GV.DoubleDownChipTempList[indexs].append(self.indexChipPosition)
+
+                    for indexes, value in enumerate(GV.DoubleDownChipTempList[2:4]):
+                        GV.DoubleDownChipValueTempList[indexes] = 0
+                        indexes += 2
+                        GV.DoubleDownChipValueTempList[indexes] += int(GV.chipValues[value[0]])
 
 
             if exchange_remove:
@@ -1252,7 +1280,6 @@ class game_functions:
             elif len(GV.CardHand2[0]) == 3 and len(GV.CardHand2[1]) == 3:
                 if (GV.CardHand2[0])[1:3] == (GV.CardHand2[1])[1:3]:
                     GV.splitActivation1 = True
-
         else:
             GV.splitActivation1 = False
 
@@ -1265,8 +1292,8 @@ class game_functions:
         else:
             GV.splitActivation2 = False
 
-
         print(GV.DoubleDownChipTempList)
+        print(GV.DoubleDownChipValueTempList)
     
 
     def blackjack(self):
@@ -1476,6 +1503,11 @@ class game_functions:
                     for values in range(0,4):
                         GV.HandValues[values] = sum(GV.CardValues[values])
 
+                    GV.DoubleDownChipTempList1 = []
+                    GV.DoubleDownChipTempList2 = []
+                    GV.DoubleDownChipTempList3 = []
+                    GV.DoubleDownChipTempList4 = []
+
                 elif index == 2 and GV.splitConfirmation2:
                     # Adds second card of the other hand ---
                     GV.CardHands[3].append((GV.CardHands[2])[-1])
@@ -1587,6 +1619,11 @@ class game_functions:
                     for values in range(0,4):
                         GV.HandValues[values] = sum(GV.CardValues[values])
 
+                    GV.DoubleDownChipTempList1 = []
+                    GV.DoubleDownChipTempList2 = []
+                    GV.DoubleDownChipTempList3 = []
+                    GV.DoubleDownChipTempList4 = []
+
                 elif GV.HandState[index] == 1:
                     GV.gamefocus[index] = 0
                     if GV.HandValues[index] == 21:
@@ -1678,14 +1715,13 @@ class game_functions:
                             else:
                                 break
 
+                    GV.DoubleDownChipTempList1 = []
+                    GV.DoubleDownChipTempList2 = []
+                    GV.DoubleDownChipTempList3 = []
+                    GV.DoubleDownChipTempList4 = []
+
 
         if GV.dTurn:
-            print(GV.dHandValue)
-            print(GV.dCardHand)
-            print()
-            print(GV.CardHands)
-            print(GV.CardValues)
-            print(GV.HandValues)
             if all(hand > 21 for hand in GV.HandValues if hand != 0):
                 GV.dDrawTime = -1
                 GV.dOutcome = True
