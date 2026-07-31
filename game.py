@@ -332,6 +332,9 @@ class game_variable: # Game variables
         self.payout = False
 
         self.gameBetChipValue = [0, 0, 0, 0]
+        self.tempChipBet1 = []
+        self.tempChipBet4 = []
+        self.tempChipBetValues = [0, 0]
         self.splitActivation1 = False
         self.splitActivation2 = False
         self.splitConfirmation1 = False
@@ -478,7 +481,10 @@ class game_objects:
                 else:
                     chipOutlineColour = GV.yellow_colour
                     chipOutlineWidth = 2
-            elif index_var in GV.chipBet1 or index_var in GV.chipBet2 or index_var in GV.chipBet3 or index_var in GV.chipBet4 or index_var in GV.chipExchange:
+            elif index_var in GV.chipBet1 or index_var in GV.chipBet2 or index_var in GV.chipBet3 or index_var in GV.chipBet4 or index_var in GV.chipExchange or index_var in GV.DoubleDownChipTempList:
+                chipOutlineColour = GV.bright_green
+                chipOutlineWidth = 2
+            elif index_var in GV.DoubleDownChipTempList[0] or index_var in GV.DoubleDownChipTempList[1] or index_var in GV.DoubleDownChipTempList[2] or index_var in GV.DoubleDownChipTempList[3]:
                 chipOutlineColour = GV.bright_green
                 chipOutlineWidth = 2
             elif GV.chipValueColours[index_var[0]] == GV.black_colour or GV.chipValueColours[index_var[0]] == GV.blue_colour:
@@ -682,36 +688,30 @@ class game_objects:
 
         box_surface = pygame.Surface((76, 50.5), pygame.SRCALPHA)
 
-        temp_box_colour = GV.yellow_colour
         if GV.bettingGame:
-            if GV.gamefocus[1] == 1:
-                if GV.DoubleDownActivation1:
-                    if GV.DOUBLEDOWN_Button:
-                        temp_box_colour = GV.button_blue2
-                    else:
-                        temp_box_colour = GV.button_blue2_dark
-                else:
-                    temp_box_colour = GV.darkred_colour
-            elif GV.gamefocus[2] == 1:
-                if GV.DoubleDownActivation2:
-                    if GV.DOUBLEDOWN_Button:
-                        temp_box_colour = GV.button_blue2
-                    else:
-                        temp_box_colour = GV.button_blue2_dark
-                else:
-                    temp_box_colour = GV.darkred_colour
+            if 1 in GV.gamefocus:
+                for index, value in enumerate(GV.gamefocus):
+                    if value == 1:
+                        '''
+                        print("call" ,GV.DoubleDownChipValueTempList)
+                        print(GV.DoubleDownChipTempList)
+                        print(GV.gameBetChipValue)
+                        print(GV.DoubleDownOverride)
+                        print("stop", GV.CardHands)
+                        '''
+                        if GV.DoubleDownChipValueTempList[index] == GV.gameBetChipValue[index] and GV.DoubleDownOverride[index] == 0 and GV.CardHands[index] == 2:
+                            if GV.DOUBLEDOWN_Button:
+                                temp_box_colour = GV.button_blue2
+                            else:
+                                temp_box_colour = GV.button_blue2_dark
+                        else:
+                            temp_box_colour = GV.darkred_colour
             else:
                 temp_box_colour = GV.darkred_colour
-            
         else:
-            temp_box_colour = GV.button_blue_dark
+            temp_box_colour = GV.darkred_colour
 
-        if GV.DOUBLEDOWN_Button and GV.bettingGame:
-            pygame.draw.rect(box_surface, GV.button_blue2, (0, 0, 76, 50.5))
-        elif GV.bettingGame:
-            pygame.draw.rect(box_surface, GV.darkred_colour, (0, 0, 76, 51))
-        else:
-            pygame.draw.rect(box_surface, GV.button_blue2_dark, (0, 0, 76, 50.5))
+        pygame.draw.rect(box_surface, temp_box_colour, (0, 0, 76, 51))
         rect = box_surface.get_rect(center=(598, 407.75))
         GV.display.blit(box_surface, rect)
 
@@ -730,7 +730,6 @@ class game_objects:
         
 
         box_surface = pygame.Surface((76, 51), pygame.SRCALPHA)
-        temp_box_colour = GV.yellow_colour
         if GV.bettingGame:
             if GV.gamefocus[1] == 1:
                 if GV.splitActivation1:
@@ -752,7 +751,7 @@ class game_objects:
                 temp_box_colour = GV.darkred_colour
             
         else:
-            temp_box_colour = GV.button_blue_dark
+            temp_box_colour = GV.darkred_colour
         pygame.draw.rect(box_surface, temp_box_colour, (0, 0, 76, 51))
         rect = box_surface.get_rect(center=(598, 357.25))
         GV.display.blit(box_surface, rect)
@@ -1021,16 +1020,21 @@ class game_functions:
                             GV.payout = True
 
                             GV.gameBetChipValue = [0, 0, 0, 0]
+                            GV.tempChipBet1 = []
+                            GV.tempChipBet4 = []
+                            GV.tempChipBetValues = [0, 0]
                             GV.splitActivation1 = False
                             GV.splitActivation2 = False
                             GV.splitConfirmation1 = False
                             GV.splitConfirmation2 = False
                             GV.splitOverride1 = False
                             GV.splitOverride2 = False
+
+
                             GV.DoubleDownActivation1 = False
                             GV.DoubleDownActivation2 = False
-
                             GV.DoubleDownChipValueTempList = [0, 0, 0, 0]
+
                             GV.DoubleDownChipTempList1 = []
                             GV.DoubleDownChipTempList2 = []
                             GV.DoubleDownChipTempList3 = []
@@ -1082,14 +1086,20 @@ class game_functions:
                         if GV.gamefocus[1] == 1:
                             if GV.splitActivation1:
                                 GV.splitConfirmation1 = True
-                                for chip in GV.chipBet1:
+                                for chip in GV.tempChipBet1:
+                                    GV.chipBet1.append(chip)
                                     GV.gameCHIPS[0][chip[0]] += 1
+                                GV.tempChipBetValues[0] = 0
+                                GV.tempChipBetValues[1] = 0
 
                         elif GV.gamefocus[2] == 1:
                             if GV.splitActivation2:
                                 GV.splitConfirmation2 = True
-                                for chip in GV.chipBet4:
+                                for chip in GV.tempChipBet4:
+                                    GV.chipBet4.append(chip)
                                     GV.gameCHIPS[3][chip[0]] += 1
+                                GV.tempChipBetValues[0] = 0
+                                GV.tempChipBetValues[1] = 0
                     
                     elif GV.DOUBLEDOWN_Button and GV.bettingGame:
                         for indexes, value in enumerate(GV.gamefocus):
@@ -1103,6 +1113,7 @@ class game_functions:
                             GV.gameBetChipValue[indexs] = 0
                             if list_var:
                                 for value in list_var:
+                                    print(100, value)
                                     GV.gameBetChipValue[indexs] += int((GV.chipValues)[value[0]])
 
 
@@ -1198,23 +1209,38 @@ class game_functions:
                 GV.DoubleDownChipTempListremove[0] = 0
                 
 
-                if len(GV.CardHands[1]) == 2:
-                    if self.indexChipPosition not in GV.chipBet1 and self.indexChipPosition not in GV.chipBet2 and not GV.splitOverride1 and GV.bettingGame:
-                        GV.chipBet1.append(self.indexChipPosition)
+                for indexs, value in enumerate(GV.gamefocus[0:2]):
+                    if value == 1 and len(GV.CardHands[indexs]) == 2:
+                        if self.indexChipPosition not in GV.DoubleDownChipTempList[0] and self.indexChipPosition not in GV.DoubleDownChipTempList[1] and GV.bettingGame:
+                            if self.indexChipPosition not in GV.tempChipBet1 and self.indexChipPosition not in GV.chipBet2:
+                                GV.DoubleDownChipTempList[indexs].append(self.indexChipPosition)
+                            if GV.DoubleDownChipTempList:
+                                for indexes, list_var in enumerate(GV.DoubleDownChipTempList[0:2]):
+                                    if list_var:
+                                        GV.DoubleDownChipValueTempList[indexes] = 0
+                                        for values in list_var:
+                                            print(list_var)
+                                            GV.DoubleDownChipValueTempList[indexes] += int(GV.chipValues[values[0]])
+                
+                print("length", len(GV.CardHand2), GV.CardHands)
+                print(GV.tempChipBet1)
+                print(GV.tempChipBetValues[0])
+                print(GV.gameBetChipValue[1])
+                print(GV.gameBet)
+                if len(GV.CardHand2) == 2:
+                    if len(GV.CardHand2[0]) == 3 and len((GV.CardHand2[1])) == 3:
+                        if GV.Values[int((GV.CardHand2[0])[1:3]) -2] == GV.Values[int((GV.CardHand2[1])[1:3]) -2]:
+                            if self.indexChipPosition not in GV.tempChipBet1 and self.indexChipPosition not in GV.chipBet2 and not GV.splitOverride1 and GV.bettingGame:
+                                print("1WOKKKING")
+                                GV.tempChipBet1.append(self.indexChipPosition)
+                    else:
+                        if GV.Values[int((GV.CardHand2[0])[1]) -2] == GV.Values[int((GV.CardHand2[1])[1]) -2]:
+                            if self.indexChipPosition not in GV.tempChipBet1 and self.indexChipPosition not in GV.chipBet2 and not GV.splitOverride1 and GV.bettingGame:
+                                print("2WOKKKING")
+                                GV.tempChipBet1.append(self.indexChipPosition)
 
                 if self.indexChipPosition not in GV.chipBet2 and GV.bettingGame is False:
                     GV.chipBet2.append(self.indexChipPosition)
-                
-                if self.indexChipPosition not in GV.DoubleDownChipTempList[0] and self.indexChipPosition not in GV.DoubleDownChipTempList[1] and GV.bettingGame:
-                    for indexs, value in enumerate(GV.gamefocus[0:2]):
-                        if value == 1:
-                            GV.DoubleDownChipTempList[indexs].append(self.indexChipPosition)
-                    if GV.DoubleDownChipTempList:
-                        for indexes, value in enumerate(GV.DoubleDownChipTempList[0:2]):
-                            if value:
-                                print(value[0][0])
-                                GV.DoubleDownChipValueTempList[indexes] = 0
-                                GV.DoubleDownChipValueTempList[indexes] += int(GV.chipValues[value[0][0]])
                 
             elif -75 <= rectRotatedx2 <= 75 and -100 <= rectRotatedy2 <= 100:
                 bet3_remove = False
@@ -1222,28 +1248,30 @@ class game_functions:
                 GV.DoubleDownChipTempListremove[2] = 0
                 GV.DoubleDownChipTempListremove[3] = 0
 
-                if len(GV.CardHands[2]) == 2:
-                    if self.indexChipPosition not in GV.chipBet4 and self.indexChipPosition not in GV.chipBet3 and not GV.splitOverride2 and GV.bettingGame:
-                        GV.chipBet4.append(self.indexChipPosition)
+                for indexs, value in enumerate(GV.gamefocus[2:4]):
+                    if value == 1 and len(GV.CardHands[indexs]) == 2:
+                        if self.indexChipPosition not in GV.DoubleDownChipTempList[2] and self.indexChipPosition not in GV.DoubleDownChipTempList[3] and GV.bettingGame:
+                            if self.indexChipPosition not in GV.chipBet3 and self.indexChipPosition not in GV.tempChipBet4:
+                                indexs += 2
+                                GV.DoubleDownChipTempList[indexs].append(self.indexChipPosition)
+                            if GV.DoubleDownChipTempList:
+                                for indexes, list_var in enumerate(GV.DoubleDownChipTempList[2:4]):
+                                    if list_var:
+                                        GV.DoubleDownChipValueTempList[indexes] = 0
+                                        for values in list_var:
+                                            indexes += 2
+                                            GV.DoubleDownChipValueTempList[indexes] += int(GV.chipValues[values[0]])
+
+                if len(GV.CardHands[2]) == 2 and GV.gameBetChipValue[2] == GV.tempChipBetValues[1]:
+                    if self.indexChipPosition not in GV.tempChipBet4 and self.indexChipPosition not in GV.chipBet3 and not GV.splitOverride2 and GV.bettingGame:
+                        GV.tempChipBet4.append(self.indexChipPosition)
 
                 if self.indexChipPosition not in GV.chipBet3 and GV.bettingGame is False:
                     GV.chipBet3.append(self.indexChipPosition)
 
-                if self.indexChipPosition not in GV.DoubleDownChipTempList[2] and self.indexChipPosition not in GV.DoubleDownChipTempList[3] and GV.bettingGame:
-                    for indexs, value in enumerate(GV.gamefocus[2:4]):
-                        if value == 1:
-                            indexs += 2
-                            GV.DoubleDownChipTempList[indexs].append(self.indexChipPosition)
-
-                    for indexes, value in enumerate(GV.DoubleDownChipTempList[2:4]):
-                        GV.DoubleDownChipValueTempList[indexes] = 0
-                        indexes += 2
-                        GV.DoubleDownChipValueTempList[indexes] += int(GV.chipValues[value[0]])
-
-
             if exchange_remove:
                 if self.indexChipPosition in GV.chipExchange: 
-                    GV.chipExchange.remove(self.indexChipPosition)
+                    GV.chipExchange.remove(self.indexChipPosition) 
 
                 if not GV.chipExchange:
                     GV.chipExchangeOn = False
@@ -1251,30 +1279,41 @@ class game_functions:
                     GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
                     GV.chipExchangeStr1 = None
             if bet1_remove == True:
-                if self.indexChipPosition in GV.chipBet1 and not GV.splitOverride1: 
-                    GV.chipBet1.remove(self.indexChipPosition)
+                if self.indexChipPosition in GV.tempChipBet1 and not GV.splitOverride1: 
+                    GV.tempChipBet1.remove(self.indexChipPosition)
             if bet2_remove == True:
                 if self.indexChipPosition in GV.chipBet2 and not GV.splitOverride1 and not GV.bettingGame: 
                     GV.chipBet2.remove(self.indexChipPosition)
             if bet3_remove == True:
-                if self.indexChipPosition in GV.chipBet3: 
+                if self.indexChipPosition in GV.chipBet3 and not GV.splitOverride2 and not GV.bettingGame: 
                     GV.chipBet3.remove(self.indexChipPosition)
             if bet4_remove == True:
-                if self.indexChipPosition in GV.chipBet4: 
-                    GV.chipBet4.remove(self.indexChipPosition)
+                if self.indexChipPosition in GV.tempChipBet4 and not GV.splitOverride2: 
+                    GV.tempChipBet4.remove(self.indexChipPosition)
             for indexs, value in enumerate(GV.DoubleDownChipTempListremove):
                 if value == 1:
                     if self.indexChipPosition in GV.DoubleDownChipTempList[indexs]:
                         GV.DoubleDownChipTempList[indexs].remove(self.indexChipPosition)
+
+            for indexes, value in enumerate(GV.DoubleDownChipTempList):
+                if not value and GV.DoubleDownChipValueTempList[indexes] != 0:
+                    GV.DoubleDownChipValueTempList[indexes] = 0
 
 
         for indexs, list_var in enumerate(GV.chipBet):
             GV.gameBetChipValue[indexs] = 0
             if list_var:
                 for value in list_var:
-                    GV.gameBetChipValue[indexs] += int((GV.chipValues)[value[0]])
+                    GV.gameBetChipValue[indexs] += int(GV.chipValues[value[0]])
+        
+        GV.tempChipBetValues[0] = 0
+        GV.tempChipBetValues[1] = 0
+        for value in GV.tempChipBet1:
+            GV.tempChipBetValues[0] += int(GV.chipValues[value[0]])
+        for value in GV.tempChipBet4:
+            GV.tempChipBetValues[1] += int(GV.chipValues[value[0]])
 
-        if GV.gameBetChipValue[0] == GV.gameBetChipValue[1] and GV.CardValues2 and not GV.splitOverride1:
+        if GV.tempChipBetValues[0] == GV.gameBetChipValue[1] and GV.CardValues2 and not GV.splitOverride1:
             if GV.CardValues2[0] == GV.CardValues2[1]:
                 GV.splitActivation1 = True
             elif len(GV.CardHand2[0]) == 3 and len(GV.CardHand2[1]) == 3:
@@ -1283,7 +1322,7 @@ class game_functions:
         else:
             GV.splitActivation1 = False
 
-        if GV.gameBetChipValue[2] == GV.gameBetChipValue[3] and GV.CardValues3 and not GV.splitOverride2:
+        if GV.gameBetChipValue[2] == GV.tempChipBetValues[1] and GV.CardValues3 and not GV.splitOverride2:
             if GV.CardValues3[0] == GV.CardValues3[1]:
                 GV.splitActivation2 = True
             elif len(GV.CardHand3[0]) == 3 and len(GV.CardHand3[1]) == 3:
@@ -1291,11 +1330,7 @@ class game_functions:
                     GV.splitActivation2 = True
         else:
             GV.splitActivation2 = False
-
-        print(GV.DoubleDownChipTempList)
-        print(GV.DoubleDownChipValueTempList)
     
-
     def blackjack(self):
         for index, value in enumerate(GV.gameStart[1:3]):
             if value == 1 and (GV.addCard[1:3][index]) == 1:
