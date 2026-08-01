@@ -937,6 +937,11 @@ class game_functions:
                                 GV.chipPositions[index].append([((GV.chipStartPositions)[GV.chipValues[index]])[0] - GV.sideOffset, ((GV.chipStartPositions[GV.chipValues[index]])[1] - GV.offsetreal)])
                                 GV.offset += 10
 
+                        GV.chipExchangeValue1 = 0
+                        
+                        GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
+                        GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
+
                         if GV.bettingGame:
                             for index, value in enumerate(GV.chipBet1):
                                 GV.chipPositions[value[0]].append(GV.gameChipPos1[index])
@@ -946,6 +951,9 @@ class game_functions:
                                 GV.chipPositions[value[0]].append(GV.gameChipPos3[index])
                             for index, value in enumerate(GV.chipBet4):
                                 GV.chipPositions[value[0]].append(GV.gameChipPos4[index])
+                        else:
+                            for index, o in enumerate(GV.chipBet):
+                                GV.chipBet[index].clear()
 
                         GV.chipDisplayPriority.clear()
 
@@ -954,11 +962,6 @@ class game_functions:
                             for indexb, value in enumerate(lista):
                                 GV.chipDisplayPriority.append((indexa, indexb))
                                 indexb
-                            
-                        GV.chipExchangeValue1 = 0
-                        
-                        GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
-                        GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
 
                     else:
                         GV.exchangeConfirmation = False
@@ -1043,10 +1046,13 @@ class game_functions:
                                                             GV.DoubleDownChipTempList3, GV.DoubleDownChipTempList4]
                             GV.DoubleDownChipTempListremove = [0, 0, 0, 0]
                             GV.DoubleDownOverride = [0, 0, 0, 0]
-                        for indexs, value in enumerate(GV.chipBet):
-                            if len(value) != 0:
-                                for chip in value:
+                        for indexs, list_var in enumerate(GV.chipBet):
+                            if len(list_var) != 0:
+                                for chip in list_var:
                                     GV.gameCHIPS[indexs][chip[0]] += 1
+                                    print(GV.chipBet)
+                                    print(chip)
+                                    print(GV.chipPositions[chip[0]], chip[1])
                                     GV.gameChipPos[indexs].append(GV.chipPositions[chip[0]][chip[1]])
                                     GV.gameBet[indexs] += int(GV.chipValues[chip[0]])
                                     GV.bettingGame = True
@@ -1127,6 +1133,9 @@ class game_functions:
                                     GV.gameCHIPS[0][chip[0]] += 1
                                 GV.tempChipBetValues[0] = 0
                                 GV.tempChipBetValues[1] = 0
+                                for indexb, value in enumerate(GV.gameCHIPS[0]):
+                                    if value != 0:
+                                        CHIPS[indexb] -= value
 
                         elif GV.gamefocus[2] == 1:
                             if GV.splitActivation2:
@@ -1136,6 +1145,9 @@ class game_functions:
                                     GV.gameCHIPS[3][chip[0]] += 1
                                 GV.tempChipBetValues[0] = 0
                                 GV.tempChipBetValues[1] = 0
+                                for indexb, value in enumerate(GV.gameCHIPS[3]):
+                                    if value != 0:
+                                        CHIPS[indexb] -= value
                     
                     elif GV.DOUBLEDOWN_Button and GV.bettingGame:
                         for indexes, value in enumerate(GV.gamefocus):
@@ -1255,12 +1267,6 @@ class game_functions:
                                         GV.DoubleDownChipValueTempList[indexes] = 0
                                         for values in list_var:
                                             GV.DoubleDownChipValueTempList[indexes] += int(GV.chipValues[values[0]])
-                
-                print("length", len(GV.CardHand2), GV.CardHands)
-                print(GV.tempChipBet1)
-                print(GV.tempChipBetValues[0])
-                print(GV.gameBetChipValue[1])
-                print(GV.gameBet)
                 if len(GV.CardHand2) == 2:
                     if len(GV.CardHand2[0]) == 3 and len((GV.CardHand2[1])) == 3:
                         if GV.Values[int((GV.CardHand2[0])[1:3]) -2] == GV.Values[int((GV.CardHand2[1])[1:3]) -2]:
@@ -1955,7 +1961,8 @@ class game_functions:
             GV.tempChipBet4.clear()
             for indexa, temp in enumerate(GV.tempChipBetValues):
                 GV.tempChipBetValues[indexa] = 0
-
+            GV.splitOverride1 = False
+            GV.splitOverride2 = False
             print(CHIPS)
 
 GF = game_functions()
@@ -1992,6 +1999,7 @@ class pygame_function:
         if self.on_init() == False:
             GV._running = False 
         while(GV._running):
+            print(GV.chipBet)
             for i in CHIPS:
                 if i < 0:
                     print("AHHHHHHH")
