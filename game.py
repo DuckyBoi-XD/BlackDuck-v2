@@ -1062,6 +1062,42 @@ class game_functions:
                         elif len(GV.chipBet3) != 0:
                             GV.gamefocus[2] = 1
 
+                        for indexation, value in enumerate(GV.chipPositions):
+                            GV.chipPositions[indexation].clear()
+                        for index, i in enumerate(CHIPS):
+                            GV.offset = 5
+                            GV.offsetreal = 0
+                            GV.sideOffset = 0
+                            for GV.chipID in range(0, i):
+                                GV.sideOffset = int(str(GV.offset/350)[0]) * 5
+                                GV.offsetreal = GV.offset - int(str(GV.offset/350)[0]) * 350
+                                GV.chipPositions[index].append([((GV.chipStartPositions)[GV.chipValues[index]])[0] - GV.sideOffset, ((GV.chipStartPositions[GV.chipValues[index]])[1] - GV.offsetreal)])
+                                GV.offset += 10
+
+                        for index, value in enumerate(GV.chipBet1):
+                            GV.chipPositions[value[0]].append(GV.gameChipPos1[index])
+                        for index, value in enumerate(GV.chipBet2):
+                            GV.chipPositions[value[0]].append(GV.gameChipPos2[index])
+                        for index, value in enumerate(GV.chipBet3):
+                            GV.chipPositions[value[0]].append(GV.gameChipPos3[index])
+                        for index, value in enumerate(GV.chipBet4):
+                            GV.chipPositions[value[0]].append(GV.gameChipPos4[index])
+
+                        GV.chipExchange.clear()
+
+                        GV.chipDisplayPriority.clear()
+
+                        for indexa, lista in enumerate(GV.chipPositions):
+                            indexb = 0
+                            for indexb, value in enumerate(lista):
+                                GV.chipDisplayPriority.append((indexa, indexb))
+                                indexb
+
+                        GV.chipExchangeValue1 = 0
+                        
+                        GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
+                        GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
+
                     elif GV.BET_HIT_Button and GV.bettingGame:
                         if GV.gamefocus[0] == 1:
                             GV.addCard[0] = 1
@@ -1113,7 +1149,6 @@ class game_functions:
                             GV.gameBetChipValue[indexs] = 0
                             if list_var:
                                 for value in list_var:
-                                    print(100, value)
                                     GV.gameBetChipValue[indexs] += int((GV.chipValues)[value[0]])
 
 
@@ -1219,7 +1254,6 @@ class game_functions:
                                     if list_var:
                                         GV.DoubleDownChipValueTempList[indexes] = 0
                                         for values in list_var:
-                                            print(list_var)
                                             GV.DoubleDownChipValueTempList[indexes] += int(GV.chipValues[values[0]])
                 
                 print("length", len(GV.CardHand2), GV.CardHands)
@@ -1692,13 +1726,14 @@ class game_functions:
 
                     if GV.HandValues[index] <= 10:
                         for indexs, value in enumerate(GV.CardValues[index]):
-                            if value == 1:
-                                GV.CardValues[index][indexs] = 11
+                            GV.HandValues[index] = sum(GV.CardValues[index])
+                            if GV.HandValues[index] <= 10:
+                                if value == 1:
+                                    GV.CardValues[index][indexs] = 11
                     
                     GV.HandValues[index] = sum(GV.CardValues[index])
 
                     for values in range(0,4):
-                        print(values)
                         GV.HandValues[values] = sum(GV.CardValues[values])
 
 
@@ -1844,6 +1879,11 @@ class game_functions:
                 GV.dDrawTime -= 1
 
         if GV.dOutcome and GV.payout:
+            print("OUTCOME")
+            print(GV.chipBet)
+            print(GV.gameCHIPS)
+            print(CHIPS)
+            print(GV.gameOutput)
             for index, value in enumerate(GV.gameOutput):
                 if value != 0: 
 
@@ -1910,7 +1950,13 @@ class game_functions:
                     indexb
             
             for indexa, temp in enumerate(GV.chipBet):
-                    GV.chipBet[indexa].clear()
+                GV.chipBet[indexa].clear()
+            GV.tempChipBet1.clear()
+            GV.tempChipBet4.clear()
+            for indexa, temp in enumerate(GV.tempChipBetValues):
+                GV.tempChipBetValues[indexa] = 0
+
+            print(CHIPS)
 
 GF = game_functions()
 
