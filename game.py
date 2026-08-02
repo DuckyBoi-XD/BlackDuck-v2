@@ -1281,13 +1281,14 @@ class game_functions:
                 GV.DoubleDownChipTempListremove[3] = 0
 
                 for indexs, value in enumerate(GV.gamefocus[2:4]):
-                    indexs+=2
+                    indexs += 2
                     if value == 1 and len(GV.CardHands[indexs]) == 2:
                         if self.indexChipPosition not in GV.DoubleDownChipTempList[2] and self.indexChipPosition not in GV.DoubleDownChipTempList[3] and GV.bettingGame:
                             if self.indexChipPosition not in GV.tempChipBet4 and self.indexChipPosition not in GV.chipBet3:
                                 GV.DoubleDownChipTempList[indexs].append(self.indexChipPosition)
                             if GV.DoubleDownChipTempList:
                                 for indexes, list_var in enumerate(GV.DoubleDownChipTempList[2:4]):
+                                    indexes += 2
                                     if list_var:
                                         GV.DoubleDownChipValueTempList[indexes] = 0
                                         for values in list_var:
