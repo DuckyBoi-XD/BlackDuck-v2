@@ -957,7 +957,6 @@ class game_functions:
                             indexb = 0
                             for indexb, value in enumerate(lista):
                                 GV.chipDisplayPriority.append((indexa, indexb))
-                                indexb
 
                     else:
                         GV.exchangeConfirmation = False
@@ -1076,16 +1075,26 @@ class game_functions:
                                 GV.chipPositions[index].append([((GV.chipStartPositions)[GV.chipValues[index]])[0] - GV.sideOffset, ((GV.chipStartPositions[GV.chipValues[index]])[1] - GV.offsetreal)])
                                 GV.offset += 10
 
+                        GV.chipExchange.clear()
+
+                        chipBet1_temp = []
+                        chipBet2_temp = []
+                        chipBet3_temp = []
+                        chipBet4_temp = []
+
                         for index, value in enumerate(GV.chipBet1):
                             GV.chipPositions[value[0]].append(GV.gameChipPos1[index])
+                            chipBet1_temp.append((value[0], len(GV.chipPositions[value[0]]) - 1))
                         for index, value in enumerate(GV.chipBet2):
                             GV.chipPositions[value[0]].append(GV.gameChipPos2[index])
+                            chipBet2_temp.append((value[0], len(GV.chipPositions[value[0]]) - 1))
                         for index, value in enumerate(GV.chipBet3):
                             GV.chipPositions[value[0]].append(GV.gameChipPos3[index])
+                            chipBet3_temp.append((value[0], len(GV.chipPositions[value[0]]) - 1))
                         for index, value in enumerate(GV.chipBet4):
                             GV.chipPositions[value[0]].append(GV.gameChipPos4[index])
+                            chipBet4_temp.append((value[0], len(GV.chipPositions[value[0]]) - 1))
 
-                        GV.chipExchange.clear()
 
                         GV.chipDisplayPriority.clear()
 
@@ -1093,12 +1102,18 @@ class game_functions:
                             indexb = 0
                             for indexb, value in enumerate(lista):
                                 GV.chipDisplayPriority.append((indexa, indexb))
-                                indexb
+
+                        GV.chipBet1[:] = chipBet1_temp
+                        GV.chipBet2[:] = chipBet2_temp
+                        GV.chipBet3[:] = chipBet3_temp
+                        GV.chipBet4[:] = chipBet4_temp
+
 
                         GV.chipExchangeValue1 = 0
                         
                         GV.chipSmallExchangeListtemp = list(GV.chipSmallExchangeList)
                         GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
+                                
 
                     elif GV.BET_HIT_Button and GV.bettingGame:
                         if GV.gamefocus[0] == 1:
@@ -1778,7 +1793,7 @@ class game_functions:
                             else:
                                 GV.dTurn = True
                         else:
-                            GV.dTurn = True
+                            GV.dTurn = True 
 
                 elif GV.HandState[index] == 1:
                     GV.gamefocus[index] = 0
