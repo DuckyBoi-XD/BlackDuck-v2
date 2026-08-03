@@ -1167,6 +1167,8 @@ class game_functions:
                                     GV.DoubleDownConfirmation[indexes] = 1
                                     for value in GV.DoubleDownChipTempList[indexes]:
                                         GV.chipBet[indexes].append(value)
+                                        GV.gameCHIPS[indexes][value[0]] += 1
+                                        CHIPS[value[0]] -= 1
 
                         for indexs, list_var in enumerate(GV.chipBet):
                             GV.gameBetChipValue[indexs] = 0
@@ -1744,21 +1746,6 @@ class game_functions:
                     GV.DoubleDownConfirmation[index] = 0
                     GV.DoubleDownOverride[index] = 1
 
-                    if len(GV.cardDeck[0]) == 3:
-                        GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1:3])-2]))
-                    else:    
-                        GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
-
-                    for indexing, value in enumerate(GV.CardValues[index]):
-                        GV.HandValues[index] = sum(GV.CardValues[index])
-                        if GV.HandValues[index] > 21:
-                            if value == 11:
-                                (GV.CardValues[index])[indexing] = 1
-                        else:
-                            break
-                    
-                    GV.HandValues[index] = sum(GV.CardValues[index])
-
                     if GV.HandValues[index] <= 10:
                         for indexs, value in enumerate(GV.CardValues[index]):
                             GV.HandValues[index] = sum(GV.CardValues[index])
@@ -1794,6 +1781,19 @@ class game_functions:
                                 GV.dTurn = True
                         else:
                             GV.dTurn = True 
+
+                    if index != 3:
+                        if GV.HandValues[index+1] != 0:
+                            GV.gamefocus[index+1] = 1
+                        else:
+                            GV.dTurn = True
+                    else:
+                        GV.dTurn = True
+
+                    print("game stats")
+                    print(GV.HandValues)
+                    print(GV.CardHands)
+
 
                 elif GV.HandState[index] == 1:
                     GV.gamefocus[index] = 0
@@ -1982,7 +1982,7 @@ class game_functions:
 
         if GV.dOutcome and GV.payout:
             print("OUTCOME")
-            print(GV.chipBet)
+            print("special", GV.chipBet)
             print(GV.gameCHIPS)
             print(CHIPS)
             print(GV.gameOutput)
@@ -2095,11 +2095,11 @@ class pygame_function:
         if self.on_init() == False:
             GV._running = False 
         while(GV._running):
+            '''
             print(GV.chipBet)
-            print(GV.DoubleDownChipTempList)
-            print(GV.DoubleDownChipValueTempList)
-            print(GV.gameBetChipValue)
-            print(GV.DoubleDownActivation)
+            print(GV.dHandValue)
+            print(GV.HandValues)
+            '''
             for i in CHIPS:
                 if i < 0:
                     print("AHHHHHHH")
