@@ -1170,8 +1170,7 @@ class game_functions:
                                         GV.chipBet[indexes].append(value)
                                         GV.gameCHIPS[indexes][value[0]] += 1
                                         CHIPS[value[0]] -= 1
-                                    GV.DoubleDownChipTempList[indexes].clear()
-
+                                        
                         for indexs, list_var in enumerate(GV.chipBet):
                             GV.gameBetChipValue[indexs] = 0
                             if list_var:
