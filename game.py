@@ -96,7 +96,7 @@ def save_game(money_value = None, chip_info = None):
         f.write(encoded_bytes)
 
 MONEY, CHIPS = load_game()
-CHIPS = [0, 0, 0, 6, 0, 0, 0, 0, 0, 0]
+CHIPS = [1, 1, 1, 6, 1, 1, 1, 1, 1, 1]
 debug_var = True
 
 def cosd(x):
@@ -106,6 +106,23 @@ def sind(x):
 
 def RICD(midx, midy):# random int card display
     return random.randint(midx-3, midx+3), random.randint(midy-3, midy+3)
+
+def best_hand_value(card_values):
+    '''Return the highest valid blackjack total for a hand.'''
+    ace_indexes = [index for index, value in enumerate(card_values) if value in (1, 11)]
+    total = sum(1 if value in (1, 11) else value for value in card_values)
+
+    upgrades = 0
+    while upgrades < len(ace_indexes) and total + 10 <= 21:
+        total += 10
+        upgrades += 1
+
+    for index in ace_indexes:
+        card_values[index] = 1
+    for index in ace_indexes[:upgrades]:
+        card_values[index] = 11
+
+    return total
 
 class game_variable: # Game variables
     def __init__(self):
@@ -1407,15 +1424,7 @@ class game_functions:
                     else:    
                         GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
 
-                    for indexing, value in enumerate(GV.CardValues[index]):
-                        GV.HandValues[index] = sum(GV.CardValues[index])
-                        if GV.HandValues[index] > 21:
-                            if value == 11:
-                                (GV.CardValues[index])[indexing] = 1
-                        else:
-                            break
-                    
-                    GV.HandValues[index] = sum(GV.CardValues[index])
+                    GV.HandValues[index] = best_hand_value(GV.CardValues[index])
 
                     GV.cardDeck.pop(0)
                     GV.cardPositions[index].append(RICD((GV.cardStartPos[index])[0], (GV.cardStartPos[index])[1]))
@@ -1435,15 +1444,7 @@ class game_functions:
                 else:    
                     GV.dCardValues.append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
 
-                for indexing, value in enumerate(GV.dCardValues):
-                    GV.dHandValue = sum(GV.dCardValues)
-                    if GV.dHandValue > 21:
-                        if value == 11:
-                            (GV.dCardValues)[indexing] = 1
-                    else:
-                        break
-                
-                GV.dHandValue = sum(GV.dCardValues)
+                GV.dHandValue = best_hand_value(GV.dCardValues)
 
                 GV.cardDeck.pop(0)
                 GV.dcardPosition.append(RICD((GV.dcardStartPos)[0], (GV.dcardStartPos)[1]))
@@ -1466,15 +1467,7 @@ class game_functions:
                         else:    
                             GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
 
-                        for indexing, value in enumerate(GV.CardValues[index]):
-                            GV.HandValues[index] = sum(GV.CardValues[index])
-                            if GV.HandValues[index] > 21:
-                                if value == 11:
-                                    (GV.CardValues[index])[indexing] = 1
-                            else:
-                                break
-                        
-                        GV.HandValues[index] = sum(GV.CardValues[index])
+                            GV.HandValues[index] = best_hand_value(GV.CardValues[index])
 
                         GV.cardDeck.pop(0)
                         GV.cardPositions[index].append(RICD((GV.cardStartPos[index])[0], (GV.cardStartPos[index])[1]))
@@ -1493,15 +1486,7 @@ class game_functions:
                     else:    
                         GV.CardValues[0].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
 
-                    for indexing, value in enumerate(GV.CardValues[0]):
-                        GV.HandValues[0] = sum(GV.CardValues[0])
-                        if GV.HandValues[0] > 21:
-                            if value == 11:
-                                (GV.CardValues[0])[indexing] = 1
-                        else:
-                            break
-                    
-                    GV.HandValues[0] = sum(GV.CardValues[0])
+                    GV.HandValues[0] = best_hand_value(GV.CardValues[0])
 
                     GV.cardPositions[0].append(RICD((GV.cardStartPos[0])[0], (GV.cardStartPos[0])[1]))
                     (GV.cardStartPos[0])[0] += 20
@@ -1524,15 +1509,7 @@ class game_functions:
                     else:    
                         GV.CardValues[0].append(int(GV.Values[int(((GV.CardHands[0])[-1])[1])-2]))
 
-                    for indexing, value in enumerate(GV.CardValues[0]):
-                        GV.HandValues[0] = sum(GV.CardValues[0])
-                        if GV.HandValues[0] > 21:
-                            if value == 11:
-                                (GV.CardValues[0])[indexing] = 1
-                        else:
-                            break
-                    
-                    GV.HandValues[0] = sum(GV.CardValues[0])
+                    GV.HandValues[0] = best_hand_value(GV.CardValues[0])
 
                     GV.cardDeck.pop(0)
                     GV.cardPositions[0].append(RICD((GV.cardStartPos[0])[0], (GV.cardStartPos[0])[1]))
@@ -1550,15 +1527,7 @@ class game_functions:
                     else:    
                         GV.CardValues[1].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
 
-                    for indexing, value in enumerate(GV.CardValues[1]):
-                        GV.HandValues[1] = sum(GV.CardValues[1])
-                        if GV.HandValues[1] > 21:
-                            if value == 11:
-                                (GV.CardValues[1])[indexing] = 1
-                        else:
-                            break
-                    
-                    GV.HandValues[1] = sum(GV.CardValues[1])
+                    GV.HandValues[1] = best_hand_value(GV.CardValues[1])
 
                     GV.cardDeck.pop(0)
                     GV.cardPositions[1].append(RICD((GV.cardStartPos[1])[0], (GV.cardStartPos[1])[1]))
@@ -1588,16 +1557,7 @@ class game_functions:
                                 GV.CardValues[indexesa].append(int(GV.Values[int(((GV.CardHands[indexesa])[indexesb])[1])-2]))
 
                     for indexes, list_var in enumerate(GV.CardValues):
-                        for indexing, value in enumerate(list_var):
-                            GV.HandValues[indexes] = sum(GV.CardValues[indexes])
-                            if GV.HandValues[indexes] > 21:
-                                if value == 11:
-                                    (GV.CardValues[indexes])[indexing] = 1
-                            else:
-                                break
-                    
-                    for values in range(0,4):
-                        GV.HandValues[values] = sum(GV.CardValues[values])
+                        GV.HandValues[indexes] = best_hand_value(list_var)
 
                     GV.DoubleDownChipTempList1 = []
                     GV.DoubleDownChipTempList2 = []
@@ -1613,15 +1573,7 @@ class game_functions:
                     else:    
                         GV.CardValues[3].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
 
-                    for indexing, value in enumerate(GV.CardValues[3]):
-                        GV.HandValues[3] = sum(GV.CardValues[3])
-                        if GV.HandValues[3] > 21:
-                            if value == 11:
-                                (GV.CardValues[3])[indexing] = 1
-                        else:
-                            break
-                    
-                    GV.HandValues[3] = sum(GV.CardValues[3])
+                    GV.HandValues[3] = best_hand_value(GV.CardValues[3])
 
                     GV.cardPositions[3].append(RICD((GV.cardStartPos[3])[0], (GV.cardStartPos[3])[1]))
                     (GV.cardStartPos[3])[0] += 20
@@ -1644,14 +1596,7 @@ class game_functions:
                     else:    
                         GV.CardValues[3].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
 
-                    for indexing, value in enumerate(GV.CardValues[3]):
-                        GV.HandValues[3] = sum(GV.CardValues[3])
-                        if GV.HandValues[3] > 21:
-                            if value == 11:
-                                (GV.CardValues[3])[indexing] = 1
-                        else:
-                            break
-                    GV.HandValues[3] = sum(GV.CardValues[3])
+                    GV.HandValues[3] = best_hand_value(GV.CardValues[3])
 
                     GV.cardDeck.pop(0)
                     GV.cardPositions[3].append(RICD((GV.cardStartPos[3])[0], (GV.cardStartPos[3])[1]))
@@ -1669,14 +1614,7 @@ class game_functions:
                     else:    
                         GV.CardValues[2].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
 
-                    for indexing, value in enumerate(GV.CardValues[2]):
-                        GV.HandValues[2] = sum(GV.CardValues[2])
-                        if GV.HandValues[2] > 21:
-                            if value == 11:
-                                (GV.CardValues[2])[indexing] = 1
-                        else:
-                            break
-                    GV.HandValues[2] = sum(GV.CardValues[2])
+                    GV.HandValues[2] = best_hand_value(GV.CardValues[2])
 
                     GV.cardDeck.pop(0)
                     GV.cardPositions[2].append(RICD((GV.cardStartPos[2])[0], (GV.cardStartPos[2])[1]))
@@ -1704,16 +1642,7 @@ class game_functions:
                                 GV.CardValues[indexesa].append(int(GV.Values[int(((GV.CardHands[indexesa])[indexesb])[1])-2]))
 
                     for indexes, list_var in enumerate(GV.CardValues):
-                        for indexing, value in enumerate(list_var):
-                            GV.HandValues[indexes] = sum(GV.CardValues[indexes])
-                            if GV.HandValues[indexes] > 21:
-                                if value == 11:
-                                    (GV.CardValues[indexes])[indexing] = 1
-                            else:
-                                break
-                    
-                    for values in range(0,4):
-                        GV.HandValues[values] = sum(GV.CardValues[values])
+                        GV.HandValues[indexes] = best_hand_value(list_var)
 
                     GV.DoubleDownChipTempList1 = []
                     GV.DoubleDownChipTempList2 = []
@@ -1729,15 +1658,7 @@ class game_functions:
                     else:    
                         GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
 
-                    for indexing, value in enumerate(GV.CardValues[index]):
-                        GV.HandValues[index] = sum(GV.CardValues[index])
-                        if GV.HandValues[index] > 21:
-                            if value == 11:
-                                (GV.CardValues[index])[indexing] = 1
-                        else:
-                            break
-                    
-                    GV.HandValues[index] = sum(GV.CardValues[index])
+                    GV.HandValues[index] = best_hand_value(GV.CardValues[index])
 
                     GV.cardDeck.pop(0)
                     GV.cardPositions[index].append(RICD((GV.cardStartPos[index])[0], (GV.cardStartPos[index])[1]))
@@ -1747,17 +1668,10 @@ class game_functions:
                     GV.DoubleDownConfirmation[index] = 0
                     GV.DoubleDownOverride[index] = 1
 
-                    if GV.HandValues[index] <= 10:
-                        for indexs, value in enumerate(GV.CardValues[index]):
-                            GV.HandValues[index] = sum(GV.CardValues[index])
-                            if GV.HandValues[index] <= 10:
-                                if value == 1:
-                                    GV.CardValues[index][indexs] = 11
-                    
-                    GV.HandValues[index] = sum(GV.CardValues[index])
+                    GV.HandValues[index] = best_hand_value(GV.CardValues[index])
 
                     for values in range(0,4):
-                        GV.HandValues[values] = sum(GV.CardValues[values])
+                        GV.HandValues[values] = best_hand_value(GV.CardValues[values])
 
 
                     if GV.HandValues[index] > 21:
@@ -1812,27 +1726,12 @@ class game_functions:
                     else:    
                         GV.CardValues[index].append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
 
-                    for indexing, value in enumerate(GV.CardValues[index]):
-                        GV.HandValues[index] = sum(GV.CardValues[index])
-                        if GV.HandValues[index] > 21:
-                            if value == 11:
-                                (GV.CardValues[index])[indexing] = 1
-                        else:
-                            break
-                    
-                    GV.HandValues[index] = sum(GV.CardValues[index])
+                    GV.HandValues[index] = best_hand_value(GV.CardValues[index])
 
-                    if GV.HandValues[index] <= 10:
-                        for indexs, value in enumerate(GV.CardValues[index]):
-                            GV.HandValues[index] = sum(GV.CardValues[index])
-                            if GV.HandValues[index] <= 10:
-                                if value == 1:
-                                    GV.CardValues[index][indexs] = 11
-                    
-                    GV.HandValues[index] = sum(GV.CardValues[index])
+                    GV.HandValues[index] = best_hand_value(GV.CardValues[index])
 
                     for values in range(0,4):
-                        GV.HandValues[values] = sum(GV.CardValues[values])
+                        GV.HandValues[values] = best_hand_value(GV.CardValues[values])
 
 
                     if GV.HandValues[index] > 21:
@@ -1875,13 +1774,7 @@ class game_functions:
                                 GV.CardValues[indexesa].append(int(GV.Values[int(((GV.CardHands[indexesa])[indexesb])[1])-2]))
 
                     for indexes, list_var in enumerate(GV.CardValues):
-                        for indexing, value in enumerate(list_var):
-                            GV.HandValues[indexes] = sum(GV.CardValues[indexes])
-                            if GV.HandValues[indexes] > 21:
-                                if value == 11:
-                                    (GV.CardValues[indexes])[indexing] = 1
-                            else:
-                                break
+                        GV.HandValues[indexes] = best_hand_value(list_var)
 
                     GV.DoubleDownChipTempList1 = []
                     GV.DoubleDownChipTempList2 = []
@@ -1937,15 +1830,7 @@ class game_functions:
                 else:    
                     GV.dCardValues.append(int(GV.Values[int((GV.cardDeck[0])[1])-2]))
 
-                for indexing, value in enumerate(GV.dCardValues):
-                    GV.dHandValue = sum(GV.dCardValues)
-                    if GV.dHandValue > 21:
-                        if value == 11:
-                            (GV.dCardValues)[indexing] = 1
-                    else:
-                        break
-                
-                GV.dHandValue = sum(GV.dCardValues)
+                GV.dHandValue = best_hand_value(GV.dCardValues)
 
                 GV.cardDeck.pop(0)
                 GV.dcardPosition.append(RICD((GV.dcardStartPos)[0], (GV.dcardStartPos)[1]))
