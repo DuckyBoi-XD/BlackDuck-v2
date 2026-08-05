@@ -213,6 +213,9 @@ class game_variable: # Game variables
         self.betFunctionDoubleDownFont = pygame.font.Font("assets/fonts/tableFont.ttf", 15)
         self.betFunctionSplitFont = pygame.font.Font("assets/fonts/tableFont.ttf", 25)
 
+        self.tableTextFontFull = pygame.font.Font("assets/fonts/tableFont.ttf", 40)
+        self.tableTextFontSemi = pygame.font.Font("assets/fonts/tableFont.ttf", 25)
+
         self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont)
         self.chipFontListSmall = (self.threeCharFontSmall, self.fourCharFontSmall, self.fiveCharFontSmall, self.sixCharFontSmall)
 
@@ -856,6 +859,62 @@ class game_objects:
                     else:
                         pygame.draw.rect(GV.display, GV.bright_blue, rect.inflate(2, 2), width=2, border_radius=3)
 
+        tableText = GV.tableTextFontFull.render("PAY 2 to 1", True, GV.white_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 335)
+        tabletextRect = tableText_rotated.get_rect(center=(111, 144))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+
+        tableText = GV.tableTextFontSemi.render("BLACKJACK", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 350)
+        tabletextRect = tableText_rotated.get_rect(center=(396, 254))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render(" AND ", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 355)
+        tabletextRect = tableText_rotated.get_rect(center=(510, 270))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render("5", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 350)
+        tabletextRect = tableText_rotated.get_rect(center=(550, 273))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tabletext = GV.tableTextFontSemi.render(" CARD ", True, GV.yellow_colour)
+        tabletextRect = tabletext.get_rect(center=(600, 275))
+        GV.display.blit(tabletext, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render("CHARLIE", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 5)
+        tabletextRect = tableText_rotated.get_rect(center=(700, 270))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render(" PAY 3 to 1", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 13)
+        tabletextRect = tableText_rotated.get_rect(center=(815, 252))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render("DEALDER ", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 352)
+        tabletextRect = tableText_rotated.get_rect(center=(430, 208))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render("DRAWS ON 16, ", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 359.5)
+        tabletextRect = tableText_rotated.get_rect(center=(586, 217))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render("STAND ON 17", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 7)
+        tabletextRect = tableText_rotated.get_rect(center=(753, 207))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+
+        tableText = GV.tableTextFontFull.render("PAY 2 to 1", True, GV.white_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 26)
+        tabletextRect = tableText_rotated.get_rect(center=(1089, 137))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
 
 GO = game_objects()
 
@@ -865,6 +924,7 @@ class game_functions:
             if event.type == pygame.QUIT:
                 GV._running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                print(pygame.mouse.get_pos())
                 if int(list(reversed(GV.chipValues))[GV.exchangeChipSelection]) < GV.chipExchangeValue2 or (int(list(reversed(GV.chipValues))[GV.exchangeChipSelection]) == GV.chipExchangeValue2 and len(GV.chipExchange)!= 1):
                     if int(list(reversed(GV.chipValues))[GV.exchangeChipSelection]) <= GV.chipExchangeValue2-GV.chipExchangeValue1:
                         if event.button == 1:
@@ -1970,7 +2030,6 @@ class pygame_function:
         if self.on_init() == False:
             GV._running = False 
         while(GV._running):
-            print(GV.DoubleDownChipTempList)
             for i in CHIPS:
                 if i < 0:
                     print("AHHHHHHH")
