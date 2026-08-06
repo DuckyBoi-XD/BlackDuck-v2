@@ -97,6 +97,13 @@ def save_game(money_value = None, chip_info = None):
 
 MONEY, CHIPS = load_game()
 CHIPS = [1, 1, 1, 6, 1, 1, 1, 1, 1, 1]
+STATS = {"hands played" : 0,
+         "hands won" : 0,
+         "hands lost" : 0,
+         "money gained" : 0,
+         "blackjack or 5CC" : 0,
+         "hands push back" : 0}
+
 debug_var = True
 
 def cosd(x):
@@ -1946,19 +1953,26 @@ class game_functions:
                         for indexing, valuea in enumerate(gameCHIPSVar):
                             if valuea > 0:
                                 CHIPS[indexing] += valuea
+                        STATS["hands played"] += 1
+                        STATS["hands push back"] += 1
 
                     elif value == 2:
-                        pass
-
+                        STATS["hands played"] += 1
+                        STATS["hands lost"] += 1
                     elif value == 3:
                         if GV.HandState[index] == 3 or GV.HandState[index] == 4:
                             for indexing, valuea in enumerate(gameCHIPSVar):
                                 if valuea > 0:
                                     CHIPS[indexing] += valuea * 3
+                                    STATS["money gained"] += (int(GV.chipValues[indexing]))*2
+                            STATS["blackjack or 5CC"] += 1
                         else:
                             for indexing, valuea in enumerate(gameCHIPSVar):
                                 if valuea > 0:
                                     CHIPS[indexing] += valuea * 2
+                                    STATS["money gained"] += int(GV.chipValues[indexing])
+                        STATS["hands played"] += 1
+                        STATS["hands won"] += 1
 
                     gameChipPosVar.clear()
                     chipBetVar.clear()
@@ -2030,6 +2044,7 @@ class pygame_function:
         if self.on_init() == False:
             GV._running = False 
         while(GV._running):
+            print(STATS)
             for i in CHIPS:
                 if i < 0:
                     print("AHHHHHHH")
