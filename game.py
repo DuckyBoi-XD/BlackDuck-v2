@@ -96,7 +96,7 @@ def save_game(money_value = None, chip_info = None):
         f.write(encoded_bytes)
 
 MONEY, CHIPS = load_game()
-CHIPS = [1, 1, 1, 6, 1, 1, 1, 1, 1, 1]
+CHIPS = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
 STATS = {"hands played" : 0,
          "hands won" : 0,
          "hands lost" : 0,
@@ -382,6 +382,8 @@ class game_variable: # Game variables
         self.DoubleDownChipTempListremove = [0, 0, 0, 0]
         self.DoubleDownConfirmation = [0, 0, 0, 0]
         self.DoubleDownOverride = [0, 0, 0, 0]
+
+        self.gameend = False
         
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -921,6 +923,11 @@ class game_objects:
                     else:
                         pygame.draw.rect(GV.display, GV.bright_blue, rect.inflate(2, 2), width=2, border_radius=3)
 
+    def gameEnd(self):
+            if GV.gameend and GV.payout is False:
+                pygame.draw.rect(GV.display, (0, 0, 0), (450, 150, 300, 400))
+                pygame.draw.rect(GV.display, (200, 200, 200), (450, 150, 300, 400), width=5)
+    
 GO = game_objects()
 
 class game_functions:
@@ -929,7 +936,6 @@ class game_functions:
             if event.type == pygame.QUIT:
                 GV._running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                print(pygame.mouse.get_pos())
                 if int(list(reversed(GV.chipValues))[GV.exchangeChipSelection]) < GV.chipExchangeValue2 or (int(list(reversed(GV.chipValues))[GV.exchangeChipSelection]) == GV.chipExchangeValue2 and len(GV.chipExchange)!= 1):
                     if int(list(reversed(GV.chipValues))[GV.exchangeChipSelection]) <= GV.chipExchangeValue2-GV.chipExchangeValue1:
                         if event.button == 1:
@@ -2008,6 +2014,9 @@ class game_functions:
             GV.splitOverride1 = False
             GV.splitOverride2 = False
 
+            if sum(CHIPS) == 0:
+                GV.gameend = True
+
 GF = game_functions()
 
 class pygame_function:
@@ -2034,6 +2043,7 @@ class pygame_function:
         game_objects.on_init(self)
         game_objects.game_space(self)
         game_objects.chip_object(self)
+        game_objects.gameEnd(self)
     def on_loop(self):
         pass
     def on_cleanup(self):
@@ -2042,7 +2052,6 @@ class pygame_function:
         if self.on_init() == False:
             GV._running = False 
         while(GV._running):
-            print(STATS)
             for i in CHIPS:
                 if i < 0:
                     print("AHHHHHHH")
@@ -2052,6 +2061,7 @@ class pygame_function:
             GF.blackjack()
             self.on_loop()
             self.on_render()
+
             pygame.display.flip()
 
 def main():
