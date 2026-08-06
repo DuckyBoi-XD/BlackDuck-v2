@@ -789,6 +789,62 @@ class game_objects:
         rect = rect_surface.get_rect(center=(598, 433))
         GV.display.blit(rect_surface, rect)
 
+        tableText = GV.tableTextFontFull.render("PAY 2 to 1", True, GV.white_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 335)
+        tabletextRect = tableText_rotated.get_rect(center=(111, 144))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+
+        tableText = GV.tableTextFontSemi.render("BLACKJACK", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 350)
+        tabletextRect = tableText_rotated.get_rect(center=(396, 254))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render(" AND ", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 355)
+        tabletextRect = tableText_rotated.get_rect(center=(510, 270))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render("5", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 350)
+        tabletextRect = tableText_rotated.get_rect(center=(550, 273))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tabletext = GV.tableTextFontSemi.render(" CARD ", True, GV.yellow_colour)
+        tabletextRect = tabletext.get_rect(center=(600, 275))
+        GV.display.blit(tabletext, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render("CHARLIE", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 5)
+        tabletextRect = tableText_rotated.get_rect(center=(700, 270))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render(" PAY 3 to 1", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 13)
+        tabletextRect = tableText_rotated.get_rect(center=(815, 252))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render("DEALDER ", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 352)
+        tabletextRect = tableText_rotated.get_rect(center=(430, 208))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render("DRAWS ON 16, ", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 359.5)
+        tabletextRect = tableText_rotated.get_rect(center=(586, 217))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+        tableText = GV.tableTextFontSemi.render("STAND ON 17", True, GV.yellow_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 7)
+        tabletextRect = tableText_rotated.get_rect(center=(753, 207))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
+
+        tableText = GV.tableTextFontFull.render("PAY 2 to 1", True, GV.white_colour)
+        tableText_rotated = pygame.transform.rotate(tableText, 26)
+        tabletextRect = tableText_rotated.get_rect(center=(1089, 137))
+        GV.display.blit(tableText_rotated, tabletextRect)
+
         if GV.bettingGame:
             for indexa, cardlist in enumerate(GV.cardPositions):
                 for indexb, cardpos in enumerate(cardlist):
@@ -861,67 +917,9 @@ class game_objects:
                                 pygame.draw.rect(GV.display, GV.bright_red, rect.inflate(2, 2), width=2, border_radius=3)
                             else:
                                 pygame.draw.rect(GV.display, GV.bright_orange, rect.inflate(2, 2), width=2, border_radius=3)
-
-                        
+                                
                     else:
                         pygame.draw.rect(GV.display, GV.bright_blue, rect.inflate(2, 2), width=2, border_radius=3)
-
-        tableText = GV.tableTextFontFull.render("PAY 2 to 1", True, GV.white_colour)
-        tableText_rotated = pygame.transform.rotate(tableText, 335)
-        tabletextRect = tableText_rotated.get_rect(center=(111, 144))
-        GV.display.blit(tableText_rotated, tabletextRect)
-
-
-        tableText = GV.tableTextFontSemi.render("BLACKJACK", True, GV.yellow_colour)
-        tableText_rotated = pygame.transform.rotate(tableText, 350)
-        tabletextRect = tableText_rotated.get_rect(center=(396, 254))
-        GV.display.blit(tableText_rotated, tabletextRect)
-
-        tableText = GV.tableTextFontSemi.render(" AND ", True, GV.yellow_colour)
-        tableText_rotated = pygame.transform.rotate(tableText, 355)
-        tabletextRect = tableText_rotated.get_rect(center=(510, 270))
-        GV.display.blit(tableText_rotated, tabletextRect)
-
-        tableText = GV.tableTextFontSemi.render("5", True, GV.yellow_colour)
-        tableText_rotated = pygame.transform.rotate(tableText, 350)
-        tabletextRect = tableText_rotated.get_rect(center=(550, 273))
-        GV.display.blit(tableText_rotated, tabletextRect)
-
-        tabletext = GV.tableTextFontSemi.render(" CARD ", True, GV.yellow_colour)
-        tabletextRect = tabletext.get_rect(center=(600, 275))
-        GV.display.blit(tabletext, tabletextRect)
-
-        tableText = GV.tableTextFontSemi.render("CHARLIE", True, GV.yellow_colour)
-        tableText_rotated = pygame.transform.rotate(tableText, 5)
-        tabletextRect = tableText_rotated.get_rect(center=(700, 270))
-        GV.display.blit(tableText_rotated, tabletextRect)
-
-        tableText = GV.tableTextFontSemi.render(" PAY 3 to 1", True, GV.yellow_colour)
-        tableText_rotated = pygame.transform.rotate(tableText, 13)
-        tabletextRect = tableText_rotated.get_rect(center=(815, 252))
-        GV.display.blit(tableText_rotated, tabletextRect)
-
-        tableText = GV.tableTextFontSemi.render("DEALDER ", True, GV.yellow_colour)
-        tableText_rotated = pygame.transform.rotate(tableText, 352)
-        tabletextRect = tableText_rotated.get_rect(center=(430, 208))
-        GV.display.blit(tableText_rotated, tabletextRect)
-
-        tableText = GV.tableTextFontSemi.render("DRAWS ON 16, ", True, GV.yellow_colour)
-        tableText_rotated = pygame.transform.rotate(tableText, 359.5)
-        tabletextRect = tableText_rotated.get_rect(center=(586, 217))
-        GV.display.blit(tableText_rotated, tabletextRect)
-
-        tableText = GV.tableTextFontSemi.render("STAND ON 17", True, GV.yellow_colour)
-        tableText_rotated = pygame.transform.rotate(tableText, 7)
-        tabletextRect = tableText_rotated.get_rect(center=(753, 207))
-        GV.display.blit(tableText_rotated, tabletextRect)
-
-
-        tableText = GV.tableTextFontFull.render("PAY 2 to 1", True, GV.white_colour)
-        tableText_rotated = pygame.transform.rotate(tableText, 26)
-        tabletextRect = tableText_rotated.get_rect(center=(1089, 137))
-        GV.display.blit(tableText_rotated, tabletextRect)
-
 
 GO = game_objects()
 
