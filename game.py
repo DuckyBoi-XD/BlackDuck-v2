@@ -64,28 +64,27 @@ def load_game(): # access save file -JSON
             json_str = decode_save(encoded_bytes)
             data = json.loads(json_str)
             savefile_value = 1
-            return (data.get("Money", 0),
-                    data.get("Chips", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-                    )# 1, 5, 10, 25, 100, 500, 1.000, 5.000, 10.000, 25.000, 100.000
+            return (data.get("Chips", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+                    data.get("Stats", {"hands played" : 0, "hands won" : 0, "hands lost" : 0, "money gained" : 0, "blackjack or 5CC" : 0, "hands push back" : 0}))
                     
     except FileNotFoundError:
         savefile_value = 2
-        return 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        return [10, 2, 1, 0, 0, 0, 0, 0, 0, 0], {"hands played" : 0, "hands won" : 0, "hands lost" : 0, "money gained" : 0, "blackjack or 5CC" : 0, "hands push back" : 0}
     except (ValueError, json.JSONDecodeError) as error:
         print(f"Corrupted save file - using defaults. Error: {error}")
         savefile_value = 3  
-        return 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        return [10, 2, 1, 0, 0, 0, 0, 0, 0, 0], {"hands played" : 0, "hands won" : 0, "hands lost" : 0, "money gained" : 0, "blackjack or 5CC" : 0, "hands push back" : 0}
 
-def save_game(money_value = None, chip_info = None):
+def save_game(chip_info = None, stats = None):
     '''saving game data'''
-    if money_value is None:
-        money_value = MONEY
     if chip_info is None:
         chip_info = CHIPS
+    if stats is None:
+        stats = STATS
 
     data = {
-        "Money": money_value,
-        "Chips": chip_info
+        "Chips": chip_info,
+        "Stats": stats
     }
     json_str = json.dumps(data)
     encoded_bytes = encode_save(json_str)
@@ -95,14 +94,7 @@ def save_game(money_value = None, chip_info = None):
     with open(save_path, "wb") as f:
         f.write(encoded_bytes)
 
-MONEY, CHIPS = load_game()
-CHIPS = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
-STATS = {"hands played" : 0,
-         "hands won" : 0,
-         "hands lost" : 0,
-         "money gained" : 0,
-         "blackjack or 5CC" : 0,
-         "hands push back" : 0}
+CHIPS, STATS = load_game()
 
 debug_var = True
 
@@ -388,6 +380,7 @@ class game_variable: # Game variables
 
         self.gameend = False
         self.gameendHover = [20, 20, 20]
+        self.gameRestart = False
         
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -1110,6 +1103,8 @@ class game_functions:
                             for indexb, value in enumerate(lista):
                                 GV.chipDisplayPriority.append((indexa, indexb))
 
+                        save_game()
+
                     else:
                         GV.exchangeConfirmation = False
 
@@ -1329,6 +1324,14 @@ class game_functions:
                                 for value in list_var:
                                     GV.gameBetChipValue[indexs] += int((GV.chipValues)[value[0]])
 
+                if GV.gameRestart:
+                    CHIPS = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
+                    STATS = {"hands played" : 0,
+                            "hands won" : 0,
+                            "hands lost" : 0,
+                            "money gained" : 0,
+                            "blackjack or 5CC" : 0,
+                            "hands push back" : 0}
 
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
@@ -1386,9 +1389,10 @@ class game_functions:
                 (500, 497, 200, 40)
                 if 500 <= cursorPosx <= 700 and 497 <= cursorPosy <= 537:
                     GV.gameend = [80, 80, 80]
+                    GV.gameRestart = True
                 else:
                     GV.gameend = [20, 20, 20]
-            
+                    GV.gameRestart = False
 
     def betting_area(self):
         for self.indexChipPosition in reversed(GV.chipDisplayPriority):
@@ -2088,6 +2092,7 @@ class game_functions:
 
             if sum(CHIPS) == 0:
                 GV.gameend = True
+            save_game()
 
 GF = game_functions()
 
