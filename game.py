@@ -223,6 +223,9 @@ class game_variable: # Game variables
         self.tableTextFontFull = pygame.font.Font("assets/fonts/tableFont.ttf", 40)
         self.tableTextFontSemi = pygame.font.Font("assets/fonts/tableFont.ttf", 25)
 
+        self.endgamefont = pygame.font.Font("assets/fonts/endgameFont.ttf", 20)
+        self.endgamefontSemi = pygame.font.Font("assets/fonts/endgameFont.ttf", 17)
+
         self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont)
         self.chipFontListSmall = (self.threeCharFontSmall, self.fourCharFontSmall, self.fiveCharFontSmall, self.sixCharFontSmall)
 
@@ -925,9 +928,62 @@ class game_objects:
 
     def gameEnd(self):
             if GV.gameend and GV.payout is False:
-                pygame.draw.rect(GV.display, (0, 0, 0), (450, 150, 300, 400))
-                pygame.draw.rect(GV.display, (200, 200, 200), (450, 150, 300, 400), width=5)
-    
+                rect_surface = pygame.Surface((600, 400), pygame.SRCALPHA)
+                rect_surface.set_alpha(200)
+        
+                pygame.draw.rect(rect_surface, (0, 0, 0), (0, 0, 300, 400))
+                pygame.draw.rect(rect_surface, (255, 255, 255), (0, 0, 300, 400), width=3)
+        
+                GV.display.blit(rect_surface, (450, 150))
+        
+                endgameText = GV.endgamefont.render(f"HANDS PLAYED:", True, GV.white_colour)
+                tabletextRect = endgameText.get_rect(center=(600, 180))
+                GV.display.blit(endgameText, tabletextRect)
+        
+                endgameValue = GV.endgamefont.render(f"{STATS["hands played"]}", True, GV.white_colour)
+                tabletextRect = endgameValue.get_rect(center=(600, 200))
+                GV.display.blit(endgameValue, tabletextRect)
+        
+                
+                endgameText = GV.endgamefont.render(f"HANDS WON:", True, GV.white_colour)
+                tabletextRect = endgameText.get_rect(center=(600, 235))
+                GV.display.blit(endgameText, tabletextRect)
+                endgameValue = GV.endgamefont.render(f"{STATS["hands won"]}", True, GV.white_colour)
+                tabletextRect = endgameValue.get_rect(center=(600, 255))
+                GV.display.blit(endgameValue, tabletextRect)
+        
+        
+                endgameText = GV.endgamefont.render(f"HANDS LOST:", True, GV.white_colour)
+                tabletextRect = endgameText.get_rect(center=(600, 280))
+                GV.display.blit(endgameText, tabletextRect)
+                endgameValue = GV.endgamefont.render(f"{STATS["hands lost"]}", True, GV.white_colour)
+                tabletextRect = endgameValue.get_rect(center=(600, 300))
+                GV.display.blit(endgameValue, tabletextRect)
+        
+        
+                tableText = GV.endgamefontSemi.render(f"BLACKJACK AND", True, GV.white_colour)
+                tabletextRect = tableText.get_rect(center=(600, 325))
+                GV.display.blit(tableText, tabletextRect)
+                tableText = GV.endgamefontSemi.render(f"5 CARD CHARLIE WINS:", True, GV.white_colour)
+                tabletextRect = tableText.get_rect(center=(600, 345))
+                GV.display.blit(tableText, tabletextRect)
+                tableText = GV.endgamefont.render(f"{STATS["blackjack or 5CC"]}", True, GV.white_colour)
+                tabletextRect = tableText.get_rect(center=(600, 365))
+                GV.display.blit(tableText, tabletextRect)
+        
+                endgameText = GV.endgamefont.render(f"HANDS PUSHED BACK:", True, GV.white_colour)
+                tabletextRect = endgameText.get_rect(center=(600, 395))
+                GV.display.blit(endgameText, tabletextRect)
+                endgameValue = GV.endgamefont.render(f"{STATS["hands push back"]}", True, GV.white_colour)
+                tabletextRect = endgameValue.get_rect(center=(600, 415))
+                GV.display.blit(endgameValue, tabletextRect)
+        
+                endgameText = GV.endgamefont.render(f"MONEY EARNT:", True, GV.white_colour)
+                tabletextRect = endgameText.get_rect(center=(600, 440))
+                GV.display.blit(endgameText, tabletextRect)
+                endgameValue = GV.endgamefont.render(f"{STATS["money gained"]}", True, GV.white_colour)
+                tabletextRect = endgameValue.get_rect(center=(600, 460))
+                GV.display.blit(endgameValue, tabletextRect)
 GO = game_objects()
 
 class game_functions:
