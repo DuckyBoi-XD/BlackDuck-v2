@@ -2267,6 +2267,8 @@ class pygame_function:
             GV._running = False 
         while(GV._running):
             self.FPS.tick(self.fps)
+            if sum(CHIPS) == 0:
+                GV.gameend = True
             GF.move_chip()
             GF.betting_area()
             GF.blackjack()
