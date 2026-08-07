@@ -130,6 +130,7 @@ class game_variable: # Game variables
         self.display = pygame.display.set_mode((self.displayWidth, self.displayHeight), pygame.HWSURFACE | pygame.DOUBLEBUF)
         self.table_colour = (20, 86, 62)
         self.table_colour_accent = (37, 64, 64)
+        global CHIPS, STATS
 
         self.white_colour = (255, 255, 255)
         self.red_colour = (159, 27, 39)
@@ -424,6 +425,8 @@ class game_objects:
                 -1003 - (sind(delta) * 1200))
             )
         GV.chipExchangeFunctionPosChords.append((553.120603956999, 0))
+
+        global CHIPS, STATS
     def on_init(self):
         self.chipCirclePoints1 = []
         self.chipCirclePoints2 = []
@@ -989,6 +992,7 @@ GO = game_objects()
 
 class game_functions:
     def move_chip(self):
+        global CHIPS, STATS
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 GV._running = False
@@ -1395,6 +1399,7 @@ class game_functions:
                     GV.gameRestart = False
 
     def betting_area(self):
+        global CHIPS, STATS
         for self.indexChipPosition in reversed(GV.chipDisplayPriority):
             chipPositionx = ((GV.chipPositions[self.indexChipPosition[0]])[self.indexChipPosition[1]])[0]
             chipPositiony = ((GV.chipPositions[self.indexChipPosition[0]])[self.indexChipPosition[1]])[1]
@@ -1559,6 +1564,7 @@ class game_functions:
                     GV.DoubleDownActivation[indexes] = 1
 
     def blackjack(self):
+        global CHIPS, STATS
         for index, value in enumerate(GV.gameStart[1:3]):
             if value == 1 and (GV.addCard[1:3][index]) == 1:
                 index += 1
