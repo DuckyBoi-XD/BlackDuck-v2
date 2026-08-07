@@ -1957,29 +1957,14 @@ class game_functions:
                     for values in range(0,4):
                         GV.HandValues[values] = best_hand_value(GV.CardValues[values])
 
-
+                    GV.gamefocus[index] = 0
+                    GV.HandState[index] = 1
                     if GV.HandValues[index] > 21:
                         GV.HandState[index] = 2
-                        GV.gamefocus[index] = 0
                         GV.gameOutput[index] = 2
-                        if index != 3:
-                            if GV.HandValues[index+1] != 0:
-                                GV.gamefocus[index+1] = 1
-                            else:
-                                GV.dTurn = True
-                        else:
-                            GV.dTurn = True
                     
                     elif len(GV.CardHands[index]) == 5:
                         GV.HandState[index] = 4
-                        GV.gamefocus[index] = 0
-                        if index != 3:
-                            if GV.HandValues[index+1] != 0:
-                                GV.gamefocus[index+1] = 1
-                            else:
-                                GV.dTurn = True
-                        else:
-                            GV.dTurn = True 
 
                     if index != 3:
                         if GV.HandValues[index+1] != 0:
