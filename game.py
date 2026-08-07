@@ -1329,14 +1329,93 @@ class game_functions:
                                     GV.gameBetChipValue[indexs] += int((GV.chipValues)[value[0]])
 
                 if GV.gameRestart:
-                    CHIPS = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
+                    CHIPS = [10, 2, 1, 0, 0, 0, 0, 0, 0, 0]
                     STATS = {"hands played" : 0,
                             "hands won" : 0,
                             "hands lost" : 0,
                             "money gained" : 0,
                             "blackjack or 5CC" : 0,
                             "hands push back" : 0}
+                    GV.gameRestart = False
+                    GV.gameend = False
+                    GV.dbust = False
+                    GV.dStart = True
+                    GV.dOutcome = False
+                    GV.exchangeConfirmation = True
 
+                    for indexsa, list_var in enumerate(GV.gameCHIPS):
+                        for indexsb, value in enumerate(list_var):
+                            (GV.gameCHIPS[indexsa])[indexsb] = 0
+                    GV.gameBet = [0, 0, 0, 0]
+                    GV.cardPositions1 = []
+                    GV.cardPositions2 = []
+                    GV.cardPositions3 = []
+                    GV.cardPositions4 = []
+                    GV.cardPositions = [GV.cardPositions1, GV.cardPositions2, GV.cardPositions3, GV.cardPositions4]
+                    GV.dcardPosition = []
+
+                    GV.addCard = [0, 0, 0, 0]
+                    GV.daddCard = 0
+
+                    GV.gameStart = [0, 0, 0, 0]
+                    GV.dTurn = False
+                    GV.dDrawTime = 90
+
+                    GV.cardStartPos1 = [120, 240]
+                    GV.cardStartPos2 = [400, 300]
+                    GV.cardStartPos3 = [780, 300]
+                    GV.cardStartPos4 = [1050, 240]
+                    GV.cardStartPos = [GV.cardStartPos1, GV.cardStartPos2, GV.cardStartPos3, GV.cardStartPos4]
+                    GV.dcardStartPos = [594, 80]
+
+                    GV.CardHand1 = []
+                    GV.CardHand2 = []
+                    GV.CardHand3 = []
+                    GV.CardHand4 = []
+                    GV.CardHands = [GV.CardHand1, GV.CardHand2, GV.CardHand3, GV.CardHand4]
+                    GV.dCardHand = []
+
+                    GV.HandValues = [0, 0, 0, 0]
+                    GV.dHandValue = 0
+
+                    GV.CardValues1 = []
+                    GV.CardValues2 = []
+                    GV.CardValues3 = []
+                    GV.CardValues4 = []
+                    GV.CardValues = [GV.CardValues1, GV.CardValues2, GV.CardValues3, GV.CardValues4]
+                    GV.dCardValues = []
+
+                    GV.dbust = False
+                    GV.gamefocus = [0, 0, 0, 0]
+                    GV.HandState = [0, 0, 0, 0]
+                    GV.gameOutput = [0, 0, 0, 0]
+                    GV.dOutcome = False
+                    GV.payout = True
+
+                    GV.gameBetChipValue = [0, 0, 0, 0]
+                    GV.tempChipBet1 = []
+                    GV.tempChipBet4 = []
+                    GV.tempChipBetValues = [0, 0]
+                    GV.splitActivation1 = False
+                    GV.splitActivation2 = False
+                    GV.splitConfirmation1 = False
+                    GV.splitConfirmation2 = False
+                    GV.splitOverride1 = False
+                    GV.splitOverride2 = False
+
+
+                    GV.DoubleDownActivation = [0, 0, 0, 0]
+                    GV.DoubleDownChipValueTempList = [0, 0, 0, 0]
+
+                    GV.DoubleDownChipTempList1 = []
+                    GV.DoubleDownChipTempList2 = []
+                    GV.DoubleDownChipTempList3 = []
+                    GV.DoubleDownChipTempList4 = []
+                    GV.DoubleDownChipTempList = [GV.DoubleDownChipTempList1, GV.DoubleDownChipTempList2,
+                                                    GV.DoubleDownChipTempList3, GV.DoubleDownChipTempList4]
+                    GV.DoubleDownChipTempListremove = [0, 0, 0, 0]
+                    GV.DoubleDownOverride = [0, 0, 0, 0]
+                    GV.DoubleDownConfirmation = [0, 0, 0, 0]
 
             if event.type == pygame.MOUSEBUTTONUP and GV.mousePosChange == True:
                 GV.mousePosChange = False
