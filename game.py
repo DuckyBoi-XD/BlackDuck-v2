@@ -1226,14 +1226,28 @@ class game_functions:
                         GV.chipExchangeStr1 = (f"{GV.chipExchangeValue1:,}")
 
                         if GV.bettingGame:
+                            chipBet1_temp = []
+                            chipBet2_temp = []
+                            chipBet3_temp = []
+                            chipBet4_temp = []
+
                             for index, value in enumerate(GV.chipBet1):
                                 GV.chipPositions[value[0]].append(GV.gameChipPos1[index])
+                                chipBet1_temp.append((value[0], len(GV.chipPositions[value[0]]) - 1))
                             for index, value in enumerate(GV.chipBet2):
                                 GV.chipPositions[value[0]].append(GV.gameChipPos2[index])
+                                chipBet2_temp.append((value[0], len(GV.chipPositions[value[0]]) - 1))
                             for index, value in enumerate(GV.chipBet3):
                                 GV.chipPositions[value[0]].append(GV.gameChipPos3[index])
+                                chipBet3_temp.append((value[0], len(GV.chipPositions[value[0]]) - 1))
                             for index, value in enumerate(GV.chipBet4):
                                 GV.chipPositions[value[0]].append(GV.gameChipPos4[index])
+                                chipBet4_temp.append((value[0], len(GV.chipPositions[value[0]]) - 1))
+
+                            GV.chipBet1[:] = chipBet1_temp
+                            GV.chipBet2[:] = chipBet2_temp
+                            GV.chipBet3[:] = chipBet3_temp
+                            GV.chipBet4[:] = chipBet4_temp
                         else:
                             for index, o in enumerate(GV.chipBet):
                                 GV.chipBet[index].clear()
