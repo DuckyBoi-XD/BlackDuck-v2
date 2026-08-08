@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "blackduck-v2"
+dynamic = ["version"]
+description = "The second version of the well-known gambling game Blackjack, made in Python using Pygame for the user interface."
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["game", "gambling", "pygame", "blackjack", "casino]
+authors = [
+  { name="Braeden Sy Tan" }
+]
+license = "GPL-3.0-or-later"
+dependencies = ["pygame>=2.6.0"]
+
+[project.urls]
+Homepage = "https://github.com/DuckyBoi-XD/BlackDuck-v2"
+Issues = "https://github.com/DuckyBoi-XD/BlackDuck-v2/issues"
+
+[project.scripts]
+BD2 = "blackduck-v2_package.game:main"
+blackduck-v2 = "blackduck-v2_package.game:main"
+play-BD2 = "blackduck-v2_package.game:main"
+play-blackduck-v2 = "blackduck-v2_package.game:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+version_scheme = "release-branch-semver"
+local_scheme = "no-local-version"
+tag_regex = "^(?:v)?(?P<version>\\d+\\.\\d+\\.\\d+)$"
