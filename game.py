@@ -383,6 +383,7 @@ class game_variable: # Game variables
         self.gameend = False
         self.gameendHover = [20, 20, 20]
         self.gameRestart = False
+        self.gameendcount = 0
         
         self.chipStartPositions = {}
         for index, i in enumerate(self.chipValues): # Starting value of chips
@@ -2225,9 +2226,6 @@ class game_functions:
                 GV.tempChipBetValues[indexa] = 0
             GV.splitOverride1 = False
             GV.splitOverride2 = False
-
-            if sum(CHIPS) == 0:
-                GV.gameend = True
             save_game()
 
 GF = game_functions()
@@ -2266,11 +2264,17 @@ class pygame_function:
             GV._running = False 
         while(GV._running):
             self.FPS.tick(self.fps)
-            if sum(CHIPS) == 0:
-                GV.gameend = True
             GF.move_chip()
             GF.betting_area()
             GF.blackjack()
+            print(CHIPS)
+            if sum(CHIPS) == 0 and not any(GV.chipBet):
+                GV.gameendcount += 1
+                if GV.gameendcount == 2:
+                    GV.gameend = True
+            else:
+                GV.gameendcount = 0
+                GV.gameend = False
             self.on_loop()
             self.on_render()
 
