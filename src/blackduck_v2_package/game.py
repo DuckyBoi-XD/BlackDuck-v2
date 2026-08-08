@@ -76,11 +76,11 @@ def load_game(): # access save file -JSON
                     
     except FileNotFoundError:
         savefile_value = 2
-        return [10, 2, 1, 0, 0, 0, 0, 0, 0, 0], {"hands played" : 0, "hands won" : 0, "hands lost" : 0, "money gained" : 0, "blackjack or 5CC" : 0, "hands push back" : 0}
+        return [5, 2, 1, 0, 0, 0, 0, 0, 0, 0], {"hands played" : 0, "hands won" : 0, "hands lost" : 0, "money gained" : 0, "blackjack or 5CC" : 0, "hands push back" : 0}
     except (ValueError, json.JSONDecodeError) as error:
         print(f"Corrupted save file - using defaults. Error: {error}")
         savefile_value = 3  
-        return [10, 2, 1, 0, 0, 0, 0, 0, 0, 0], {"hands played" : 0, "hands won" : 0, "hands lost" : 0, "money gained" : 0, "blackjack or 5CC" : 0, "hands push back" : 0}
+        return [5, 2, 1, 0, 0, 0, 0, 0, 0, 0], {"hands played" : 0, "hands won" : 0, "hands lost" : 0, "money gained" : 0, "blackjack or 5CC" : 0, "hands push back" : 0}
 
 def save_game(chip_info = None, stats = None):
     '''saving game data'''
@@ -985,7 +985,7 @@ class game_functions:
     def reset_full_game(self):
         global CHIPS, STATS
 
-        CHIPS = [10, 2, 1, 0, 0, 0, 0, 0, 0, 0]
+        CHIPS = [5, 2, 1, 0, 0, 0, 0, 0, 0, 0]
         STATS = {"hands played" : 0,
                  "hands won" : 0,
                  "hands lost" : 0,
