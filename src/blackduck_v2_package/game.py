@@ -5,8 +5,15 @@ import base64
 import os
 import codecs
 import math
+from pathlib import Path
 from pygame.locals import *
-from importlib import resources
+
+ASSETS_DIR = Path(__file__).resolve().parent / "assets"
+
+
+def asset_path(relative_path):
+    """Return the installed package path for an asset."""
+    return str(ASSETS_DIR / relative_path)
 
 def to_binary_str(s):
     '''binary encoder'''
@@ -194,31 +201,31 @@ class game_variable: # Game variables
         self.mouseStartPos = None
         self.mousePosChange = False
 
-        self.threeCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 40)
-        self.fourCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 30)
-        self.fiveCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 25)
-        self.sixCharFont = pygame.font.Font("assets/fonts/chiptext.ttf", 23)
+        self.threeCharFont = pygame.font.Font(asset_path("fonts/chipText.ttf"), 40)
+        self.fourCharFont = pygame.font.Font(asset_path("fonts/chipText.ttf"), 30)
+        self.fiveCharFont = pygame.font.Font(asset_path("fonts/chipText.ttf"), 25)
+        self.sixCharFont = pygame.font.Font(asset_path("fonts/chipText.ttf"), 23)
 
-        self.tableFont = pygame.font.Font("assets/fonts/tableFont.ttf", 40)
+        self.tableFont = pygame.font.Font(asset_path("fonts/tableFont.ttf"), 40)
 
-        self.threeCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 16)
-        self.fourCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 13)
-        self.fiveCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 10)
-        self.sixCharFontSmall = pygame.font.Font("assets/fonts/chiptext.ttf", 8)
+        self.threeCharFontSmall = pygame.font.Font(asset_path("fonts/chipText.ttf"), 16)
+        self.fourCharFontSmall = pygame.font.Font(asset_path("fonts/chipText.ttf"), 13)
+        self.fiveCharFontSmall = pygame.font.Font(asset_path("fonts/chipText.ttf"), 10)
+        self.sixCharFontSmall = pygame.font.Font(asset_path("fonts/chipText.ttf"), 8)
 
-        self.exchangeFontFull = pygame.font.Font("assets/fonts/tableFont.ttf", 30)
+        self.exchangeFontFull = pygame.font.Font(asset_path("fonts/tableFont.ttf"), 30)
 
-        self.exchangeChipAmmount = pygame.font.Font("assets/fonts/tableFont.ttf", 20)
-        self.betFunctionBetFont = pygame.font.Font("assets/fonts/tableFont.ttf", 30)
-        self.betFunctionStandFont = pygame.font.Font("assets/fonts/tableFont.ttf", 20)
-        self.betFunctionDoubleDownFont = pygame.font.Font("assets/fonts/tableFont.ttf", 15)
-        self.betFunctionSplitFont = pygame.font.Font("assets/fonts/tableFont.ttf", 25)
+        self.exchangeChipAmmount = pygame.font.Font(asset_path("fonts/tableFont.ttf"), 20)
+        self.betFunctionBetFont = pygame.font.Font(asset_path("fonts/tableFont.ttf"), 30)
+        self.betFunctionStandFont = pygame.font.Font(asset_path("fonts/tableFont.ttf"), 20)
+        self.betFunctionDoubleDownFont = pygame.font.Font(asset_path("fonts/tableFont.ttf"), 15)
+        self.betFunctionSplitFont = pygame.font.Font(asset_path("fonts/tableFont.ttf"), 25)
 
-        self.tableTextFontFull = pygame.font.Font("assets/fonts/tableFont.ttf", 40)
-        self.tableTextFontSemi = pygame.font.Font("assets/fonts/tableFont.ttf", 25)
+        self.tableTextFontFull = pygame.font.Font(asset_path("fonts/tableFont.ttf"), 40)
+        self.tableTextFontSemi = pygame.font.Font(asset_path("fonts/tableFont.ttf"), 25)
 
-        self.endgamefont = pygame.font.Font("assets/fonts/endgameFont.ttf", 20)
-        self.endgamefontSemi = pygame.font.Font("assets/fonts/endgameFont.ttf", 17)
+        self.endgamefont = pygame.font.Font(asset_path("fonts/endgameFont.ttf"), 20)
+        self.endgamefontSemi = pygame.font.Font(asset_path("fonts/endgameFont.ttf"), 17)
 
         self.chipFontList = (self.threeCharFont, self.fourCharFont, self.fiveCharFont, self.sixCharFont)
         self.chipFontListSmall = (self.threeCharFontSmall, self.fourCharFontSmall, self.fiveCharFontSmall, self.sixCharFontSmall)
@@ -255,29 +262,11 @@ class game_variable: # Game variables
 
         self.tempcardDeck = []
 
-        self.spadesCards = (("assets/Carddeck/Spades/2.png"), ("assets/Carddeck/Spades/3.png"), ("assets/Carddeck/Spades/4.png"),
-                            ("assets/Carddeck/Spades/5.png"), ("assets/Carddeck/Spades/6.png"), ("assets/Carddeck/Spades/7.png"),
-                            ("assets/Carddeck/Spades/8.png"), ("assets/Carddeck/Spades/9.png"), ("assets/Carddeck/Spades/10.png"),
-                            ("assets/Carddeck/Spades/J.png"), ("assets/Carddeck/Spades/Q.png"), ("assets/Carddeck/Spades/K.png"),
-                            ("assets/Carddeck/Spades/A.png"))
-        
-        self.heartsCards = (("assets/Carddeck/Hearts/2.png"), ("assets/Carddeck/Hearts/3.png"), ("assets/Carddeck/Hearts/4.png"),
-                            ("assets/Carddeck/Hearts/5.png"), ("assets/Carddeck/Hearts/6.png"), ("assets/Carddeck/Hearts/7.png"),
-                            ("assets/Carddeck/Hearts/8.png"), ("assets/Carddeck/Hearts/9.png"), ("assets/Carddeck/Hearts/10.png"),
-                            ("assets/Carddeck/Hearts/J.png"), ("assets/Carddeck/Hearts/Q.png"), ("assets/Carddeck/Hearts/K.png"),
-                            ("assets/Carddeck/Hearts/A.png"))
-        
-        self.diamondsCards = (("assets/Carddeck/Diamonds/2.png"), ("assets/Carddeck/Diamonds/3.png"), ("assets/Carddeck/Diamonds/4.png"),
-                            ("assets/Carddeck/Diamonds/5.png"), ("assets/Carddeck/Diamonds/6.png"), ("assets/Carddeck/Diamonds/7.png"),
-                            ("assets/Carddeck/Diamonds/8.png"), ("assets/Carddeck/Diamonds/9.png"), ("assets/Carddeck/Diamonds/10.png"),
-                            ("assets/Carddeck/Diamonds/J.png"), ("assets/Carddeck/Diamonds/Q.png"), ("assets/Carddeck/Diamonds/K.png"),
-                            ("assets/Carddeck/Diamonds/A.png"))
-        
-        self.clubsCards = (("assets/Carddeck/Clubs/2.png"), ("assets/Carddeck/Clubs/3.png"), ("assets/Carddeck/Clubs/4.png"),
-                            ("assets/Carddeck/Clubs/5.png"), ("assets/Carddeck/Clubs/6.png"), ("assets/Carddeck/Clubs/7.png"),
-                            ("assets/Carddeck/Clubs/8.png"), ("assets/Carddeck/Clubs/9.png"), ("assets/Carddeck/Clubs/10.png"),
-                            ("assets/Carddeck/Clubs/J.png"), ("assets/Carddeck/Clubs/Q.png"), ("assets/Carddeck/Clubs/K.png"),
-                            ("assets/Carddeck/Clubs/A.png"))
+        card_ranks = ("2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A")
+        self.spadesCards = tuple(asset_path(f"Carddeck/Spades/{rank}.png") for rank in card_ranks)
+        self.heartsCards = tuple(asset_path(f"Carddeck/Hearts/{rank}.png") for rank in card_ranks)
+        self.diamondsCards = tuple(asset_path(f"Carddeck/Diamonds/{rank}.png") for rank in card_ranks)
+        self.clubsCards = tuple(asset_path(f"Carddeck/Clubs/{rank}.png") for rank in card_ranks)
         
         self.CardFiles = (self.spadesCards, self.heartsCards, self.diamondsCards, self.clubsCards)
         
@@ -897,7 +886,7 @@ class game_objects:
                 value_var -= 2
                 
                 if indexb == 0 and GV.dTurn is False:
-                    card = pygame.transform.smoothscale(pygame.image.load("assets/Carddeck/back.png"), (105, 140)).convert_alpha()
+                    card = pygame.transform.smoothscale(pygame.image.load(asset_path("Carddeck/back.png")), (105, 140)).convert_alpha()
                 else:
                     card = pygame.transform.smoothscale(pygame.image.load((GV.CardFiles[suit_var][value_var])), (105, 140)).convert_alpha()
                 rect = card.get_rect(center=(dcard))
@@ -2267,7 +2256,6 @@ class pygame_function:
             GF.move_chip()
             GF.betting_area()
             GF.blackjack()
-            print(CHIPS)
             if sum(CHIPS) == 0 and not any(GV.chipBet):
                 GV.gameendcount += 1
                 if GV.gameendcount == 2:

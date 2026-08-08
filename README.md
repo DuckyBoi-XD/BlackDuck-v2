@@ -28,4 +28,14 @@ https://github.com/user-attachments/assets/2b0f2c18-4612-4728-96e1-f55488b0ae66
 
 ## How To Install
 
+```bash
+python -m pip install blackduck-v2
+```
+
 ## How To Play
+
+After installation, start the game with:
+
+```bash
+blackduck-v2
+```
