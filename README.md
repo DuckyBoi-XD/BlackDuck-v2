@@ -12,3 +12,11 @@ The second version of the well-known gambling game Blackjack, made in Python usi
 - Chip Exchanging: Space that allows players to exchange their chips for other chips
 - Two-Hand Play: Two betting spaces allow the player to start with two hands
 - Statistics: Stats are tracked throughout the game and appear when the player runs out of chips
+
+https://github.com/user-attachments/assets/88797d72-ae88-46bc-a3bf-27622c33cf81
+
+https://github.com/user-attachments/assets/e1411064-0543-459c-b19e-7e9bbab91d31
+
+https://github.com/user-attachments/assets/c164994e-a1fd-47c3-b6ac-8c73027726d3
+
+https://github.com/user-attachments/assets/2b0f2c18-4612-4728-96e1-f55488b0ae66
