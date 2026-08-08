@@ -28,14 +28,41 @@ https://github.com/user-attachments/assets/2b0f2c18-4612-4728-96e1-f55488b0ae66
 
 ## How To Install
 
-```bash
-python -m pip install blackduck-v2
-```
+Requirements:
+
+- MacOS or Linux device
+- Python 3.9 or later (the latest to be safe)
+- Pip 22 or later (the latest to be safe)
+- Pygame 2.6.0 or later (should be installed when installing the package from Pypi)
+
+1. You'll need to have Python and pip installed.
+    - You can follow [this](https://www.python.org/downloads/) to install Python
+    - You can follow [this](https://pypi.org/project/pip/) to install pip
+
+2. In Terminal or Command Prompt, enter the command:
+
+    ```sh
+    pip install blackduck-v2
+    ```
+
+    This will install the game. This is from the Pypi package [blackduck-v2](https://pypi.org/project/blackduck-v2/)
+
+3. Once installed, you can use the commands:
+
+    - `bd2`
+    - `blackduck-v2`
+    - `play-bd2`
+    - `play-blackduck-v2`
+    (Capatalisation doesn't matter)
+
+4. Enjoy and good luck gambling
 
 ## How To Play
 
-After installation, start the game with:
+After running one of the entry commands (bd2, blackduck-v2, play-bd2, play-blackduck-v2) you will be presented with the pygame UI as a casino/blackjack table. 
 
-```bash
-blackduck-v2
-```
+You'll see many different things:
+
+- On the centre you'll see the 2 betting areas (space to put your chips when betting) and control buttons for: starting, hitting, standing, doubling down and splitting.
+- On the bottom, you'll see the chips you have, in which you start with 5 Ones, 2 Fives and 1 Ten.
+- On the top right you'll see the exchange space. This is the space you put your chips in to exchange for other denominations.
