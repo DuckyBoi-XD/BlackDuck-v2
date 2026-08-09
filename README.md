@@ -25,6 +25,15 @@ https://github.com/user-attachments/assets/2b0f2c18-4612-4728-96e1-f55488b0ae66
 
 ## Images
 
+<img alt="Title screen of the game" src="images/midgame.png" />
+
+###
+
+<img alt="Game screen when inputting code" src="images/lose.png">
+
+###
+
+<img alt="Point scoring screen" src="images/restart.png">
 
 ## How To Install
 
@@ -66,3 +75,10 @@ You'll see many different things:
 - On the centre you'll see the 2 betting areas (space to put your chips when betting) and control buttons for: starting, hitting, standing, doubling down and splitting.
 - On the bottom, you'll see the chips you have, in which you start with 5 Ones, 2 Fives and 1 Ten.
 - On the top right you'll see the exchange space. This is the space you put your chips in to exchange for other denominations.
+
+To actually play the game there are 4 steps:
+
+1. Move the chip in to either betting space to choose the ammount to bet.
+2. Press the 'bet' button to start the hand/game.
+3. Use 4 of the function to play blackjack.
+4. Watch as you start winning or losing blackjack games.
