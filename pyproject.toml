@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "blackduck-v2"
 dynamic = ["version"]
-description = "The second version of the well-known gambling game Blackjack, made in Python using Pygame for the user interface."
+description = "The second version of my recreation of the well-known gambling game Blackjack, made in Python using Pygame for the user interface."
 readme = "README.md"
 requires-python = ">=3.8"
 keywords = ["game", "gambling", "pygame", "blackjack", "casino"]

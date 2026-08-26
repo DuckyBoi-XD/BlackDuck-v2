@@ -1,6 +1,6 @@
 # BlackDuck-v2
 
-The second version of the well-known gambling game Blackjack, made in Python using Pygame for the user interface.
+The second version of my recreation of the well-known gambling game Blackjack, made in Python using Pygame for the user interface.
 
 ## Features
 
