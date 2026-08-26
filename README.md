@@ -75,7 +75,7 @@ You'll see many different things:
 
 - On the centre you'll see the 2 betting areas (space to put your chips when betting) and control buttons for: starting, hitting, standing, doubling down and splitting.
 - On the bottom, you'll see the chips you have, in which you start with 5 Ones, 2 Fives and 1 Ten.
-- On the top right you'll see the exchange space. This is the space you put your chips in to exchange for other denominations.
+- On the top right you'll see the exchange space. This is the space you put your chips in to exchange for other denominations. To exchange chips you have to put any amount of chips in the exchange area and on the left side, a menu will appear. In the menu you can select the chips to exchange (left click) and remove chips (right click). Once the total values of the chips selected is equal to the values of the chips you place in the exchange area, you can press the green button to exchange the chips.
 
 To actually play the game there are 4 steps:
 
