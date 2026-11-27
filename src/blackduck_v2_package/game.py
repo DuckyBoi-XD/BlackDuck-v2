@@ -928,7 +928,7 @@ class game_objects:
                 endgameRect = endgameText.get_rect(center=(600, 180))
                 GV.display.blit(endgameText, endgameRect)
         
-                endgameValue = GV.endgamefont.render(f"{STATS["hands played"]}", True, GV.white_colour)
+                endgameValue = GV.endgamefont.render(f"{STATS['hands played']}", True, GV.white_colour)
                 endgameRect = endgameValue.get_rect(center=(600, 200))
                 GV.display.blit(endgameValue, endgameRect)
         
@@ -936,7 +936,7 @@ class game_objects:
                 endgameText = GV.endgamefont.render(f"HANDS WON:", True, GV.white_colour)
                 endgameRect = endgameText.get_rect(center=(600, 235))
                 GV.display.blit(endgameText, endgameRect)
-                endgameValue = GV.endgamefont.render(f"{STATS["hands won"]}", True, GV.white_colour)
+                endgameValue = GV.endgamefont.render(f"{STATS['hands won']}", True, GV.white_colour)
                 endgameRect = endgameValue.get_rect(center=(600, 255))
                 GV.display.blit(endgameValue, endgameRect)
         
@@ -944,7 +944,7 @@ class game_objects:
                 endgameText = GV.endgamefont.render(f"HANDS LOST:", True, GV.white_colour)
                 endgameRect = endgameText.get_rect(center=(600, 285))
                 GV.display.blit(endgameText, endgameRect)
-                endgameValue = GV.endgamefont.render(f"{STATS["hands lost"]}", True, GV.white_colour)
+                endgameValue = GV.endgamefont.render(f"{STATS['hands lost']}", True, GV.white_colour)
                 endgameRect = endgameValue.get_rect(center=(600, 305))
                 GV.display.blit(endgameValue, endgameRect)
         
@@ -955,21 +955,21 @@ class game_objects:
                 tableText = GV.endgamefontSemi.render(f"5 CARD CHARLIE WINS:", True, GV.white_colour)
                 endgameRect = tableText.get_rect(center=(600, 355))
                 GV.display.blit(tableText, endgameRect)
-                tableText = GV.endgamefont.render(f"{STATS["blackjack or 5CC"]}", True, GV.white_colour)
+                tableText = GV.endgamefont.render(f"{STATS['blackjack or 5CC']}", True, GV.white_colour)
                 endgameRect = tableText.get_rect(center=(600, 375))
                 GV.display.blit(tableText, endgameRect)
         
                 endgameText = GV.endgamefont.render(f"HANDS PUSHED BACK:", True, GV.white_colour)
                 endgameRect = endgameText.get_rect(center=(600, 410))
                 GV.display.blit(endgameText, endgameRect)
-                endgameValue = GV.endgamefont.render(f"{STATS["hands push back"]}", True, GV.white_colour)
+                endgameValue = GV.endgamefont.render(f"{STATS['hands push back']}", True, GV.white_colour)
                 endgameRect = endgameValue.get_rect(center=(600, 430))
                 GV.display.blit(endgameValue, endgameRect)
         
                 endgameText = GV.endgamefont.render(f"MONEY EARNT:", True, GV.white_colour)
                 endgameRect = endgameText.get_rect(center=(600, 460))
                 GV.display.blit(endgameText, endgameRect)
-                endgameValue = GV.endgamefont.render(f"{STATS["money gained"]}", True, GV.white_colour)
+                endgameValue = GV.endgamefont.render(f"{STATS['money gained']}", True, GV.white_colour)
                 endgameRect = endgameValue.get_rect(center=(600, 480))
                 GV.display.blit(endgameValue, endgameRect)
 
